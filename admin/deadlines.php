@@ -2,17 +2,24 @@
 include("includes/config.inc.php");
 include("includes/functions-required.php");
 include("includes/class-template.php");
-//include("includes/garbage_collector.php");
-$template = new Template;
-//require("security.php");
 
-include("html/header.html");
+$hdr=loadPage("header",'Header');
+
+$menuitems=array();
+$menuitems[]=array('title'=>'Add','url'=>'deadlines.php?section=add');
+$menuitems[]=array('title'=>'List','url'=>'deadlines.php?section=view');
+$hdr->AddRows("list",$menuitems);
+
+
+$tmpl=loadPage("deadlines", 'Deadlines');
 
 $success="";
-//echo"<pre>";
-//print_r($_POST);
-//print_r($_GET); 
-//echo"</pre>";
+/*
+echo"<pre>";
+print_r($_POST);
+print_r($_GET); 
+echo"</pre>";
+*/
 if(isset($_REQUEST['action'])) if(isset($_REQUEST['add']) || isset($_REQUEST['update']) || $_REQUEST['action']=="add_date_add" || $_REQUEST['action']=="add_date_update") {
 	
 	$topics = (isset($_REQUEST['topics']))?$topics = implode(",", $_REQUEST['topics']): "";
@@ -22,6 +29,7 @@ if(isset($_REQUEST['action'])) if(isset($_REQUEST['add']) || isset($_REQUEST['up
 
 if(isset($_REQUEST['action'])) if(isset($_REQUEST['add']) || $_REQUEST['action']=="add_date_add") {
 	//only one date for an ADD
+	//echo ("Here");
 	$tmp_date = explode("/", $_REQUEST['d_date']);
 	$d_date = mktime(1,1,1,$tmp_date[1],$tmp_date[0],$tmp_date[2]);
 	$tmp_date = explode("/", $_REQUEST['close_warning_date']);
@@ -35,20 +43,57 @@ if(isset($_REQUEST['action'])) if(isset($_REQUEST['add']) || $_REQUEST['action']
 	if(!is_numeric($_REQUEST['days_in_advance'])) $days_in_advance=0; else $days_in_advance=$_REQUEST['days_in_advance'];
 	if(isset($_REQUEST['override'])) $override=TRUE; else $override=FALSE;// flag for don't email deadline
     if(isset($_REQUEST['no_deadline'])) $no_deadline=TRUE; else $no_deadline=FALSE;
-	$values = array('null', addslashes($_REQUEST['title']), addslashes($_REQUEST['warning_message']), addslashes($_REQUEST['description']), addslashes($_REQUEST['synopsis']), $topics, $approved, $internal,$override,$no_deadline);
-	if(mysqlInsert("deadlines", $values)) $success=" <strong>Complete</strong>";
-	$id=mysql_insert_id();
-	$values = array('null',$id,$d_date,$close_warning_date, $early_warning_date, $expiry_date,$days_in_advance);
-	if(mysqlInsert("deadline_dates", $values)) $success=" <strong>Complete (1 date)</strong>";
+    
+    $sql="INSERT INTO deadlines SET
+    	deadline_id='null',
+    	title='". mysql_escape_string($_REQUEST['title']) ."',
+    	warning_message='". mysql_escape_string($_REQUEST['warning_message']) ."',
+    	description='". mysql_escape_string($_REQUEST['description']) ."',
+    	synopsis='" . mysql_escape_string($_REQUEST['synopsis']) ."',
+    	topics= '$topics',
+    	approved='$approved',
+    	internal='$internal',
+    	override=$override,
+    	no_deadline=$no_deadline
+    	";
+
+    if(!$db->Execute($sql)) $success.='Error inserting into deadlines table';
+		else{
+			$success = " <strong>Deadline Inserted;</strong>";
+			$id=$db->Insert_ID();
+			}
+	
+	$sql="INSERT INTO deadline_dates SET
+		date_id='null',
+		deadline_id=$id,
+		d_date=$d_date,
+		close_warning_date=$close_warning_date,
+		early_warning_date=$early_warning_date,
+		expiry_date=$expiry_date,
+		days_in_advance=$days_in_advance
+	";
+	if(!$db->Execute($sql)) $success.='Error inserting deadline date into table';
+		else{
+			$success .= " <strong>Complete (1 date); </strong>";
+			$id=$db->Insert_ID();
+			}
+	
 	//add a date entry by repeating the entry (can't use zero or dates get weird)
 	if($action=="add_date_add"){
-		if(mysqlInsert("deadline_dates", $values)) $success=" <strong>Complete (1 date)</strong>";
+		if(!$db->Execute($sql)) $success.='Error inserting new deadline date into table';
+		else{
+			$success .= " <strong>New entry added; </strong>";
+			$id=$db->Insert_ID();
+			}
+
 		$section='update';
 	}
 }
 else if(isset($_REQUEST['action'])) if (isset($_REQUEST['update']) || $_REQUEST['action']=="add_date_update") {
 	
-	$dates=mysqlFetchRows("deadline_dates","deadline_id=$_REQUEST[id]");
+	$sql="SELECT * FROM deadline_dates WHERE deadline_id=$_REQUEST[id]";
+	$dates=$db->GetAll($sql);
+
 	for($x=1;$x<= count($dates); $x++){
 		$varname="d_date".$x;
 		$tmp_date = explode("/", $_REQUEST[$varname]);
@@ -69,43 +114,64 @@ else if(isset($_REQUEST['action'])) if (isset($_REQUEST['update']) || $_REQUEST[
 		
 		$varname="days_in_advance$x";
 		if(!is_numeric($_REQUEST[$varname])) $days_in_advance=0; else $days_in_advance=$_REQUEST[$varname];
-		$values=array(	'd_date'=>$d_date,
-						'close_warning_date'=>$close_warning_date, 
-						'early_warning_date'=>$early_warning_date, 
-						'expiry_date'=>$expiry_date,
-						'days_in_advance'=>$days_in_advance);
+		
 		$varname="date_id$x";
 		$val=$_REQUEST[$varname];
-		$result=mysqlUpdate("deadline_dates",$values,"date_id=$val");
-		if($result != 1) $success.="Error updating: $result";
+		$sql="UPDATE deadline_dates SET
+			deadline_id=$id,
+			d_date=$d_date,
+			close_warning_date=$close_warning_date,
+			early_warning_date=$early_warning_date,
+			expiry_date=$expiry_date,
+			days_in_advance=$days_in_advance
+			WHERE date_id=". $_REQUEST[$varname].";";
+		if(!$db->Execute($sql)) $success.=" Error updating date $x ;";
+		else $success .= " <strong>Date updated; </strong>";
+		
 		
 	} //next date entry
 	if(isset($_REQUEST['override'])) $override=TRUE; else $override=FALSE;// flag for don't email deadline
     if(isset($_REQUEST['no_deadline'])) $no_deadline=TRUE; else $no_deadline=FALSE;
     
-	$values = array(	'title'=>addslashes($_REQUEST['title']), 
-						'warning_message'=>addslashes($_REQUEST['warning_message']), 
-						'description'=>addslashes($_REQUEST['description']), 
-						'synopsis'=>addslashes($_REQUEST['synopsis']), 
-						'topics'=>addslashes($topics), 
-						'approved'=>$approved, 
-						'internal'=>$internal,
-						'override'=>$override,
-                        'no_deadline'=>$no_deadline); 
-	if(mysqlUpdate("deadlines", $values, "deadline_id=$_REQUEST[id]")) $success.=" <strong>Deadline Updated</strong>";
+    $sql="UPDATE deadlines SET
+		title='".addslashes($_REQUEST['title'])."', 
+		warning_message='".addslashes($_REQUEST['warning_message'])."', 
+		description='".addslashes($_REQUEST['description'])."', 
+		synopsis='".addslashes($_REQUEST['synopsis'])."', 
+		topics='".addslashes($topics)."', 
+		approved=$approved, 
+		internal=$internal,
+		override=$override,
+        no_deadline=$no_deadline
+        WHERE deadline_id=".$_REQUEST['id'].";"; 
+    if(!$db->Execute($sql)) $success.=" Error updating deadline ;";
+	else $success .= " <strong>Deadline updated; </strong>";
+
+
 	if($_REQUEST['action']=="add_date_update") {
-		$values = array('null',$_REQUEST['id'],$d_date,$close_warning_date, $early_warning_date, $expiry_date,$days_in_advance);
-		$result=mysqlInsert("deadline_dates", $values);
-		if ($result != 1) $success.=" <strong>Error: $result</strong>"; else $success.=" <strong>Complete </strong>";
+		$sql="INSERT INTO deadline_dates SET
+			date_id='null',
+			deadline_id=$_REQUEST[id],
+			d_date=$d_date,
+			close_warning_date=$close_warning_date,
+			early_warning_date=$early_warning_date,
+			expiry_date=$expiry_date,
+			days_in_advance=$days_in_advance
+			";
+		if(!$db->Execute($sql)) $success.=" Error adding date $x ;";
+		else $success .= " <strong>Date added; </strong>";
+		
 		$_REQUEST['section']='update';
 	}
 }
 if (isset($_REQUEST['delete'])) {
+    $sql="DELETE FROM deadline_dates WHERE deadline_id=$_REQUEST[id]";
+    if(!$db->Execute($sql)) $success.=" Error deleting date ;";
+    $sql="DELETE FROM deadlines WHERE deadline_id=$_REQUEST[id]";
+    if(!$db->Execute($sql)) $success.=" Error deleting deadline ;";
+    else $success=" <strong>Deadline Deleted</strong>";
     
-	$result=mysqlDelete("deadline_dates","deadline_id=$_REQUEST[id]");
-	$result2=mysqlDelete("deadlines", "deadline_id=$_REQUEST[id]");
-	if($result !=1 || $result2 != 1) $success="<font color='#AA0000'>Error Deleting: $result $result2</font>"; 
-	else $success=" <strong>Deadline Deleted</strong>";
+
 }
 if(isset($_REQUEST['action'])) if($_REQUEST['action']=="drop"){
 	//echo $dropid;
@@ -117,58 +183,48 @@ if (isset($_REQUEST['section'])) {
 	if(!isset($success)) $success="";
 	switch($_REQUEST['section']){
 		case "view":  
-			$values = mysqlFetchRows("deadlines as d left join deadline_dates as dd on d.deadline_id=dd.deadline_id ","1 order by dd.d_date desc");
-			$output = "";
+			$tmpl->setAttribute("view","visibility","visible");
+			$sql="SELECT * FROM deadlines as d 
+				LEFT JOIN deadline_dates as dd on d.deadline_id=dd.deadline_id
+				ORDER BY dd.d_date DESC";
+			$values=$db->GetAll($sql);
+			$viewlist=array();
 			if(is_array($values)) {
 				foreach($values as $index) {
-					$dates=mysqlFetchRows("deadline_dates","deadline_id=$index[deadline_id]");
+					$sql="SELECT * FROM deadline_dates WHERE deadline_id=$index[deadline_id]";
+					$dates=$db->GetAll($sql);
 					
-					if($index['d_date'] <= mktime()) $bgcolor="#D7D7D9"; else 
-						if($index['internal']=="yes") $bgcolor="#CCCCFF";
-						else $bgcolor="#CCFFCC";
-					if(count($dates)>1) $multi="#FFCCCC";else $multi=$bgcolor;
-                    if($index['no_deadline']) $bgcolor="#6666FF";
+					if($index['d_date'] <= mktime()) $index['bgcolor']="#D7D7D9"; else 
+						if($index['internal']=="yes") $index['bgcolor']="#CCCCFF";
+						else $index['bgcolor']="#CCFFCC";
+					if(count($dates)>1) $index['multi']="#FFCCCC";else $index['multi']=$bgcolor;
+                    if($index['no_deadline']) $index['bgcolor']="#6666FF";
 					$index['d_date'] = date("j/n/y", $index['d_date']);
+					$sql="SELECT * FROM mail WHERE assoc_id=$index[date_id] AND type='deadline-early'";
+					$mailitem_e=$db->GetRow($sql);
+					$sql="SELECT * FROM mail WHERE assoc_id=$index[date_id] AND type='deadline-close'";
+					$mailitem_c=$db->GetRow($sql);
+
+					if(is_array($mailitem_e)) $index['ecol']="<img src='/admin/images/check.gif'>"; else $index['ecol']="";
+					if(is_array($mailitem_c)) $index['ccol']="<img src='/admin/images/check.gif'>"; else $index['ccol']="";
 					
-					$mailitem_e=mysqlFetchRow("mail","assoc_id = $index[date_id] AND type='deadline-early'");
-					$mailitem_c=mysqlFetchRow("mail","assoc_id = $index[date_id] AND type='deadline-close'");
-					if(is_array($mailitem_e)) $ecol="<img src='/admin/images/check.gif'>"; else $ecol="";
-					if(is_array($mailitem_c)) $ccol="<img src='/admin/images/check.gif'>"; else $ccol="";
-					
-					$output .= "
-						<tr>
-							<td bgcolor='#E09731'><a style='color:white' href='deadlines.php?section=update&id=$index[deadline_id]'>Update</a></td>
-							<td bgcolor='$bgcolor'>$index[title]</td>
-							<td bgcolor='$multi'>$index[d_date]</td>
-							<td bgcolor='$bgcolor'>$index[synopsis]</td>
-							<td bgcolor='$bgcolor'>$index[approved]</td>
-							<td align='center' bgcolor='#D7D7D9'>$ecol</td>
-							<td align='center' bgcolor='#D7D7D9'>$ccol</td>
-						</tr>";
+					$viewlist[]=$index;
 				}
-				$hasharray = array('success'=>$success, 'output'=>$output);
-				$filename = 'templates/template-deadlines_view.html';
+				
 			}
-			else {
-				$hasharray = array('title'=>"Deadlines");
-				$filename = 'includes/error-no_records.html';
-			}
-			$parsed_html_file = $template->loadTemplate($filename,$hasharray,"HTML");
-			echo $parsed_html_file;
+			//print_r($viewlist[0]); 
+			$tmpl->AddRows('viewlist',$viewlist);
             break;
 		case "add":
-			$topics = mysqlFetchRows("topics_research", "1 ORDER BY name");
-			$topic_options = "";
-			if(is_array($topics)) {
-				foreach($topics as $topic) {
-					$topic_options .= "<option value='$topic[topic_id]'>$topic[name]</option>";
-					
-				}
-			}
-			$hasharray = array('success'=>$success, 'topic_options'=>$topic_options);
-			$filename = 'templates/template-deadlines_add.html';
-			$parsed_html_file = $template->loadTemplate($filename,$hasharray,"HTML");
-			echo $parsed_html_file;
+			$sql="SELECT name,topic_id FROM topics_research WHERE 1 ORDER BY name";
+			$topics=$db->Execute($sql);
+			
+			$topic_options=$topics->GetMenu('topics[]','',true,true,8);
+			$tmpl->AddVars('add',array( 'topic_options'=>$topic_options,
+                                        'success'=>$success));
+			$tmpl->setAttribute("add","visibility","visible");
+			$hdr->AddVar("header","title","Deadlines: Add New");
+			
             break;
 			
 			
@@ -255,6 +311,10 @@ if (isset($_REQUEST['section'])) {
             break;
 	} 
 }
-//-- Footer File
-include("templates/template-footer.html");
+
+
+$hdr->AddVar('success','success',$success);
+$hdr->displayParsedTemplate('header');
+$tmpl->displayParsedTemplate('page');
+
 ?>

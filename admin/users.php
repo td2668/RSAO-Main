@@ -382,7 +382,6 @@ else if (isset($_REQUEST['delete'])) {
     $_REQUEST['section']='view';
 }
 
-if(!isset($_REQUEST['section'])) $_REQUEST['section']='view';
 if (isset($_REQUEST['section'])) {
 	if(!isset($success)) $success="";
 
@@ -470,7 +469,7 @@ switch($_REQUEST['section']){
                 if($index['mail_events']) $index['events']='checked'; else $index['events']='';
                 if($index['mail_deadlines']) $index['deadlines']='checked'; else $index['deadlines']='';
                 $index['picture'] = (mysqlFetchRow("pictures_associated", "object_id=$index[user_id] AND table_name='users'"))?
-			"<img src='/images/head.gif'>":"";
+			"<img src='/admin/images/head.gif'>":"";
                 if($index['tss'] == 1) {
                   $index['tss'] = 'TSS';
                 } else {
@@ -526,7 +525,6 @@ switch($_REQUEST['section']){
                                         'which_message'=>$which_message,
                                         'department_list'=>$department_list,
                                         'department2_list'=>$department2_list ));
-         $tmpl->setAttribute("letter","visibility","hidden");
          $tmpl->setAttribute("add","visibility","visible");
          $hdr->AddVar("header","title","Users: Add New");
 		
@@ -634,7 +632,7 @@ switch($_REQUEST['section']){
             }
             
             
-            $tmpl->setAttribute("letter","visibility","hidden");
+            
 			$tmpl->setAttribute("update","visibility","visible");
          	$hdr->AddVar("header","title","Users: Update $values[first_name] $values[last_name]");
 		}
@@ -645,7 +643,6 @@ switch($_REQUEST['section']){
     case "log":
         
         $tmpl->setAttribute("log","visibility","visible");
-        $tmpl->setAttribute("letter","visibility","hidden");
         if(isset($_REQUEST['user_id'])) if($_REQUEST['user_id']>0) {
             $user=$db->getRow("SELECT * FROM users WHERE user_id=$_REQUEST[user_id]");
             if(count($user)>0) {
@@ -662,5 +659,5 @@ $hdr->displayParsedTemplate('header');
 $tmpl->displayParsedTemplate('page');
 
     
-
+include("templates/template-footer.html");
 ?>

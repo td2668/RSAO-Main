@@ -1,406 +1,795 @@
 <patTemplate:tmpl name="PAGE">
-	
-   <div class="datapage">
-	   	
-	<div style="clear:none;">
-		<patTemplate:tmpl name="letter" visibility="visible">
+    <patTemplate:tmpl name="view" visibility="hidden">
+
+    	<table border="1" cellpadding="3" style="border-collapse: collapse" bordercolor="#FFFFFF" cellspacing="1">	
+		  <tr><td colspan='7'><br>
+
+		  <patTemplate:tmpl name="letter">
 		  <a class='mainbottom' style='font-size:16px' href='{LETTERURL}'>{LETTER}</a> |
 		  </patTemplate:tmpl>
-	</div>
-	
-    <patTemplate:tmpl name="view" visibility="hidden">
-    	<table border="1" cellpadding="3" style="border-collapse: collapse" bordercolor="#FFFFFF" cellspacing="1">	
-			
-		  
+
+		  <br></td></tr>
+
           <patTemplate:tmpl name="listtitle" type="simpleCondition" requiredvars="UPDATE" varscope="viewlist">
+
 		  <tr>
+
 			  <td colspan="13"><font size='-6'>&nbsp;</font></td>
+
 		  </tr>
+
 			<tr bgcolor="#000000">
+
 				<td>&nbsp;</td>
+
 		        <td>&nbsp;</td>
+
 				<td><b style="color:#E1E1E1;font-size:10px">Last Name</b></td>
+
 				<td><b style="color:#E1E1E1;font-size:10px">First Name</b></td>
+
 		        
+
 				<td><b style="color:#E1E1E1;font-size:10px">Email</b></td>
+
 		        <td><b style="color:#E1E1E1;font-size:10px">TSS</b></td>
+
 		        <td><b style="color:#E1E1E1;font-size:10px">Status</b></td>
+
 		        <td><b style="color:#E1E1E1;font-size:10px">Active</b></td>
+
 				<td><b style="color:#E1E1E1;font-size:10px">Topics</b></td>
+
 		        <td><b style="color:#E1E1E1;font-size:10px">Browser</b></td>
+
 		        <td><b style="color:#E1E1E1;font-size:10px">P-Short</b></td>
+
 		        <td><b style="color:#E1E1E1;font-size:10px">P-Long </b></td> 
+
 		
+
 				
+
 				
+
 		        <td><b style="color:#E1E1E1;font-size:10px">CV#</b></td>
+
 		        <td><b style="color:#E1E1E1;font-size:10px">Access</b></td>
+
                 <td>&nbsp;</td>
+
                 <td>&nbsp;</td>
+
 			</tr>
+
             </patTemplate:tmpl>
+
 			<patTemplate:tmpl name="viewlist" type="simpleCondition" requiredvars="UPDATE">
+
 				<tr>
+
 					<td bgcolor='#E09731'><a style='color:white' href='{UPDATE}'><b>Update</b></a></td>
+
                     <td bgcolor='#E09731'><a style='color:white' href='{LOG}'><b>Log</b></a></td>
+
                     
+
 					<td bgcolor='{BGCOLOR}'>{LAST_NAME}</td>
+
 					<td bgcolor='{BGCOLOR}'>{FIRST_NAME}</td>
+
 			        
+
 					<td bgcolor='{BGCOLOR}'><font color='{REDFLAG}'>{EMAIL}</font></td>
+
 	                <td bgcolor='{BGCOLOR}'>{TSS}</td>
+
 	                <td bgcolor='{BGCOLOR}'>{EMP_STATUS}</td>
+
 	                <td bgcolor='{BGCOLOR}'>{ACTIVE_STATUS}</td>
+
 					<td bgcolor='$app'><input type='checkbox' name='events' {EVENTS} disabled /><input type='checkbox' name='deadlines' {DEADLINES} disabled /></td>
+
 					<td bgcolor='{BROW}' align='center'>{PICTURE}</td>
+
 					<td bgcolor='{P_SHORT}'>&nbsp;</td>
+
 					<td bgcolor='{P_EXT}'>&nbsp;</td>
+
 					
+
 					
+
                     <td bgcolor='{BGCOLOR}'>{CV_ITEMS}</td>
+
                     <td bgcolor='{BGCOLOR}'>{ACCESS}</td>
 
+
+
                   
+
                     <td>{BUTTON1}</td></tr>
+
 			
+
 			
+
 			</patTemplate:tmpl>
+
 			
+
 		</table>
+
 	</patTemplate:tmpl>
+
     
+
     <patTemplate:tmpl name="add" visibility="hidden">
+
         <form method="post" name="form1" action="users.php?section=add" onSubmit="">
+
             <table>
+
                 
+
                 
+
                 <tr>
+
                     
+
                     <td>First Name:</td>
+
                     <td><input type="text" name="first_name" maxlength="255" size="30"></td>
+
                 </tr>
+
                 <tr>
+
                     <td>Last Name:</td>
+
                     <td><input type="text"  onBlur="javascript:document.forms[0].email.value=document.forms[0].first_name.value.substr(0,1).toLowerCase() + document.forms[0].last_name.value.toLowerCase() + '@mtroyal.ca'; document.forms[0].username.value=document.forms[0].first_name.value.substr(0,1).toLowerCase() + document.forms[0].last_name.value.toLowerCase(); " name="last_name" maxlength="255" size="30"></td>
+
                 </tr>
+
                 <tr>
+
                 <td>Department</td>
+
                 <td>
+
                 {DEPARTMENT_LIST}
+
                 </td></tr>
+
                 
+
                 <tr>
+
                 <td>Secondary Department</td>
+
                 <td>
+
                 {DEPARTMENT2_LIST}
+
                 </td></tr>
+
                 
+
                 <tr>
+
                     <td>Email:</td>
+
                     <td><input type="text" name="email" maxlength="255" size="30"></td>
+
                 </tr>
+
                 
+
                 <tr>
+
                     <td>Username:</td>
+
                     <td><input type="text" name="username" maxlength="255" size="30"></td>
+
                 </tr>
+
                 <tr>
+
                     <td>Password:</td>
+
                     <td><input type="text" name="password" size="30"</td>
+
                 </tr>
+
                  <tr>
+
                     <td>Employee Type:</td>
+
                     <td>
+
                     {EMP_TYPE_OPTIONS}
+
                     </td>
+
                 </tr>
+
                 <tr>
+
                     <td>Title:</td>
+
                     <td><input type="text" name="title" maxlength="255" size="30"></td>
+
                 </tr>
+
                  <tr>
+
                     <td>Secondary Title:</td>
+
                     <td><input type="text" name="secondary_title" maxlength="255" size="30"></td>
+
                 </tr>
+
                  <tr>
+
                     <td>Office Location:</td>
+
                     <td><input type="text" name="office" maxlength="30" size="30"></td>
+
                 </tr>
+
                  <tr>
+
                     <td>Phone: <i>(403)123-4567</i></td>
+
                     <td><input type="text" name="phone" maxlength="30" size="30"></td>
+
                 </tr>
+
                  <tr>
+
                     <td>Fax:</td>
+
                     <td><input type="text" name="fax" maxlength="30" size="30"></td>
+
                 </tr>
+
                  <tr>
+
                     <td>Homepage:</td>
+
                     <td><input type="text" name="homepage" maxlength="100" size="30"></td>
+
                 </tr>
+
                 <tr>
+
                     <td>User Topics (Filter)</td>
+
                     <td>{TOPIC_OPTIONS}</td>
+
                 </tr>
+
                 <tr>
+
                     <td>Short Profile:</td>
+
                     <td><textarea name="profile_short" rows='3' cols="120"></textarea></td>
+
                     </tr>
+
                 <tr>
+
                     <td>Long Profile:</td>
+
                     <td><textarea name="profile_ext" rows='12' cols="120"></textarea></td>
+
                     </tr>
+
                 <tr>
+
                     <td>Keywords:</td>
+
                     <td><input type="text" name="keywords" size='80'></td>
+
                     </tr>
+
                 <tr>
+
                     <td>Send New User Msg?:</td>
+
                     <td><input type="checkbox" name="welcome_msg" value="yes" ></td>
+
                 </tr>
+
                 <tr>
+
                     <td>Which Message?</td>
+
                     <td>{WHICH_MESSAGE}</td></tr>
+
                      <tr>
+
                     <td>Mail Events?:</td>
+
                     <td><input type="checkbox" name="mail_events" value="1" checked></td>
+
                 </tr>
+
                  <tr>
+
                     <td>Mail Deadlines?:</td>
+
                     <td><input type="checkbox" name="mail_deadlines" value="1" checked></td>
+
                 </tr>
+
                  <tr>
+
                     <td>Feature User?:</td>
+
                     <td><input type="checkbox" name="feature" value="1"></td>
+
                 </tr>
+
                    <tr>
+
                     <td>Browser?:</td>
+
                     <td><input type="checkbox" name="browser" value="1"></td>
+
                 </tr>
+
                 <tr>
+
                     <td>Hidden?:</td>
+
                     <td><input type="checkbox" name="hidden" value="1"></td>
+
                 </tr>
+
                 <tr>
+
                     <td>Disabled?:</td>
+
                     <td><input type="checkbox" name="disabled" value="1"></td>
+
                 </tr>
+
                 <tr>
+
                     <td colspan="2"><hr>
+
                     </td>
+
                 </tr>
+
                 <tr>
+
                     <td>Status</td>
+
                     <td><select name="emp_status">
+
                     <option value=''></option>
+
                     <option value='T'>Tenured</option>
+
                     <option value="TN">Tenure-Track</option>
+
                     <option value="TC">Term-Certain</option>
+
                     </select></td>
+
                 </tr>
+
                 <tr>
+
                     <td>Start Date</td>
+
                     <td><input type="text" name="start_date" size="6"> <i>YYYY</i></td>
+
                 </tr>
+
                 <tr>
+
                     <td>TSS Status</td>
+
                     <td><input type="checkbox" name="tss" ></td>
+
                 </tr>
+
                 <tr>
+
                     <td>TSS Start</td>
+
                     <td><input type="text" name="tss_start" size="6"> <i>YYYY</i></td>
+
                 </tr>
+
                 <tr><td>Employee #</td>
+
                 <td><input type="text" name="emp_num" size="12"></td>
+
                 </tr>
+
                 <tr><td>Active Status</td>
+
                 <td><input type="text" name="active_status" size=1 value="A"> <i>(A=Active, L=Leave)</i></td></tr>
+
                 
+
                 <tr>
+
                     <td>&nbsp;</td>
+
                     <td><input type="submit" name="add" value="Add">&nbsp;&nbsp;
+
                         <button onClick="window.location='users.php?section=view'">Back</button></td>
+
                 </tr>
+
             </table>
+
             </form>
+
     </patTemplate:tmpl>
+
     
+
     <patTemplate:tmpl name="update" visibility="hidden">
+
     	<form method="post" name="form1" action="users.php?section=update&id={ID}" onSubmit="return">
+
 			<table>
+
 				<input type="hidden" name="old_username" maxlength="255" size="30" value="{USERNAME}">
+
 			    <input type="hidden" name="letter" value="{LETTER}">
+
 			    <input type="hidden" name="fac_only" value="{FAC_ONLY}">
+
 				
+
 				<tr>
+
 			
+
 			        <td>First Name:</td>
+
 			        <td><input type="text" name="first_name" maxlength="255" size="30" value="{FIRST_NAME}"></td>
+
 			    </tr>
+
 			    <tr>
+
 			        <td>Last Name:</td>
+
 			        <td><input type="text"  name="last_name" maxlength="255" size="30" value="{LAST_NAME}"></td>
+
 			    </tr>
+
 			    <tr>
+
 			    <td>Department</td>
+
 			    <td>{DEPARTMENT_LIST}</td></tr>
+
 			
+
 			    <tr>
+
 			    <td>Secondary Department</td>
+
 			    <td>{DEPARTMENT2_LIST}</td></tr>
+
 			
+
 			    <tr>
+
 			        <td>Email:</td>
+
 			        <td><input type="text" name="email" maxlength="255" size="30" value="{EMAIL}"></td>
+
 			    </tr>
+
 			
+
 			    <tr>
+
 			        <td>Username:</td>
+
 			        <td><input type="text" name="username" maxlength="255" size="30" value="{USERNAME}"></td>
+
 			    </tr>
+
 			
+
 			     <tr>
+
 			        <td>Employee Type:</td>
+
 			        <td>{EMP_TYPE_OPTIONS}
+
 			    </td></tr>
+
 			    <tr>
+
 			        <td>Title:</td>
+
 			        <td><input type="text" name="title" maxlength="255" size="30" value="{TITLE}"></td>
+
 			    </tr>
+
 			     <tr>
+
 			        <td>Secondary Title:</td>
+
 			        <td><input type="text" name="secondary_title" maxlength="255" size="30" value="{SECONDARY_TITLE}"></td>
+
 			    </tr>
+
 			     <tr>
+
 			        <td>Office Location:</td>
+
 			        <td><input type="text" name="office" maxlength="30" size="30" value="{OFFICE}"></td>
+
 			    </tr>
+
 			     <tr>
+
 			        <td>Phone: <i>(403)123-4567</i></td>
+
 			        <td><input type="text" name="phone" maxlength="30" size="30" value="{PHONE}"></td>
+
 			    </tr>
+
 			     <tr>
+
 			        <td>Fax:</td>
+
 			        <td><input type="text" name="fax" maxlength="30" size="30" value="{FAX}"></td>
+
 			    </tr>
+
 			     <tr>
+
 			        <td>Homepage:</td>
+
 			        <td><input type="text" name="homepage" maxlength="100" size="30" value="{HOMEPAGE}"></td>
+
 			    </tr>
+
 			     <tr>
+
 			        <td>User Topics (Filter)</td>
+
 			        <td>{TOPIC_OPTIONS}</td>
+
 			    </tr>
+
 			    <tr>
+
 			    	<td>One Line:</td>
+
 					<td><textarea name="oneline" rows="1" cols="70"  >{ONELINE}</textarea>  </td>
+
 			    </tr>
+
 			     <tr>
+
 			        <td>Short Profile:</td>
+
 			        <td><textarea name="profile_short" rows='3' cols="120">{PROFILE_SHORT}</textarea></td>
+
 			        </tr>
+
 			    <tr>
+
 			        <td>Long Profile:</td>
+
 			        <td><textarea name="profile_ext" rows='12' cols="120">{PROFILE_EXT}</textarea></td>
+
 			        </tr>
+
 			        <tr>
+
 			        <td>Keywords:</td>
+
 			        <td><input type="text" name="keywords" maxlength="255" size="80" value="{KEYWORDS}">
+
 			</td>
+
 			    </tr>
+
 			    <tr>
+
 			        <td>Mail Events?:</td>
+
 			        <td><input type="checkbox" name="mail_events" value="1" {MAIL_EVENTS}></td>
+
 			    </tr>
+
 			     <tr>
+
 			        <td>Mail Deadlines?:</td>
+
 			        <td><input type="checkbox" name="mail_deadlines" value="1" {MAIL_DEADLINES}></td>
+
 			    </tr>
+
 			     <tr>
+
 			        <td>Feature User?:</td>
+
 			        <td><input type="checkbox" name="feature" value="1" {FEATURE}></td>
+
 			    </tr>
+
 			    <tr>
+
 			        <td>Browser?:</td>
+
 			        <td><input type="checkbox" name="browser" value="1" {BROWSER}></td>
+
 			    </tr>
+
 			    <tr>
+
 			        <td>Hidden?:</td>
+
 			        <td><input type="checkbox" name="hidden" value="1" {HIDDEN}></td>
+
 			    </tr>
+
 			    <tr>
+
 			        <td>Disabled?:</td>
+
 			        <td><input type="checkbox" name="disabled" value="1" {DISABLED}></td>
+
 			    </tr>
+
 			    <tr>
+
 			        <td colspan="2"><hr>
+
 			        </td>
+
 			    </tr>
+
 			    <tr>
+
 			        <td>Status</td>
+
 			        <td><select name="emp_status">
+
 			        {EMP_STATUS_OPTIONS}
+
 			        </select></td>
+
 				</tr>
+
 			    <tr>
+
 			        <td>Start Date</td>
+
 			        <td><input type="text" name="start_date" size="6" value="{START_DATE}"> <i>YYYY</i></td>
+
 			    </tr>
+
 			    <tr>
+
 			        <td>TSS Status</td>
+
 			        <td><input type="checkbox" name="tss" {TSS}></td>
+
 			    </tr>
+
 			    <tr>
+
 			        <td>TSS Start</td>
+
 			        <td><input type="text" name="tss_start" size="6" value="{TSS_START}"> <i>YYYY</i></td>
+
 			    </tr>
+
 			    <tr><td>Employee #</td>
+
 			    <td><input type="text" name="emp_num" size="12" value="{EMP_NUM}"></td>
+
 			    </tr>
+
 			    <tr><td>Active Status</td>
+
 			    <td><input type="text" name="active_status" size=1 value="{ACTIVE_STATUS}"> <i>(A=Active, L=Leave)</i></td></tr>
+
 			<tr><td></td></tr>
+
 			    <tr>
+
 					<td>&nbsp;</td>
-					<td><input style="background-color: #be7be2;" type="submit" name="update" value="Update">&nbsp;&nbsp;
+
+					<td><input type="submit" name="update" value="Update">&nbsp;&nbsp;
+
 						<button type="button" onClick="window.location='users.php?section=view&delete=y&id={ID}&section=view{FAC_ONLY}&letter={LETTER}'">Delete</button>&nbsp;&nbsp;
+
 						<button type="button" onClick="window.location='users.php?section=view{FAC_ONLY}&letter={LETTER}'">Back</button>&nbsp;&nbsp;
+
 			            {PICTURE_BUTTON}</td>
+
 				</tr>
+
                 
+
                  <patTemplate:tmpl name="viewcat" visibility="hidden">
+
                  <tr>
+
                     <td colspan="2"><hr>
+
                     </td>
+
                 </tr>
+
                  <tr><td colspan="2">
+
                     <table border="1" cellpadding="3" style="border-collapse: collapse" bordercolor="#FFFFFF" cellspacing="1">
+
                      <tr bgcolor="#000000">
+
                         <td>&nbsp;</td>
+
                         <td><b><a href="{DATEURL}" style="color:#E1E1E1;font-size:10px">Date</a></b></td>
+
                         <patTemplate:tmpl name="cond1" type="simplecondition" requiredvars="cat" varscope="viewcat">
+
                             <td><b><b style="color:#E1E1E1;font-size:10px">Category</b></td>
+
                         </patTemplate:tmpl>
+
                         <td><b style="color:#E1E1E1;font-size:10px">Comment</b></td>
+
                      </tr>
+
                      <patTemplate:tmpl name="catlist" varscope="viewcat">
+
                         <tr class='odd' onclick="javascript: window.location='userlog.php?section=edit&log_id={LOG_ID}';">
+
                             <td ></td>
+
                             <td >{DATE}</td>
+
                             
+
                         <patTemplate:tmpl name="cond2" type="simplecondition" requiredvars="cat" varscope="catlist">
+
                         <td>{CATEGORY}</td>
+
                         </patTemplate:tmpl>
+
                         <td >{CONTENTS}</td>
+
                      </tr>
+
                      </td></tr>
+
                     </patTemplate:tmpl>
+
                
+
         </table>
+
     </patTemplate:tmpl>
+
                 
+
 			</form>
+
 			</table>
+
     </patTemplate:tmpl>
-    </div>
+
+    
+
 </patTemplate:tmpl>

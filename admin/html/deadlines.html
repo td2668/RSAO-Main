@@ -1,0 +1,139 @@
+<patTemplate:tmpl name="PAGE">
+    <patTemplate:tmpl name="view" visibility="hidden">
+
+		<table border="1" cellpadding="3" style="border-collapse: collapse" bordercolor="#FFFFFF" cellspacing="1">
+
+			<tr>
+			  <td colspan='7'>&nbsp;</td>
+		
+		  </tr>
+		  <tr><td colspan='7'><table><tr><td width='30' bgcolor="#D7D7D9">&nbsp;</td><td>-Outdated</td>
+		    <td width='30' bgcolor="#FFCCCC">&nbsp;</td><td>-Multiple Dates</td><td width="30" bgcolor="#6666FF">&nbsp;</td><td>-No Deadline</td></tr></table>
+		    </td></tr>
+			<tr>
+				<td bgcolor="#000000">&nbsp;</td>
+				<td bgcolor="#000000"><b style="color:#E1E1E1;font-size:10px">Title</b></td>
+				<td bgcolor="#000000"><b style="color:#E1E1E1;font-size:10px">Deadline Date</b></td>
+				<td bgcolor="#000000"><b style="color:#E1E1E1;font-size:10px">Synopsis</b></td>
+				<td bgcolor="#000000"><b style="color:#E1E1E1;font-size:10px">Approved</b></td>
+				<td bgcolor="#000000"><b style="color:#E1E1E1;font-size:10px">Mail-E</b></td>
+				<td bgcolor="#000000"><b style="color:#E1E1E1;font-size:10px">Mail-C</b></td>
+			</tr>
+			<patTemplate:tmpl name="viewlist" type="simpleCondition" requiredvars="BGCOLOR">
+					<tr>
+							<td bgcolor='#E09731'><a style='color:white' href='deadlines.php?section=update&id={DEADLINE_ID}'>Update</a></td>
+							<td bgcolor='{BGCOLOR}'>{TITLE}</td>
+							<td bgcolor='{MULTI}'>{D_DATE}</td>
+							<td bgcolor='{BGCOLOR}'>{SYNOPSIS}</td>
+							<td bgcolor='{BGCOLOR}'>{APPROVED}</td>
+							<td align='center' bgcolor='#D7D7D9'>{ECOL}</td>
+							<td align='center' bgcolor='#D7D7D9'>{ECOL}</td>
+						</tr>
+			</patTemplate:tmpl>
+		</table>
+
+    </patTemplate:tmpl>
+    
+    
+    
+    
+    
+    
+    
+    <patTemplate:tmpl name="add" visibility="hidden">
+    	
+    	<form method="post" name="form1" action="" onSubmit="">
+	    <input type="hidden" name="action" value="">
+
+<table>
+	<tr>
+		<td>Title:</td>
+		<td colspan="2"><input type="text" name="title" maxlength="255" size="80"></td>
+	</tr>
+	<tr>
+		<td colspan="3"><i>note: date format is day/mon/year e.g. today is: 
+		<script language="JavaScript">
+		var now = new Date();
+		var year = now.getFullYear()-2000;
+		document.write(now.getDate() + '/' + (now.getMonth()+1) + '/0' + (now.getFullYear()-2000));
+		</script></i></td>
+	</tr>
+    <tr><td>No Deadline</td><td><input type="checkbox" name="no_deadline"> (no specific date; dates will be used for reminders only)</td></tr> 
+    
+
+	<tr><td colspan="5"><hr></td></tr>
+	<tr>
+		<td>Deadline Date:</td>
+		<td colspan='3'><input type="text" name="d_date" id="d_date" maxlength="10" size="10" >
+        <img src='/includes/calendar.gif'  align='absmiddle' onclick='showChooser(this, "d_date", "chooserSpan", 2011, 2020, "d/m/Y", false);'>
+        <div id='chooserSpan' class='dateChooser select-free' style='display: none; visibility: hidden; width: 166px;'>
+</div>
+        &nbsp;&nbsp;&nbsp;Due <input type="text" name="days_in_advance" value="5" size="2"> days earlier in ORS</td>
+	</tr>
+	<tr>
+		<td>Close Warning Date:</td>
+	  <td colspan="3"><input type="text" name="close_warning_date" id="close_warning_date" maxlength="10" size="10">
+      <img src='/includes/calendar.gif'  align='absmiddle' onclick='showChooser(this, "close_warning_date", "chooserSpan2", 2011, 2020, "d/m/Y", false);'>
+        <div id='chooserSpan2' class='dateChooser select-free' style='display: none; visibility: hidden; width: 166px;'>
+</div>
+      &nbsp;&nbsp;&nbsp;Early Warning Date:<input type="text" name="early_warning_date" id="early_warning_date" maxlength="10" size="10">
+      <img src='/includes/calendar.gif'  align='absmiddle' onclick='showChooser(this, "early_warning_date", "chooserSpan3", 2011, 2020, "d/m/Y", false);'>
+        <div id='chooserSpan3' class='dateChooser select-free' style='display: none; visibility: hidden; width: 166px;'>
+</div>
+      &nbsp;&nbsp;&nbsp;Expiry Date:&nbsp;&nbsp;<input type="text" name="expiry_date" id="expiry_date"maxlength="10" size="10">
+      <img src='/includes/calendar.gif'  align='absmiddle' onclick='showChooser(this, "expiry_date", "chooserSpan4", 2011, 2020, "d/m/Y", false);'>
+        <div id='chooserSpan4' class='dateChooser select-free' style='display: none; visibility: hidden; width: 166px;'>
+</div>
+      <img src='/images/helpicon.gif' width="20" height="20"  border="0" align="absmiddle" onMouseOver="ShowHelp('d1', 'Expiry Date', 'Leave blank to enable annual increments.')" onMouseOut="HideHelp('d1')">
+	    <div style="display:none; font:Verdana, Arial, Helvetica, sans-serif; font-size:10px" id="d1"></div></td>
+	</tr>
+	<tr><td colspan="5"><hr></td></tr>
+	<tr><td colspan='5' align='center'><button type="button" name="" value="" onClick="document.form1.action.value='add_date_update';document.form1.submit();">Add an Additional Deadline</button></td></tr>
+	<tr><td colspan="5"><hr></td></tr>
+	<tr><td>&nbsp;</td><td colspan="4"><strong>%dd%</strong> = Deadline date, <strong>%de%</strong> = days earlier, <strong>%cde%</strong> = calculated date for RSAO deadline</td></tr>
+	<tr>
+		<td valign="top">Warning Message:<br><i>(No HTML please)</i></td>
+		<td colspan="2"><textarea name="warning_message" rows="4" cols="120"></textarea></td>
+	</tr>
+	<tr><td>&nbsp;</td><td colspan='3'><input type="checkbox" name="override"> Do not send a warning message</td></tr>
+	<tr>
+      <td valign="top">Synopsis:</td>
+      <td colspan="2"><textarea name="synopsis" rows="5" cols="120"></textarea></td>
+    </tr>
+	<tr>
+		<td valign="top">Description:</td>
+		<td colspan="2"><textarea name="description" rows="20" cols="120"></textarea></td>
+	</tr>
+    <tr><td>&nbsp;</td>
+    <td>
+    
+    </td></tr>
+	<tr>
+		<td valign="top">Research Topics:</td>
+		<td>
+				{TOPIC_OPTIONS}
+		</td>
+			
+	</tr>
+	<tr>
+		<td>Approved:</td>
+		<td colspan="2"><input type="checkbox" name="approved" value="yes"></td>
+	</tr>
+	<tr>
+	  <td>Internal:</td>
+	  <td colspan="2"><input type="checkbox" name="internal" value="yes">
+        <a href="#"><img src="/images/help.gif" width="25" height="16" border="0" onClick="popHelp('submit_internal'); return false;"></a></td>
+    </tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td colspan="2"><input type="submit" name="add" value="Add">&nbsp;&nbsp;<button type="button" onClick="window.location='deadlines.php?section=view'">Back</button>
+			</td>
+	</tr>
+</form>
+</table>
+
+    
+    </patTemplate:tmpl>
+    
+    
+</patTemplate:tmpl>
