@@ -1,0 +1,109 @@
+
+<script language="JavaScript" type="text/javascript">
+<!--
+arrValidationDesc=
+	[
+	[["required","Please enter a Title."]], // Title
+	[["required","Please enter a VALID Date."],["date"]], // Deadline Date
+	[["required","Please enter a VALID Date."],["date"]], // Close Warning Date 
+	[["required","Please enter a VALID Date."],["date"]],// Early Warning Date
+	[],// expiry Date
+	[["required","Please enter a Warning Message"]],// Warning Message
+	[["required","Please enter a Description"]],// Description
+	[["required","Please enter a Synopsis"]]// Synopsisd
+	]; 
+//-->
+
+</script>
+<form method="post" name="form1" action="" onSubmit="">
+<input type="hidden" name="action" value="">
+<table>
+
+
+	<tr>
+		<td colspan="4" class="successhead">Add: Deadline</td>
+	</tr>
+	<tr height="10"><td colspan='7' height="14" class="success"> ~!success~</td></tr>
+	<tr>
+	  <td>&nbsp;</td>
+	  <td colspan=4>&nbsp;</td>
+    </tr>
+	<tr>
+		<td>Title:</td>
+		<td colspan=3><input type="text" name="title" maxlength="255" size="80"></td>
+	</tr>	
+	<tr>
+		<td colspan="4"><i>note: date format is day/mon/year e.g. today is: 
+		<script language="JavaScript">
+		var now = new Date();
+		var year = now.getFullYear();
+		document.write(now.getDate() + '/' + (now.getMonth()+1) + '/0' + (now.getFullYear()));
+		</script> </i></td>
+	</tr>
+    <tr><td>No Deadline</td><td><input type="checkbox" name="no_deadline"> (no specific date; dates will be used for reminders only)</td></tr> 
+	<tr><td colspan="5"><hr></td></tr>
+	<tr>
+		<td>Deadline Date:</td>
+		<td colspan='3'><input type="text" name="d_date" id="d_date" maxlength="10" size="10" >
+        <img src='/includes/calendar.gif'  align='absmiddle' onclick='showChooser(this, "d_date", "chooserSpan", 2011, 2020, "d/m/Y", false);'>
+        <div id='chooserSpan' class='dateChooser select-free' style='display: none; visibility: hidden; width: 166px;'>
+</div>
+        &nbsp;&nbsp;&nbsp;Due <input type="text" name="days_in_advance" value="5" size="2"> days earlier in ORS</td>
+	</tr>
+	<tr>
+		<td>Close Warning Date:</td>
+	  <td colspan="3"><input type="text" name="close_warning_date" id="close_warning_date" maxlength="10" size="10">
+      <img src='/includes/calendar.gif'  align='absmiddle' onclick='showChooser(this, "close_warning_date", "chooserSpan2", 2011, 2020, "d/m/Y", false);'>
+        <div id='chooserSpan2' class='dateChooser select-free' style='display: none; visibility: hidden; width: 166px;'>
+</div>
+      &nbsp;&nbsp;&nbsp;Early Warning Date:<input type="text" name="early_warning_date" id="early_warning_date" maxlength="10" size="10">
+      <img src='/includes/calendar.gif'  align='absmiddle' onclick='showChooser(this, "early_warning_date", "chooserSpan3", 2011, 2020, "d/m/Y", false);'>
+        <div id='chooserSpan3' class='dateChooser select-free' style='display: none; visibility: hidden; width: 166px;'>
+</div>
+      &nbsp;&nbsp;&nbsp;Expiry Date:&nbsp;&nbsp;<input type="text" name="expiry_date" id="expiry_date"maxlength="10" size="10">
+      <img src='/includes/calendar.gif'  align='absmiddle' onclick='showChooser(this, "expiry_date", "chooserSpan4", 2011, 2020, "d/m/Y", false);'>
+        <div id='chooserSpan4' class='dateChooser select-free' style='display: none; visibility: hidden; width: 166px;'>
+</div>
+      <img src='/images/helpicon.gif' width="20" height="20"  border="0" align="absmiddle" onMouseOver="ShowHelp('d1', 'Expiry Date', 'Leave blank to enable annual increments.')" onMouseOut="HideHelp('d1')">
+	    <div style="display:none; font:Verdana, Arial, Helvetica, sans-serif; font-size:10px" id="d1"></div></td>
+	</tr>
+	<tr><td colspan="5"><hr></td></tr>
+	<tr><td colspan='5' align='center'><button type="button" name="" value="" onClick="document.form1.action.value='add_date_add';document.form1.submit();">Add an Additional Deadline</button></td></tr>
+	<tr><td colspan="5"><hr></td></tr>
+	<tr><td>&nbsp;</td><td colspan="4"><strong>%dd%</strong> = Deadline date, <strong>%de%</strong> = days earlier, <strong>%cde%</strong> = calculated date for ORS deadline</td></tr>
+	<tr>
+		<td valign="top">Warning Message:<br><i>(No HTML please)</i></td>
+		<td colspan=3><textarea name="warning_message" rows="4" cols="120"></textarea></td>
+	</tr>
+	<tr><td>&nbsp;</td><td colspan='3'><input type="checkbox" name="override"> Do not send a warning message</td></tr>
+	<tr>
+      <td valign="top">Synopsis:</td>
+      <td colspan=3><textarea name="synopsis" rows="5" cols="120"></textarea></td>
+    </tr>
+	<tr>
+		<td valign="top">Description:</td>
+		<td colspan=3><textarea name="description" rows="20" cols="120"></textarea></td>
+	</tr>
+	<tr>
+		<td valign="top">Research Topics:</td>
+		<td><select name="topics[]" multiple size="8">
+				~!topic_options~
+			</select></td>
+
+	</tr>
+	<tr>
+		<td>Approved:</td>
+		<td colspan=3><input type="checkbox" checked name="approved" value="yes"></td>
+	</tr>
+	<tr>
+	  <td>Internal:</td>
+	  <td colspan=3><input type="checkbox" name="internal" value="yes">
+        <a href="#"><img src="/images/help.gif" width="25" height="16" border="0" onClick="popHelp('submit_internal'); return false;"></a></td>
+    </tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td colspan=3><input type="submit" name="add" value="Add">&nbsp;&nbsp;
+			<button onClick="window.location='deadlines.php?section=view'">Back</button></td>
+	</tr>
+</form>
+</table>

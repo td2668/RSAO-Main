@@ -1,0 +1,121 @@
+<script language="JavaScript" type="text/javascript">
+<!--
+arrValidationDesc=
+	[
+	[["required","Please enter a Name."]], // Name
+	[["required","Please enter an end date for the project; If not yet completed then estimate an end date. This field is required for sorting"],["date"]],
+	[["required","Please enter a Synopsis"]],// Synopsisd
+	[["required","Please enter a Description"]]// Description
+	]; 
+//-->
+</script>
+
+<form method="post" name="form1" action="" onSubmit="return validateForm(this,arrValidationDesc)">
+<table>
+	<tr>
+		<td colspan="2"  class="successhead">Add: Project</td>
+	</tr>
+	<tr height="10"><td colspan='7' height="14" class="success"> ~!success~</td></tr>
+	<tr>
+	  <td>&nbsp;</td>
+	  <td>&nbsp;</td>
+    </tr>
+	<tr>
+		<td>Name:</td>
+		<td><input type="text" name="name" maxlength="255" size="80"></td>
+	</tr>
+	<tr>
+	  <td valign="top">End Date:</td>
+	  <td><input type="text" name="enddate" id='enddate' maxlength="20" size="15">
+      <img src='/includes/calendar.gif'  align='absmiddle' onclick='showChooser(this, "enddate", "chooserSpan2", 2011, 2020, "d/m/Y", false);'>
+        <div id='chooserSpan2' class='dateChooser select-free' style='display: none; visibility: hidden; width: 166px;'>
+</div></td>
+    </tr>
+	<tr>
+		<td valign="top">Synopsis:</td>
+		<td><textarea name="synopsis" rows="10" cols="80"></textarea></td>
+	</tr>
+	<tr>
+		<td valign="top">Description:</td>
+		<td><textarea name="description" rows="20" cols="120"></textarea></td>
+	</tr>
+	<tr>
+		<td valign="top">Departments:</td>
+		<td><select name="departments[]" multiple size="8">
+				~!department_options~
+			</select></td>
+	</tr>
+	<tr>
+		<td valign="top">Faculty:</td>
+		<td><select name="researchers[]" multiple size="8">
+				~!researcher_options~
+			</select></td>
+	</tr>
+	<tr>
+		<td valign="top">Research Topics:</td>
+		<td><select name="topics_research[]" multiple size="8">
+				~!topic_options~
+			</select></td>
+	</tr><tr>
+			<td>Keywords:</td>
+		<td><input type="text" name="keywords" maxlength="255" size="80" >
+</td>
+	</tr>
+	<tr>
+	  <td>Student Project?</td>
+	  <td><input type="checkbox" name="studentflag" value="yes"></td>
+    </tr>
+	<tr>
+	  <td>Student Names:</td>
+	  <td><input type="text" name="students" maxlength="255" size="80"></td>
+    </tr>
+	<tr>
+	  <td>Feature?</td>
+	  <td><input type="checkbox" name="feature"></td>
+    </tr>
+    <tr>
+      <td>Approved?</td>
+      <td><input type="checkbox" name="approved"></td>
+   </tr>
+    <tr>
+      <td>Internal Grant?</td>
+      <td><input type="checkbox" name="internal_grant"></td>
+    </tr>
+    <tr>
+      <td>Internal Grant Start Year:</td>
+      <td><select name='grant_year'>
+        <option value='2011'>2011</option>
+        <option value='2012'>2012</option>
+        <option value='2013'>2013</option>
+        <option value='2014'>2014</option>
+        <option value='2015'>2015</option>
+        <option value='2016'>2016</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>Internal Grant End Year:</td>
+      <td><select name='end_year'>
+        
+        <option value='2012'>2012</option>
+        <option value='2013'>2013</option>
+        <option value='2014'>2014</option>
+        <option value='2015'>2015</option>
+        <option value='2016'>2016</option>
+        <option value='2017'>2017</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+            <td>Internal Grant Amount:</td>
+        <td><input type="text" name="grant_amount" maxlength="10" size="10" >
+</td>
+    </tr>
+
+	<tr>
+		<td>&nbsp;</td>
+		<td><input type="submit" name="add" value="Add">&nbsp;&nbsp;
+			<button onClick="window.location='projects.php?section=view'">Back</button></td>
+	</tr>
+</form>
+</table>

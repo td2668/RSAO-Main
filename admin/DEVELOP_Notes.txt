@@ -1,0 +1,11 @@
+New database: Funding List
+- idea is to search on mega list-independent of deadline or opp.
+- should be linked to deadline or opp locally for admin purposes
+- 4 tiers for grouping. Top 3 are mandatory. If last one (grant) is missing use one above
+- deadline of zero = unknown or blank
+- set up reminder check for yearly updates. Take over from opp/deadline one
+- deadline date of '1' = continuous intake, '0'= unknown, '2'=take offline (not this year...)
+- 'occasional' - if TRUE then take offline after deadline (don't show or update)
+- the idea is to ignore the year when displaying, (except 'occasional') 
+
+

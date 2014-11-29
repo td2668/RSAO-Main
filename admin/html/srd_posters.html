@@ -1,0 +1,169 @@
+<patTemplate:tmpl name="PAGE" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+    <patTemplate:tmpl src="header.html"/>
+
+<patTemplate:tmpl name="view" visibility="hidden">
+
+
+
+<h1>Student Research Day Posters</h1>
+
+<table border="1" cellpadding="3" style="border-collapse: collapse" bordercolor="#FFFFFF" cellspacing="1">
+    <tr height="10"><td colspan='14' height="14" class="success">{SUCCESS}</td></tr>
+
+    <tr>
+    <td colspan='3' style="font-weight: bold">Total Posters: {COUNT}</td>
+    <td colspan="10">Range: {RANGE}</td>
+    </tr>
+    <tr bgcolor="#000000">
+    <td><b style="color:#E1E1E1;font-size:10px">ID#</b></td>
+    <td>
+        <b style="color:#E1E1E1;font-size:10px">
+        <a href='srd_posters.php?sort=name' title='sort by name' style='color:white'>Name</a></b>
+        <div {NAMESORTCLASS} style='display:inline-block'>&nbsp;</div>
+    </td>
+    <td><b style="color:#E1E1E1;font-size:10px">ID#</b></td>
+    <td><b style="color:#E1E1E1;font-size:10px">Department</b></td>
+    <td><b style="color:#E1E1E1;font-size:10px">Title</b></td>
+    <td><b style="color:#E1E1E1;font-size:10px">
+        <a href='srd_posters.php?sort=date' title='sort by date' style='color:white'>Date In</a></b>
+        <div {DATESORTCLASS} style='display:inline-block'>&nbsp;</div>
+    </td>
+    <td><b style="color:#E1E1E1;font-size:10px">Orient.</b></td>
+    <td><b style="color:#E1E1E1;font-size:10px">Status</b></td>
+    <td>&nsbp;</td>
+
+</tr>
+    <patTemplate:tmpl name="mainlist" type="OddEven">
+        <patTemplate:sub condition="odd">
+            <tr bgcolor='#CCCCCC'>
+             <td>{POSTER_REG_ID}</td>
+                <td>{LASTNAME}, {FIRSTNAME}</td>
+                <td>{STUDENTID}</td>
+                <td>{DEPARTMENTNAME}</td>
+                <td>{TITLE}</td>
+                <td>{SUBMIT_DATE}</td>
+                <td>{ORI}</td>
+                <td>{STATUS}</td>
+                <td>
+                <button type='button' onClick='window.location="srd_posters.php?section=edit&id={POSTER_REG_ID}";'>Edit</button>
+                </td>
+            </tr>
+                </patTemplate:sub>
+                <patTemplate:sub condition="even">
+                    <tr bgcolor="#CCFFFF">
+                    <td>{POSTER_REG_ID}</td>
+                        <td>{LASTNAME}, {FIRSTNAME}</td>
+                        <td>{STUDENTID}</td>
+                        <td>{DEPARTMENTNAME}</td>
+                        <td>{TITLE}</td>
+                        <td>{SUBMIT_DATE}</td>
+                        <td>{ORI}</td>
+                        <td>{STATUS}</td>
+
+                        <td>
+                        	<button type='button'  onClick='window.location="srd_posters.php?section=edit&id={POSTER_REG_ID}";'>Edit</button>
+                        </td>
+                        
+                    </tr>
+                </patTemplate:sub>
+            </patTemplate:tmpl>
+        </table>
+    </patTemplate:tmpl>
+
+    <patTemplate:tmpl name="edit" visibility="hidden">
+        <form name="edit" action="srd_posters.php?update" enctype="multipart/form-data" method="post">
+            <input type="hidden" name="id" value="{POSTER_REG_ID}">
+            <input type="hidden" name="MAX_FILE_SIZE" value="300000000" />
+            <table cellspacing="4">
+                <tr>
+                    <td colspan="6" class="successhead">Edit: Poster Registration</td>
+                </tr>
+                <tr height="10">
+                    <td colspan='7' height="14" class="success">{SUCCESS}</td>
+                </tr>
+                <tr>
+                    <td colspan="3">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td width='150'>Last Name</td>
+                    <td colspan="2"><input type="text" value="{LASTNAME}" size="60" name="lastName"
+                                           title="The name of the lead student" \>
+                    </td>
+                </tr>
+                <tr>
+                    <td width='150'>First Name</td>
+                    <td colspan="2"><input type="text" value="{FIRSTNAME}" size="60" name="firstName"
+                                           title="The name of the lead student" \>
+                    </td>
+                </tr>
+               
+                <tr>
+                    <td width='150'>Student ID#</td>
+                    <td colspan="2"><input type="text" size="10" value="{STUDENTID}" name="studentid"
+                                           title="We need at least one ID# if it's a group registering" \>
+                    </td>
+                </tr>
+                <tr>
+                    <td width='150'>Contact Email</td>
+                    <td colspan="2"><input type="text" size="40" value="{EMAIL}" name="email"
+                                           title="This will be our main way of contacting you" \>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td width='150'>Department</td>
+                    <td colspan="2">{DEPARTMENT}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td width='150'>Faculty Supervisor (if any)</td>
+                    <td colspan="2">{SUPERVISOR}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Status:</td>
+                    <td colspan="2"><select name='status'>
+                        <patTemplate:tmpl name="status_options">
+                            <option value="{VALUE}"
+                            {SEL}>{TEXT}</option>
+                        </patTemplate:tmpl>
+                    </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">Title of the poster:<br \>
+                        <textarea cols="80" rows="2" name="title">{TITLE}</textarea></td>
+                </tr>
+                
+                <tr>
+                    <td width='150'>Orientation:</td>
+                    <td colspan="2">
+                     <input type="radio" name="orientation"  value="portrait" {PORTRAIT} >Portrait 
+                     <input type="radio" name="orientation"  value="landscape" {LANDSCAPE} >Landscape 
+                     <input type="radio" name="orientation"  value="unknown" {UNKNOWN} >Unknown</td>
+                 </tr> 
+                
+                <tr>
+                    <td colspan="3">Poster Filename: <a target="_blank" href='{FILENAME}'>{FILENAME}</a><br \>
+                    Upload New One: <input type="file" id="filename2" name="filename2"></td>
+                </tr>
+
+                <tr>
+                    <td width='150'>
+                        <button type="submit" name="update" value="update">Update</button>
+                        &nbsp;&nbsp;
+                        <button style='background-color: red;' type="button" name="Delete" value="delete"
+                                onClick="javascript: if(confirm('Really Delete?')) window.location='srd_posters.php?delete&id={POSTER_REG_ID}';">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+
+    </patTemplate:tmpl>
+
+</patTemplate:tmpl>

@@ -1,0 +1,174 @@
+<script language="JavaScript" type="text/javascript">
+<!--
+arrValidationDesc=
+	[
+	[["required","Please enter your First Name."]], // First Name
+	[["required","Please enter your Last Name."]] // Last name
+	]; 
+//-->
+</script>
+
+<form method="post" name="form1" action="" onSubmit="">
+<table>
+	<tr>
+		<td colspan="2"  class="successhead">Add: User</td>
+	</tr>
+	<tr height="10"><td colspan='7' height="14" class="success"> ~!success~</td></tr>
+	<tr>
+	  <td>&nbsp;</td>
+	  <td>&nbsp;</td>
+    </tr>
+    <tr>
+		
+		<td>First Name:</td>
+		<td><input type="text" name="first_name" maxlength="255" size="30"></td>
+	</tr>
+	<tr>
+		<td>Last Name:</td>
+		<td><input type="text"  onBlur="javascript:document.forms[0].email.value=document.forms[0].first_name.value.substr(0,1).toLowerCase() + document.forms[0].last_name.value.toLowerCase() + '@mtroyal.ca'; document.forms[0].username.value=document.forms[0].first_name.value.substr(0,1).toLowerCase() + document.forms[0].last_name.value.toLowerCase(); " name="last_name" maxlength="255" size="30"></td>
+	</tr>
+    <tr>
+    <td>Department</td>
+    <td><select name="department">
+    ~!department_list~
+    </select></td></tr>
+    
+    <tr>
+    <td>Secondary Department</td>
+    <td><select name="department2">
+    ~!department_list~
+    </select></td></tr>
+    
+	<tr>
+		<td>Email:</td>
+		<td><input type="text" name="email" maxlength="255" size="30"></td>
+	</tr>
+	
+	<tr>
+		<td>Username:</td>
+		<td><input type="text" name="username" maxlength="255" size="30"></td>
+	</tr>
+    <tr>
+        <td>Password:</td>
+        <td><input type="text" name="password" size="30"</td>
+    </tr>
+     <tr>
+        <td>Employee Type:</td>
+        <td><select name='emp_type'>
+        <option value="">Select an employee Type</option>
+        ~!emp_type_options~
+    </tr>
+    <tr>
+        <td>Title:</td>
+        <td><input type="text" name="title" maxlength="255" size="30"></td>
+    </tr>
+     <tr>
+        <td>Secondary Title:</td>
+        <td><input type="text" name="secondary_title" maxlength="255" size="30"></td>
+    </tr>
+     <tr>
+        <td>Office Location:</td>
+        <td><input type="text" name="office" maxlength="30" size="30"></td>
+    </tr>
+     <tr>
+        <td>Phone: <i>(403)123-4567</i></td>
+        <td><input type="text" name="phone" maxlength="30" size="30"></td>
+    </tr>
+     <tr>
+        <td>Fax:</td>
+        <td><input type="text" name="fax" maxlength="30" size="30"></td>
+    </tr>
+     <tr>
+        <td>Homepage:</td>
+        <td><input type="text" name="homepage" maxlength="100" size="30"></td>
+    </tr>
+    <tr>
+        <td>User Topics (Filter)</td>
+        <td><select name='topics[]' multiple size="8">
+        <option value="0">View All</option>
+        ~!topic_options~
+        </select></td>
+    </tr>
+    <tr>
+        <td>Short Profile:</td>
+        <td><textarea name="profile_short" rows='3' cols="120"></textarea></td>
+        </tr>
+	<tr>
+        <td>Long Profile:</td>
+        <td><textarea name="profile_ext" rows='12' cols="120"></textarea></td>
+        </tr>
+    <tr>
+        <td>Keywords:</td>
+        <td><input type="text" name="keywords" size='80'></td>
+        </tr>
+    <tr>
+		<td>Send New User Msg?:</td>
+		<td><input type="checkbox" name="welcome_msg" value="yes" ></td>
+	</tr>
+	<tr>
+		<td>Which Message?</td>
+		<td><select name="which_message">
+		~!which_message~
+		</select></td></tr>
+         <tr>
+        <td>Mail Events?:</td>
+        <td><input type="checkbox" name="mail_events" value="1" checked></td>
+    </tr>
+     <tr>
+        <td>Mail Deadlines?:</td>
+        <td><input type="checkbox" name="mail_deadlines" value="1" checked></td>
+    </tr>
+	 <tr>
+        <td>Feature User?:</td>
+        <td><input type="checkbox" name="feature" value="1"></td>
+    </tr>
+       <tr>
+        <td>Browser?:</td>
+        <td><input type="checkbox" name="browser" value="1"></td>
+    </tr>
+	<tr>
+        <td>Hidden?:</td>
+        <td><input type="checkbox" name="hidden" value="1"></td>
+    </tr>
+    <tr>
+		<td>Disabled?:</td>
+		<td><input type="checkbox" name="disabled" value="1"></td>
+	</tr>
+    <tr>
+        <td colspan="2"><hr>
+        </td>
+    </tr>
+    <tr>
+        <td>Status</td>
+        <td><select name="emp_status">
+        <option value=''></option>
+        <option value='T'>Tenured</option>
+        <option value="TN">Tenure-Track</option>
+        <option value="TC">Term-Certain</option>
+        </select></td>
+    </tr>
+    <tr>
+        <td>Start Date</td>
+        <td><input type="text" name="start_date" size="6"> <i>YYYY</i></td>
+    </tr>
+    <tr>
+        <td>TSS Status</td>
+        <td><input type="checkbox" name="tss" ></td>
+    </tr>
+    <tr>
+        <td>TSS Start</td>
+        <td><input type="text" name="tss_start" size="6"> <i>YYYY</i></td>
+    </tr>
+    <tr><td>Employee #</td>
+    <td><input type="text" name="emp_num" size="12"></td>
+    </tr>
+    <tr><td>Active Status</td>
+    <td><input type="text" name="active_status" size=1 value="A"> <i>(A=Active, L=Leave)</i></td></tr>
+    
+	<tr>
+		<td>&nbsp;</td>
+		<td><input type="submit" name="add" value="Add">&nbsp;&nbsp;
+			<button onClick="window.location='users.php?section=view'">Back</button></td>
+	</tr>
+</form>
+</table>
