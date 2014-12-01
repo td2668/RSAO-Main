@@ -147,21 +147,21 @@ a.subnav:hover {font-family: arial; text-decoration:underline; color:#FFFFFF}
 input {background-color: #afc0ca;
 	   border: 1px solid #093f5b;
 	   font-family: arial;
-	   font-size: 11px;
+	   font-size: 12px;
 	   font-weight: normal;
 	   color: black;
 	   text-decoration: none;}
 select {background-color: #afc0ca;
 	    border: 1px solid #093f5b;
 	    font-family: arial;
-	    font-size: 11px;
+	    font-size: 12px;
 	    font-weight: normal;
 	    color: black;
 	    text-decoration: none;}
 select.fixed {background-color: #afc0ca;
 	    border: 1px solid #093f5b;
 	    font-family: "Courier New", Courier, mono;
-	    font-size: 11px;
+	    font-size: 12px;
 	    font-weight: normal;
 	    color: black;
 	    text-decoration: none;}
@@ -169,27 +169,27 @@ select.fixed {background-color: #afc0ca;
 button {background-color: #be7be2;
 		border: 1px solid #093f5b;
 		font-family: arial;
-		font-size: 11px;
+		font-size: 12px;
 		font-weight: normal;
 		color: black;
 		text-decoration: none;}
 button.pdf {background-color: inherit;
 		border: 1px solid #afc0ca;
 		font-family: arial;
-		font-size: 11px;
+		font-size: 12px;
 		font-weight: normal;
 		color: black;
 		text-decoration: none;}
 textarea {background-color: #afc0ca;
 	    border: 1px solid #093f5b;
 	    font-family: arial;
-	    font-size: 11px;
+	    font-size: 12px;
 	    font-weight: normal;
 		color: black;
 	    text-decoration: none;}
 body.mceContentBody {background-color: #afc0ca;
     font-family: arial;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: normal;
     color: black;
     text-decoration: none;}
@@ -407,4 +407,15 @@ table tr.hover th {
 #container
 {
 	width: 100%;
+}
+
+#subunihead {
+	background-color: #a7a7aa;
+	height: 30px;
+}
+
+#mainpage{
+	float: left; padding-left: 15px;
+	width:92%;
+	font-size: 13pt;
 }

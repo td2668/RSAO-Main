@@ -77,8 +77,8 @@ if (isset($_REQUEST['section'])) {
                 if(is_array($users)) {
                     foreach($users as $user){
                         $userlist.="<tr><td>
-                         <button onclick=\"window.location='/admin/cv_review_print.php?generate=caqc&user_id=$user[user_id]'\">CAQC CV</button>
-                        </td><td>$user[last_name], $user[first_name] </td><td><button type='button' onClick='window.location=\"/admin/caqc.php?remove&section=edit&user_id=$user[user_id]&degree_id=$_REQUEST[degree_id]\"'>Remove</button></td></tr>\n";
+                         <button onclick=\"window.location='/cv_review_print.php?generate=caqc&user_id=$user[user_id]'\">CAQC CV</button>
+                        </td><td>$user[last_name], $user[first_name] </td><td><button type='button' onClick='window.location=\"/caqc.php?remove&section=edit&user_id=$user[user_id]&degree_id=$_REQUEST[degree_id]\"'>Remove</button></td></tr>\n";
                     }
                 }
                 else $success="No faculty linked with this degree";

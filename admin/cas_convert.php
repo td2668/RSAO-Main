@@ -1176,7 +1176,7 @@
     }//switch
   
   /* Date Chooser Code
-  <img src='/admin/includes/calendar.gif'  align='absmiddle' onclick='showChooser(this, "post_date", "chooserSpan", 2000, 2012, "d/m/Y", false);'>
+  <img src='/includes/calendar.gif'  align='absmiddle' onclick='showChooser(this, "post_date", "chooserSpan", 2000, 2012, "d/m/Y", false);'>
         <div id='chooserSpan' class='dateChooser select-free' style='display: none; visibility: hidden; width: 166px;'>
 </div>
 */

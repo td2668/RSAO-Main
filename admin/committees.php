@@ -227,7 +227,7 @@ if(isset($section)) {
                         <tr>
                             <td bgcolor='#E09731'><a style='color:white' href='committees.php?section=committeeupdate&committee_id=$index[committee_id]'>Update</a></td>
                             <td bgcolor='#D7D7D9'>$index[name]</td>
-                            <td bgcolor='FFFFFF'><button onClick='window.location=\"/admin/committees.php?section=minutes&committee_id=$index[committee_id]\"'>Minutes</button>
+                            <td bgcolor='FFFFFF'><button onClick='window.location=\"/committees.php?section=minutes&committee_id=$index[committee_id]\"'>Minutes</button>
                         </tr>";
                 }
                 $hasharray = array('success'=>$success, 'output'=>$output);
@@ -252,7 +252,7 @@ if(isset($section)) {
                     $by=mysqlFetchRow('users',"user_id=$minute[uploaded_by]");         
                     if(!is_array($by)) $name='Unknown';
                     else $name=$by['first_name'] . $by['last_name'];
-                    $output.="<tr><td>$date</td><td>$name</td><td><button onClick='window.location=\"/admin/committees.php?delminute&minute_id=$minute[minute_id]&committee_id=$_REQUEST[committee_id]\"'>Delete</button></td></tr>\n";
+                    $output.="<tr><td>$date</td><td>$name</td><td><button onClick='window.location=\"/committees.php?delminute&minute_id=$minute[minute_id]&committee_id=$_REQUEST[committee_id]\"'>Delete</button></td></tr>\n";
                 }
                 $committee=mysqlFetchRow('committees',"committee_id=$_REQUEST[committee_id]");
                 $hasharray = array('success'=>$success, 'output'=>$output,'committee_id'=>$_REQUEST['committee_id'],'name'=>$committee['name']);

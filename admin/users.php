@@ -469,7 +469,7 @@ switch($_REQUEST['section']){
                 if($index['mail_events']) $index['events']='checked'; else $index['events']='';
                 if($index['mail_deadlines']) $index['deadlines']='checked'; else $index['deadlines']='';
                 $index['picture'] = (mysqlFetchRow("pictures_associated", "object_id=$index[user_id] AND table_name='users'"))?
-			"<img src='/admin/images/head.gif'>":"";
+			"<img src='/images/head.gif'>":"";
                 if($index['tss'] == 1) {
                   $index['tss'] = 'TSS';
                 } else {
@@ -481,8 +481,8 @@ switch($_REQUEST['section']){
 
 				
 				if(isset($fac_only)) $call1='&fac_only'; else $call1='';
-				if($index['user_level']==1) $index['button1']=" <button onClick='window.location=\"/admin/users.php?section=view$call1&letter=$_REQUEST[letter]&unhide&user_id=$index[user_id]\"'>UnHide</button>";
-						else $index['button1']=" <button onClick='window.location=\"/admin/users.php?section=view$call1&letter=$_REQUEST[letter]&hide&user_id=$index[user_id]\"'>Hide</button>";
+				if($index['user_level']==1) $index['button1']=" <button onClick='window.location=\"/users.php?section=view$call1&letter=$_REQUEST[letter]&unhide&user_id=$index[user_id]\"'>UnHide</button>";
+						else $index['button1']=" <button onClick='window.location=\"/users.php?section=view$call1&letter=$_REQUEST[letter]&hide&user_id=$index[user_id]\"'>Hide</button>";
 
                 $index['caqc_button']= "<button onclick=\"document.location='cv_review_print.php?generate=caqc&user_id=$index[user_id]'\">CAQC CV</button>";
 
@@ -654,10 +654,9 @@ switch($_REQUEST['section']){
 	}
 }
 
-$hdr->AddVar('success','success',$success);
+$hdr->AddVar('header','success',$success);
 $hdr->displayParsedTemplate('header');
 $tmpl->displayParsedTemplate('page');
 
-    
-include("templates/template-footer.html");
+
 ?>

@@ -611,7 +611,7 @@ case 'edit':
 
 				foreach($cos as $co){
 					$oneline['name']= "$co[last_name], $co[first_name]";
-					$oneline['delete'] = "<button type='button' $delbutton name='delete' value='delete' onClick='javascript: if(confirm(\"Really delete?\")) window.location=\"/admin/tracking.php?deletecoresearcher&id=$app[form_tracking_id]&user_id=$co[user_id]\";'>Delete</button>";
+					$oneline['delete'] = "<button type='button' $delbutton name='delete' value='delete' onClick='javascript: if(confirm(\"Really delete?\")) window.location=\"/tracking.php?deletecoresearcher&id=$app[form_tracking_id]&user_id=$co[user_id]\";'>Delete</button>";
 					$co_researchers[]=$oneline;
 				}
 				//$tmpl->setAttribute('co_researchers_section','visibility','visible');

@@ -136,7 +136,7 @@ if(isset($section)) switch ($section){
 				if(is_array($papers)){
 					$output.="<tr><td bgcolor='#000000'  style='font-size=12px; font-weight=bold; color:white;' colspan='4'> $cat[name]</td></tr>";
 					foreach ($papers as $paper){
-						if($paper['web_show']) $pcol="<img src='/admin/images/public/check.gif'>"; else $pcol="";
+						if($paper['web_show']) $pcol="<img src='/images/public/check.gif'>"; else $pcol="";
 						$output .= "
 								<tr>
 									<td bgcolor='#CC6699'><a style='color:white' href='publications.php?section=update&id=$paper[paper_id]&user_id=$user[user_id]'>Update</a></td>

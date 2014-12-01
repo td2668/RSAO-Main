@@ -138,7 +138,7 @@ if(isset($_REQUEST['restore'])) {
 if(isset($_REQUEST['archive'])){
 	 if(isset($_REQUEST['user_id'])) {
          if($_REQUEST['user_id']!=0){
-             if (!$logfile = fopen("{$configInfo['file_root']}/admin/mail_log.txt","a+")) die("Mail Log Is Not Writeable");
+             if (!$logfile = fopen("{$configInfo['file_root']}/mail_log.txt","a+")) die("Mail Log Is Not Writeable");
              $date=date($iso8601,$todays_date);
              fwrite($logfile,"-----------------\nDate: $date\n\n");
             $result=rollOver($_REQUEST['user_id']);
@@ -172,7 +172,7 @@ if(isset($_REQUEST['archiveall'])){
     //if(authorizeUsername($_REQUEST['username'])) {
 	    $users=mysqlFetchRows('users',"emp_type='MAN' OR emp_type='FACL' order by last_name,first_name ");
         $count1=$count2=$count3=$count0=0;
-        if (!$logfile = fopen("{$configInfo[file_root]}/admin/mail_log.txt","a+")) die("Mail Log Is Not Writeable");
+        if (!$logfile = fopen("{$configInfo[file_root]}/mail_log.txt","a+")) die("Mail Log Is Not Writeable");
         $date=date($iso8601,$todays_date);
         fwrite($logfile,"-----------------\nDate: $date\n\n");
         foreach($users as $user){

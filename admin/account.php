@@ -215,7 +215,7 @@ function make_table($query, $return)
                 <th><b style='color:#E1E1E1;font-size:10px'>Category</b></th>				
         </tr>";
 	while($row = mysql_fetch_array($result)){
-		echo "<tr onClick='javascript:reconcileme(" . $row['ammount'] . "," . $row['id'] . "," . $row['account_id'] . ")' bgcolor='#D7D7D9'><td>" . return_program($row['account_id']) . "</td><td>" . convert_date_to_dmY($row['date_entered']) . "<img src='/admin/includes/calendar.gif'  align='absmiddle' onclick='showChooser(this, \"transaction_date\", \"chooserSpan\", 2011, 2020, \"d/m/Y\", false);return false;'>
+		echo "<tr onClick='javascript:reconcileme(" . $row['ammount'] . "," . $row['id'] . "," . $row['account_id'] . ")' bgcolor='#D7D7D9'><td>" . return_program($row['account_id']) . "</td><td>" . convert_date_to_dmY($row['date_entered']) . "<img src='/includes/calendar.gif'  align='absmiddle' onclick='showChooser(this, \"transaction_date\", \"chooserSpan\", 2011, 2020, \"d/m/Y\", false);return false;'>
 <div id='chooserSpan' class='dateChooser select-free' style='display: none; visibility: hidden; width: 166px;'>
 </div></td><td>$" . $row['ammount'] . "</td><td>" . $row['description'] . "</td>";
         if($row['advance_flag']==1)
@@ -237,7 +237,7 @@ echo "</form>";
 echo "</table>";
 echo "<form>";
 echo "<input type='hidden' name='transaction_date' id='transaction_date' value=''>";
-echo "<img src='/admin/includes/calendar.gif'  align='absmiddle' onclick='showChooser(this, \"transaction_date\", \"chooserSpan\", 2011, 2020, \"d/m/Y\", false);'>
+echo "<img src='/includes/calendar.gif'  align='absmiddle' onclick='showChooser(this, \"transaction_date\", \"chooserSpan\", 2011, 2020, \"d/m/Y\", false);'>
 <div id='chooserSpan' class='dateChooser select-free' style='display: none; visibility: hidden; width: 166px;'>
 </div></form>";
 }

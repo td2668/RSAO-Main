@@ -44,7 +44,7 @@ $projectDir 		= "" ;
  * $filePath = '/var/www/html/sitemaps';
  */
 
-$filePath			= "/opt/lampp/htdocs/admin/sitemap";
+$filePath			= "/opt/lampp/htdocs/sitemap";
 $sitemapTextfile     = $sitemap->getTextSiteMap($projectDir,$filePath);
 $sitemapXmlfile 	= $sitemap->getXmlSiteMap($projectDir,$filePath);
 

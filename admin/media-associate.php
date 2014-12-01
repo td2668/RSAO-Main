@@ -92,7 +92,7 @@ if ($formAction == 'Add' || $formAction == 'Update') {
     $_REQUEST['section'] = 'view';
 
     // redirect to media page?
-    header("Location: /admin/media.php?section=view");
+    header("Location: /media.php?section=view");
     exit;
 
 // DELETE ASSOCIATION
@@ -205,7 +205,7 @@ if (isset($_REQUEST['section'])) {
                 while ($mediaData = mysql_fetch_assoc($query)) {
                     $output .= '
                         <tr>
-                            <td valign="top" bgcolor="#E09731"><a style="color:white" href="/admin/media-associate.php?section=view&form_action=delete&associated_id=' . $mediaData['associated_id'] . '"><b>Delete</b></a></td>
+                            <td valign="top" bgcolor="#E09731"><a style="color:white" href="/media-associate.php?section=view&form_action=delete&associated_id=' . $mediaData['associated_id'] . '"><b>Delete</b></a></td>
                             <td valign="top" align="left"><img src="' . $mediaUrlPath . '/' . $mediaData['image_name'] . '" width="100" border="0" /></td>
                             <td valign="top" align="left">
                                 Title: <strong>' . $mediaData['title'] . '</strong><br />

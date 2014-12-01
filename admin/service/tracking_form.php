@@ -78,7 +78,7 @@ function getTrackingForms($completedOnly = false, $inPrepOnly = false) {
     }
 
     $sql = "SELECT tracking.form_tracking_id AS id, tracking.letter_required, tracking.status, tracking.ors_submitted_status, approvals_ors.approved,
-                   IFNULL(CONCAT('<a href=\'/admin/tracking.php?section=files&id=', tracking.form_tracking_id, '\' class=\'files\'>', files.numFiles , '</a>'), '---') AS files,
+                   IFNULL(CONCAT('<a href=\'/tracking.php?section=files&id=', tracking.form_tracking_id, '\' class=\'files\'>', files.numFiles , '</a>'), '---') AS files,
                    tracking.tracking_name AS title,
                    IFNULL(DATE_FORMAT(tracking.submit_date,'%Y-%m-%d'), '---') AS submitted_on,
                    CONCAT(u1.last_name, ', ', u1.first_name) AS applicant,

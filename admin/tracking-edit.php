@@ -20,7 +20,7 @@ $trackingForm->retrieveForm($tid);
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
-<link rel="stylesheet" type='text/css' href="/admin/includes/css/tracking.css">
+<link rel="stylesheet" type='text/css' href="/includes/css/tracking.css">
 
 <script>
     $(function() {

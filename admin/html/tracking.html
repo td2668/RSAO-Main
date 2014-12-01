@@ -115,7 +115,7 @@ function pad_with_zeros(rounded_value, decimal_places) {
         <td>{HREB_STATUS}</td>
         <td>{DEAN_STATUS}</td>
         <td bgcolor={COICOLOUR} align="center">{COI}</td>
-        <td><button type='button' class='pdf' onClick='window.location="tracking.php?printpdf&form_tracking_id={FORM_TRACKING_ID}";'><img src='/admin/images/icon-sm-pdf2.gif'></button>
+        <td><button type='button' class='pdf' onClick='window.location="tracking.php?printpdf&form_tracking_id={FORM_TRACKING_ID}";'><img src='/images/icon-sm-pdf2.gif'></button>
         <td><button type='button' onClick='window.location="tracking.php?section=files&id={FORM_TRACKING_ID}";' style="display:{SHOWFILES}">Files ({})</button></td>
 <!--
         <td><button type='button' onClick='window.location="tracking.php?section=edit&id={FORM_TRACKING_ID}";'>Edit</button></td>
@@ -448,7 +448,7 @@ function pad_with_zeros(rounded_value, decimal_places) {
 <option value="{USER_ID}" {SEL}>{LAST_NAME}, {FIRST_NAME}</option>
 		</patTemplate:tmpl>
 		</select>
-		&nbsp;&nbsp;Date: <input type="text" id="dean_date" name="dean_date" value="{DEAN_DATE}" size="19" /> <img src='/admin/includes/calendar.gif'  align='absmiddle' onclick='showChooser(this, "dean_date", "chooserSpan3", 2011, 2020, "Y-m-d", false);'>
+		&nbsp;&nbsp;Date: <input type="text" id="dean_date" name="dean_date" value="{DEAN_DATE}" size="19" /> <img src='/includes/calendar.gif'  align='absmiddle' onclick='showChooser(this, "dean_date", "chooserSpan3", 2011, 2020, "Y-m-d", false);'>
         <div id='chooserSpan3' class='dateChooser select-free' style='display: none; visibility: hidden; width: 166px;'>
 		</div>&nbsp;
 		<button type="button" onClick="javascript: dean_date.value=nowDateTime();">Now</button></td>
@@ -468,7 +468,7 @@ function pad_with_zeros(rounded_value, decimal_places) {
 <option value="{USER_ID}" {SEL}>{LAST_NAME}, {FIRST_NAME}</option>
 		</patTemplate:tmpl>
 		</select>
-		&nbsp;&nbsp;Date: <input type="text" name="ors_date" id="ors_date" value="{ORS_DATE}" size="19" /> <img src='/admin/includes/calendar.gif'  align='absmiddle' onclick='showChooser(this, "ors_date", "chooserSpan2", 2011, 2020, "Y-m-d", false);'>
+		&nbsp;&nbsp;Date: <input type="text" name="ors_date" id="ors_date" value="{ORS_DATE}" size="19" /> <img src='/includes/calendar.gif'  align='absmiddle' onclick='showChooser(this, "ors_date", "chooserSpan2", 2011, 2020, "Y-m-d", false);'>
         <div id='chooserSpan2' class='dateChooser select-free' style='display: none; visibility: hidden; width: 166px;'>
 		</div>&nbsp;
 		<button type="button" onClick="javascript: ors_date.value=nowDateTime();">Now</button></td>

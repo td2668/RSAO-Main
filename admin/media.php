@@ -202,10 +202,10 @@ if (isset($_REQUEST['section'])) {
                     $output .= '
                         <tr>
                             <td valign="top" bgcolor="#E09731">
-                                <a style="color:white" href="/admin/media.php?section=update&media_id=' . $mediaData['media_id'] . '"><b>Update</b></a>
-                                <a style="color:white" href="/admin/media-associate.php?section=associate&media_id=' . $mediaData['media_id'] . '"><b>Associate</b></a>
+                                <a style="color:white" href="/media.php?section=update&media_id=' . $mediaData['media_id'] . '"><b>Update</b></a>
+                                <a style="color:white" href="/media-associate.php?section=associate&media_id=' . $mediaData['media_id'] . '"><b>Associate</b></a>
                                 <br />
-                                <a style="color:white" href="javascript:ConfirmDeleteMedia(\'/admin/media.php?form_action=delete&section=view&media_id=' . $mediaData['media_id'] . '\');"><b>Delete</b></a>
+                                <a style="color:white" href="javascript:ConfirmDeleteMedia(\'/media.php?form_action=delete&section=view&media_id=' . $mediaData['media_id'] . '\');"><b>Delete</b></a>
                             </td>
                             <td valign="top" align="left"><img src="' . $mediaUrlPath . '/' . $mediaData['image_name'] . '" width="100" border="0" /></td>
                             <td valign="top" align="left">

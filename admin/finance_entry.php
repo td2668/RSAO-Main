@@ -89,7 +89,7 @@ else if(isset($_GET['view']) && $_GET['view'] == 'add'){
 	}
 	echo "</select></td></tr>";
 	
-	  echo "<tr><td>Transaction date: </td><td><input name='transaction_date' id='transaction_date' size='8' value='" . date('d/m/Y') . "' onChange='document.form1.submit();'> <img src='/admin/includes/calendar.gif'  align='absmiddle' onclick='showChooser(this, \"transaction_date\", \"chooserSpan\", 2011, 2020, \"d/m/Y\", false);'>
+	  echo "<tr><td>Transaction date: </td><td><input name='transaction_date' id='transaction_date' size='8' value='" . date('d/m/Y') . "' onChange='document.form1.submit();'> <img src='/includes/calendar.gif'  align='absmiddle' onclick='showChooser(this, \"transaction_date\", \"chooserSpan\", 2011, 2020, \"d/m/Y\", false);'>
 <div id='chooserSpan' class='dateChooser select-free' style='display: none; visibility: hidden; width: 166px;'>
 </div></td></tr>";
 	
@@ -135,7 +135,7 @@ else if(isset($_GET['view']) && $_GET['view'] == 'edit'){
 	}
 	echo "</select></td></tr>";
 	
-	  echo "<tr><td>Transaction date: </td><td><input name='transaction_date' id='transaction_date' size='8' value='" . date('d/m/Y') . "' onChange='document.form1.submit();'> <img src='/admin/includes/calendar.gif'  align='absmiddle' onclick='showChooser(this, \"transaction_date\", \"chooserSpan\", 2011, 2020, \"d/m/Y\", false);'>
+	  echo "<tr><td>Transaction date: </td><td><input name='transaction_date' id='transaction_date' size='8' value='" . date('d/m/Y') . "' onChange='document.form1.submit();'> <img src='/includes/calendar.gif'  align='absmiddle' onclick='showChooser(this, \"transaction_date\", \"chooserSpan\", 2011, 2020, \"d/m/Y\", false);'>
 <div id='chooserSpan' class='dateChooser select-free' style='display: none; visibility: hidden; width: 166px;'>
 </div></td></tr>";
 	

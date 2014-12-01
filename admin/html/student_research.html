@@ -2,7 +2,7 @@
     <patTemplate:tmpl src="header.html" />
 
     <!-- /TinyMCE -->
-    <script type="text/javascript" src="/admin/includes/tiny_mce/tiny_mce.js"></script>
+    <script type="text/javascript" src="/includes/tiny_mce/tiny_mce.js"></script>
     <script type="text/javascript">
         tinyMCE.init({
             mode : "textareas",
@@ -18,7 +18,7 @@
             paste_remove_styles: true,
             paste_remove_styles_if_webkit: true,
             paste_strip_class_attributes: true,
-            content_css : "/admin/includes/admin-ucc.css"
+            content_css : "/includes/admin-ucc.css"
         });
     </script>
     <!-- /TinyMCE -->
@@ -165,11 +165,11 @@
                 <tr>
                     <td valign="top">Project Dates :</td>
                     <td>Start Date:<input type="text" name="startDate" id="ors_date" value="{STARTDATE}" size="19" />
-                                   <img src='/admin/includes/calendar.gif' onclick='showChooser(this, "ors_date", "chooserSpan", 2011, 2020, "Y-m-d", false);'>
+                                   <img src='/includes/calendar.gif' onclick='showChooser(this, "ors_date", "chooserSpan", 2011, 2020, "Y-m-d", false);'>
                         <div id='chooserSpan' class='dateChooser select-free' style='display: none; visibility: hidden; width: 166px;'></div>
                     </td>
                     <td>End Date: <input type="text" name="endDate" id="ors_date2" value="{ENDDATE}" size="19" />
-                        <img src='/admin/includes/calendar.gif' onclick='showChooser(this, "ors_date2", "chooserSpan2", 2011, 2020, "Y-m-d", false);'>
+                        <img src='/includes/calendar.gif' onclick='showChooser(this, "ors_date2", "chooserSpan2", 2011, 2020, "Y-m-d", false);'>
                         <div id='chooserSpan2' class='dateChooser select-free' style='display: none; visibility: hidden; width: 166px;'></div>
                     </td>
 

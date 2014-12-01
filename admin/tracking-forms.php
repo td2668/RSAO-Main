@@ -78,7 +78,7 @@ $agencies = $db->GetAll($sql);
             var tid = $(this).parent().parent().parent().parent().siblings()[1].innerHTML;  //get the TID from the first cell
             if (confirm('Are you sure you wish to mark this form as completed ?')) {
                     $.ajax({
-                    url: "/admin/service/tracking_form.php?action=markcomplete",
+                    url: "/service/tracking_form.php?action=markcomplete",
                     data: {trackingid: tid},
                     type: 'POST',
                     dataType: 'html',
@@ -99,7 +99,7 @@ $agencies = $db->GetAll($sql);
         $(document).on("click", '.orsletter', function() {
             var tid = $(this).parent().parent().parent().parent().siblings()[1].innerHTML;  //get the TID from the first cell
             $.ajax({
-                url: "/admin/service/tracking_form.php?action=markletter",
+                url: "/service/tracking_form.php?action=markletter",
                 data: {trackingid: tid},
                 type: 'POST',
                 dataType: 'html',
@@ -116,7 +116,7 @@ $agencies = $db->GetAll($sql);
         $(document).on("click", '.approve', function() {
             var tid = $(this).parent().parent().parent().parent().siblings()[1].innerHTML;  //get the TID from the first cell
             $.ajax({
-                url: "/admin/service/tracking_form.php?action=approve",
+                url: "/service/tracking_form.php?action=approve",
                 data: {trackingid: tid},
                 type: 'POST',
                 dataType: 'html',
@@ -133,7 +133,7 @@ $agencies = $db->GetAll($sql);
         $(document).on("click", '.submission', function() {
             var tid = $(this).parent().parent().parent().parent().siblings()[1].innerHTML;  //get the TID from the first cell
             $.ajax({
-                url: "/admin/service/tracking_form.php?action=submitted&status=yes",
+                url: "/service/tracking_form.php?action=submitted&status=yes",
                 data: {trackingid: tid},
                 type: 'POST',
                 dataType: 'html',
@@ -150,7 +150,7 @@ $agencies = $db->GetAll($sql);
         $(document).on("click", '.nosubmission', function() {
             var tid = $(this).parent().parent().parent().parent().siblings()[1].innerHTML;  //get the TID from the first cell
             $.ajax({
-                url: "/admin/service/tracking_form.php?action=submitted&status=no",
+                url: "/service/tracking_form.php?action=submitted&status=no",
                 data: {trackingid: tid},
                 type: 'POST',
                 dataType: 'html',

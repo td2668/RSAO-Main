@@ -68,7 +68,7 @@ function update() {
         throw new Exception('Unable to update slider.  Slider ID does not exist or not set.');
     }
 
-    header("Location: /admin/sliders.php");
+    header("Location: /sliders.php");
 }
 
 /**
@@ -89,7 +89,7 @@ function delete() {
         throw new Exception("Error deleting slider.  Slider ID does not exist or not set.");
     }
 
-    header("Location: /admin/sliders.php");
+    header("Location: /sliders.php");
 }
 
 /**
@@ -102,7 +102,7 @@ function add() {
     if($db->Execute($sql) === false)
         throw new Exception('SQL error.  Unable to add a new project.');
 
-    header("Location: /admin/sliders.php?section=edit&id=" . mysql_insert_id());
+    header("Location: /sliders.php?section=edit&id=" . mysql_insert_id());
 }
 
 /**
@@ -118,8 +118,8 @@ function getSliders() {
 
     foreach($sliders as $key=>$slider) {
         $sliders[$key]['page'] = $slider['page']  == 0 ? "front" : 'unknown';
-        $sliders[$key]['shown'] = ($slider['shown'] == '1') ? "<img src='/admin/images/check.gif' alt='check'/>" : '';
-        $sliders[$key]['link'] = strlen($slider['link'])  > 0  ? "<img src='/admin/images/check.gif' alt='check'/>" : '';
+        $sliders[$key]['shown'] = ($slider['shown'] == '1') ? "<img src='/images/check.gif' alt='check'/>" : '';
+        $sliders[$key]['link'] = strlen($slider['link'])  > 0  ? "<img src='/images/check.gif' alt='check'/>" : '';
     }
 
     return $sliders;

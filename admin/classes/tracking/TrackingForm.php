@@ -2,14 +2,14 @@
 
 namespace tracking;
 
-require_once($_SERVER['DOCUMENT_ROOT'] . '/admin/includes/global.inc.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/includes/global.inc.php');
 
-require_once($_SERVER['DOCUMENT_ROOT'] . '/admin/classes/tracking/Funding.php');
-require_once($_SERVER['DOCUMENT_ROOT'] . '/admin/classes/tracking/Commitments.php');
-require_once($_SERVER['DOCUMENT_ROOT'] . '/admin/classes/tracking/Investigator.php');
-require_once($_SERVER['DOCUMENT_ROOT'] . '/admin/classes/tracking/ExternalInvestigator.php');
-require_once($_SERVER['DOCUMENT_ROOT'] . '/admin/classes/tracking/COI.php');
-require_once($_SERVER['DOCUMENT_ROOT'] . '/admin/classes/tracking/Compliance.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/classes/tracking/Funding.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/classes/tracking/Commitments.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/classes/tracking/Investigator.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/classes/tracking/ExternalInvestigator.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/classes/tracking/COI.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/classes/tracking/Compliance.php');
 
 global $configInfo;
 

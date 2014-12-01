@@ -222,25 +222,25 @@ case 'view':
 
 			//if(strlen($app['tracking_name'])>40) $apps[$key]['tracking_name']=substr($app['tracking_name'],0,40) . '...';
 			
-			if($app['form_irgf_id'] > 0) $apps[$key]['irgf_pdf']="<button class='pdf' type='button' onClick='javascript: window.location=\"irgf.php?printpdf&form_irgf_id=$app[form_irgf_id]\";'><img src='/admin/images/icon-sm-pdf2.gif'></button>";
+			if($app['form_irgf_id'] > 0) $apps[$key]['irgf_pdf']="<button class='pdf' type='button' onClick='javascript: window.location=\"irgf.php?printpdf&form_irgf_id=$app[form_irgf_id]\";'><img src='/images/icon-sm-pdf2.gif'></button>";
 
-			if($app['form_tracking_id'] > 0) $apps[$key]['tracking_pdf']="<button class='pdf' type='button' onClick='javascript: window.location=\"irgf.php?printpdf&form_tracking_id=$app[form_tracking_id]\";'><img src='/admin/images/icon-sm-pdf2.gif'></button>";
+			if($app['form_tracking_id'] > 0) $apps[$key]['tracking_pdf']="<button class='pdf' type='button' onClick='javascript: window.location=\"irgf.php?printpdf&form_tracking_id=$app[form_tracking_id]\";'><img src='/images/icon-sm-pdf2.gif'></button>";
 
-			if($app['filename']!='') $apps[$key]['attach_pdf']="<button class='pdf' type='button' onClick='javascript: window.location=\"$configInfo[irgf_docs]/$app[user_id]/$app[filename]\";'><img src='/admin/images/icon-sm-pdf2.gif'></button>";
+			if($app['filename']!='') $apps[$key]['attach_pdf']="<button class='pdf' type='button' onClick='javascript: window.location=\"$configInfo[irgf_docs]/$app[user_id]/$app[filename]\";'><img src='/images/icon-sm-pdf2.gif'></button>";
 			
 			//We should at least have a user CV
 			$apps[$key]['cv_pdf']='';
 			if($app['cv']<>0){ 
 				if($app['pi']) $pi=$app['user_id']; else $pi=$app['pi_id'];
 				
-				if($pi != 0) $apps[$key]['cv_pdf']="<button class='pdf' type='button' onClick='javascript: window.location=\"cv_review_print.php?generate=mycv$app[cv]&report_user_id=$pi&style=apa\";'><img src='/admin/images/icon-sm-pdf2.gif'></button>";
+				if($pi != 0) $apps[$key]['cv_pdf']="<button class='pdf' type='button' onClick='javascript: window.location=\"cv_review_print.php?generate=mycv$app[cv]&report_user_id=$pi&style=apa\";'><img src='/images/icon-sm-pdf2.gif'></button>";
 			}
 			
 			//Pull up any co-researchers
 			$sql="SELECT * FROM forms_tracking_coresearchers WHERE form_tracking_id=$app[form_tracking_id]";
 			$cos=$db->getAll($sql);
 			if(count($cos)> 0) foreach($cos as $co){
-				if($co['cv']<>0) $apps[$key]['cv_pdf'].="<button class='pdf' type='button' onClick='javascript: window.location=\"cv_review_print.php?generate=mycv$co[cv]&report_user_id=$co[user_id]&style=apa\";'><img src='/admin/images/icon-sm-pdf2.gif'></button>";
+				if($co['cv']<>0) $apps[$key]['cv_pdf'].="<button class='pdf' type='button' onClick='javascript: window.location=\"cv_review_print.php?generate=mycv$co[cv]&report_user_id=$co[user_id]&style=apa\";'><img src='/images/icon-sm-pdf2.gif'></button>";
 			}
 			
 			//The save button - puts all files into the relevant directory. 
