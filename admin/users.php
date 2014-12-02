@@ -379,6 +379,8 @@ else if (isset($_REQUEST['delete'])) {
 	$db->Execute("DELETE FROM users_disabled WHERE user_id=$_REQUEST[id]");
     $db->Execute("DELETE FROM user_topics_filter WHERE user_id=$_REQUEST[id]");
     $db->Execute("DELETE FROM users_oneline WHERE user_id=$_REQUEST[id]");
+    $db->Execute("DELETE FROM cas_cv_items WHERE user_id=$_REQUEST[id]");
+    $db->Execute("DELETE FROM pictures_associated WHERE object_id=$_REQUEST[id] AND table_name='users'");
     $_REQUEST['section']='view';
 }
 
@@ -485,6 +487,7 @@ switch($_REQUEST['section']){
 						else $index['button1']=" <button onClick='window.location=\"/users.php?section=view$call1&letter=$_REQUEST[letter]&hide&user_id=$index[user_id]\"'>Hide</button>";
 
                 $index['caqc_button']= "<button onclick=\"document.location='cv_review_print.php?generate=caqc&user_id=$index[user_id]'\">CAQC CV</button>";
+                $index['letter']=$_REQUEST['letter'];
 
 				$viewlist[]=$index;
 			}
@@ -517,11 +520,17 @@ switch($_REQUEST['section']){
          $department2_list=$departments->GetMenu('department2','None');
          $departments->MoveFirst();
 		 $department_list=$departments->GetMenu('department','None');
+		 
+		 foreach(array(''=>'','Tenured'=>'T','Tenure-Track'=>'TN','Term-Certain'=>'TC') as $key=>$status) {
+	            
+	            $emp_status_options.="<option value='$status' $sel>$key</option>\n";
+	        }
 	
     	 
 		 
 		 $tmpl->AddVars('add',array(    'topic_options'=>$topic_options,
                                         'emp_type_options'=>$emp_type_options,
+                                        'emp_status_options'=>$emp_status_options,
                                         'which_message'=>$which_message,
                                         'department_list'=>$department_list,
                                         'department2_list'=>$department2_list ));

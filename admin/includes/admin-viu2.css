@@ -4,9 +4,9 @@ html {
 	#background:#fafafa;
 	*/
 }
-
+/*
 * {margin:0; padding:0;}
-
+*/
 form {
 	background:#fff;
 	padding:1em;
@@ -21,6 +21,16 @@ form {
 fieldset {
 	margin:0.3em 0;
 	clear:both;
+	
+}
+
+.users{
+	margin-top: 6px;
+	font-size: 0.9em;
+}
+label.users{
+	float:left;
+	width:12em;
 }
 
 form {

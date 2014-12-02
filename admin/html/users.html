@@ -51,7 +51,8 @@
 					<td bgcolor='{P_EXT}'>&nbsp;</td>
                     <td bgcolor='{BGCOLOR}'>{CV_ITEMS}</td>
                     <td bgcolor='{BGCOLOR}'>{ACCESS}</td>
-                    <td>{BUTTON1}</td></tr>
+                    <td>{BUTTON1}</td>
+                    <td><button type="button" onClick="window.location='users.php?section=view&delete=y&id={USER_ID}&section=view{FAC_ONLY}&letter={LETTER}'">Delete</button></td></tr>
 			</patTemplate:tmpl>
 
 		</table>
@@ -61,298 +62,225 @@
     <patTemplate:tmpl name="add" visibility="hidden">
 
         <form method="post" name="form1" action="users.php?section=add" onSubmit="">
-            <table>
-                <tr>
-                    <td>First Name:</td>
-                    <td><input type="text" name="first_name" maxlength="255" size="30"></td>
-                </tr>
-                <tr>
-                    <td>Last Name:</td>
-                    <td><input type="text"  onBlur="javascript:document.forms[0].email.value=document.forms[0].first_name.value.substr(0,1).toLowerCase() + document.forms[0].last_name.value.toLowerCase() + '@mtroyal.ca'; document.forms[0].username.value=document.forms[0].first_name.value.substr(0,1).toLowerCase() + document.forms[0].last_name.value.toLowerCase(); " name="last_name" maxlength="255" size="30"></td>
+            <fieldset class='users'>
+				<legend>Personal Info</legend>
+                <div class="users"><label class="users">First Name:</label>
+                    <input type="text" name="first_name" maxlength="255" size="30">
+                </div>
+                <div class="users"><label class="users">Last Name:</label>
+                    <input type="text"  onBlur="javascript:document.forms[0].email.value=document.forms[0].first_name.value.substr(0,1).toLowerCase() + document.forms[0].last_name.value.toLowerCase() + '@mtroyal.ca'; document.forms[0].username.value=document.forms[0].first_name.value.substr(0,1).toLowerCase() + document.forms[0].last_name.value.toLowerCase(); " name="last_name" maxlength="255" size="30" >
 
-                </tr>
-                <tr>
-                <td>Department</td>
-                <td>
+                </div>
+                <div class="users"><label class="users">Department:</label>
                 {DEPARTMENT_LIST}
-                </td></tr>
-                <tr>
-                <td>Secondary Department</td>
-                <td>
+                </div>
+                <div class="users"><label class="users" >Secondary Department:</label>
                 {DEPARTMENT2_LIST}
-                </td></tr>
-                <tr>
-                    <td>Email:</td>
-                    <td><input type="text" name="email" maxlength="255" size="30"></td>
-                </tr>
-                <tr>
-                    <td>Username:</td>
-                    <td><input type="text" name="username" maxlength="255" size="30"></td>
-                </tr>
-                <tr>
-                    <td>Password:</td>
-                    <td><input type="text" name="password" size="30"</td>
-                </tr>
-                 <tr>
-                    <td>Employee Type:</td>
-                    <td>
+                </div>
+                <div class="users"><label class="users"> Email:</label>
+                    <input type="text" name="email" maxlength="255" size="30">
+                </div>
+                <div class="users"><label class="users">Username:</label>
+	                <input type="text" name="username" maxlength="255" size="30" >
+                </div>
+			</fieldset>
+			<fieldset class="users">
+				<legend>Job Info</legend>
+                <div class="users"><label class="users">Employee Type:</label>
                     {EMP_TYPE_OPTIONS}
-                    </td>
-                </tr>
-                <tr>
-                    <td>Title:</td>
-                    <td><input type="text" name="title" maxlength="255" size="30"></td>
-                </tr>
-                 <tr>
-                    <td>Secondary Title:</td>
-                    <td><input type="text" name="secondary_title" maxlength="255" size="30"></td>
-                </tr>
-                 <tr>
-                    <td>Office Location:</td>
-                    <td><input type="text" name="office" maxlength="30" size="30"></td>
-                </tr>
-                 <tr>
-                    <td>Phone: <i>(403)123-4567</i></td>
-                    <td><input type="text" name="phone" maxlength="30" size="30"></td>
-                </tr>
-                 <tr>
-                    <td>Fax:</td>
-                    <td><input type="text" name="fax" maxlength="30" size="30"></td>
-                </tr>
-                 <tr>
-                    <td>Homepage:</td>
-                    <td><input type="text" name="homepage" maxlength="100" size="30"></td>
-                </tr>
-                <tr>
-                    <td>User Topics (Filter)</td>
-                    <td>{TOPIC_OPTIONS}</td>
-                </tr>
-                <tr>
-                    <td>Short Profile:</td>
-                    <td><textarea name="profile_short" rows='3' cols="120"></textarea></td>
-                    </tr>
-                <tr>
-                    <td>Long Profile:</td>
-                    <td><textarea name="profile_ext" rows='12' cols="120"></textarea></td>
-                    </tr>
-                <tr>
-                    <td>Keywords:</td>
-                    <td><input type="text" name="keywords" size='80'></td>
-                    </tr>
-                <tr>
-                    <td>Send New User Msg?:</td>
-                    <td><input type="checkbox" name="welcome_msg" value="yes" ></td>
-                </tr>
-                <tr>
-                    <td>Which Message?</td>
-                    <td>{WHICH_MESSAGE}</td></tr>
-                     <tr>
-                    <td>Mail Events?:</td>
-                    <td><input type="checkbox" name="mail_events" value="1" checked></td>
-                </tr>
-                 <tr>
-                    <td>Mail Deadlines?:</td>
-                    <td><input type="checkbox" name="mail_deadlines" value="1" checked></td>
-                </tr>
-                 <tr>
-                    <td>Feature User?:</td>
-                    <td><input type="checkbox" name="feature" value="1"></td>
-                </tr>
-                   <tr>
-                    <td>Browser?:</td>
-                    <td><input type="checkbox" name="browser" value="1"></td>
-                </tr>
-                <tr>
-                    <td>Hidden?:</td>
-                    <td><input type="checkbox" name="hidden" value="1"></td>
-                </tr>
-                <tr>
-                    <td>Disabled?:</td>
-                    <td><input type="checkbox" name="disabled" value="1"></td>
-                </tr>
-                <tr>
-                    <td colspan="2"><hr>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Status</td>
-                    <td><select name="emp_status">
-                    <option value=''></option>
-                    <option value='T'>Tenured</option>
-                    <option value="TN">Tenure-Track</option>
-                    <option value="TC">Term-Certain</option>
-                    </select></td>
-                </tr>
-                <tr>
-                    <td>Start Date</td>
-                    <td><input type="text" name="start_date" size="6"> <i>YYYY</i></td>
-                </tr>
+                </div>
+                <div class="users"><label class="users">Title:</label>
+                    <input type="text" name="title" maxlength="255" size="30" >
+                </div>
+			    
+			  	<div class="users"><label class="users">Secondary Title:</label>
+			        <input type="text" name="secondary_title" maxlength="255" size="30">
+			  	</div>
+			    <div class="users"><label class="users">Office Location:</label>
+			        <input type="text" name="office" maxlength="30" size="30" >
+			    </div>
+			    <div class="users"><label class="users">Phone: <i>(403)123-4567</i></label>
+			        <input type="text" name="phone" maxlength="30" size="30">
+			    </div>
+			    <div class="users"><label class="users">Fax:</label>
+			        <input type="text" name="fax" maxlength="30" size="30">
+			    </div>
+			    <div class="users"><label class="users">Homepage:</label>
+			        <input type="text" name="homepage" maxlength="100" size="30">
+			    </div>
+			</fieldset>
+			<fieldset class="users">
+				<legend>Descriptions</legend>
+			    <div class="users"><label class="users">User Topics (Filter)</label>
+			        {TOPIC_OPTIONS}
+			    </div>
+			    <div class="users"><label class="users">One Line:</label>
+					<textarea name="oneline" rows="1" cols="70"  ></textarea>
+			    </div>
+			    <div class="users"><label class="users">Short Profile:</label>
+			        <textarea name="profile_short" rows='3' cols="100"></textarea>
+			    </div>
+			    <div class="users"><label class="users">Long Profile:</label>
+			        <textarea name="profile_ext" rows='12' cols="100"></textarea>
+			    </div>
+			    <div class="users"><label class="users">Keywords:</label>
+			        <input type="text" name="keywords" maxlength="255" size="80">
+			    </div>
+			</fieldset>
+			<fieldset class="users">
+				<legend>Prefs and Status</legend>
+			    <div class="users"><label class="users">Mail Events?:</label>
+			        <input type="checkbox" name="mail_events" value="1">
+			    </div>
+			    <div class="users"><label class="users">Mail Deadlines?:</label>
+			        <input type="checkbox" name="mail_deadlines" value="1">
+			    </div>
+			    <div class="users"><label class="users">Feature User?:</label>
+			        <input type="checkbox" name="feature" value="1">
+			    </div>
+			    <div class="users"><label class="users">Hidden?:</label>
+			        <input type="checkbox" name="hidden" value="1">
+			    </div>
+			    <div class="users"><label class="users">Disabled?:</label>
+			        <input type="checkbox" name="disabled" value="1">
+			    </div>
+			    <div class="users"><label class="users">Status:</label>
+			        <select name="emp_status">
+			        {EMP_STATUS_OPTIONS}
+			        </select>
+			    </div>
+			    <div class="users"><label class="users">Start Date</label>
+			        <input type="text" name="start_date" size="6"> <i>YYYY</i>
+			    </div>
+			    <div class="users"><label class="users">Employee #:</label>
+			    	<input type="text" name="emp_num" size="12">
+			    </div>
+			    <div class="users"><label class="users">Active Status</label>
+			    	<input type="text" name="active_status" size=1 > <i>(A=Active, L=Leave)</i>
+			    </div>
 
-                <tr>
-                    <td>TSS Status</td>
-                    <td><input type="checkbox" name="tss" ></td>
-                </tr>
-                <tr>
-                    <td>TSS Start</td>
-                    <td><input type="text" name="tss_start" size="6"> <i>YYYY</i></td>
-                </tr>
-                <tr><td>Employee #</td>
-                <td><input type="text" name="emp_num" size="12"></td>
-                </tr>
-                <tr><td>Active Status</td>
-                <td><input type="text" name="active_status" size=1 value="A"> <i>(A=Active, L=Leave)</i></td></tr>
-                
-                <tr>
-                    <td>&nbsp;</td>
-                    <td><input type="submit" name="add" value="Add">&nbsp;&nbsp;
-                        <button onClick="window.location='users.php?section=view'">Back</button></td>
-                </tr>
-            </table>
+				<div style="text-align: center"><button type="submit" name="add" value="Add">Add</button>&nbsp;&nbsp;
+						<button type="button" onClick="window.location='users.php?section=view&delete=y&id={ID}&section=view{FAC_ONLY}&letter={LETTER}'">Delete</button>&nbsp;&nbsp;
+						<button type="button" onClick="window.location='users.php?section=view{FAC_ONLY}&letter={LETTER}'">Back</button>&nbsp;&nbsp;
+			            
+				</div>
             </form>
     </patTemplate:tmpl>
 
 
     <patTemplate:tmpl name="update" visibility="hidden">
     	<form method="post" name="form1" action="users.php?section=update&id={ID}" onSubmit="return">
-			<table>
-				<input type="hidden" name="old_username" maxlength="255" size="30" value="{USERNAME}">
-			    <input type="hidden" name="letter" value="{LETTER}">
-			    <input type="hidden" name="fac_only" value="{FAC_ONLY}">
-				<tr>
-			       <td>First Name:</td>
-			        <td><input type="text" name="first_name" maxlength="255" size="30" value="{FIRST_NAME}"></td>
-			    </tr>
-			    <tr>
-			        <td>Last Name:</td>
-			        <td><input type="text"  name="last_name" maxlength="255" size="30" value="{LAST_NAME}"></td>
-			    </tr>
-			    <tr>
-			    <td>Department</td>
-			    <td>{DEPARTMENT_LIST}</td></tr>
-			    <tr>
-			    <td>Secondary Department</td>
-			    <td>{DEPARTMENT2_LIST}</td></tr>
-			    <tr>
-			        <td>Email:</td>
-			        <td><input type="text" name="email" maxlength="255" size="30" value="{EMAIL}"></td>
-			    </tr>
-			    <tr>
-			        <td>Username:</td>
-			        <td><input type="text" name="username" maxlength="255" size="30" value="{USERNAME}"></td>
-			    </tr>
+			
+			<input type="hidden" name="old_username" maxlength="255" size="30" value="{USERNAME}">
+			<input type="hidden" name="letter" value="{LETTER}">
+			<input type="hidden" name="fac_only" value="{FAC_ONLY}">
+				
+			<fieldset class='users'>
+				<legend>Personal Info</legend>
+                <div class="users"><label class="users">First Name:</label>
+                    <input type="text" name="first_name" maxlength="255" size="30" value="{FIRST_NAME}">
+                </div>
+                <div class="users"><label class="users">Last Name:</label>
+                    <input type="text"  onBlur="javascript:document.forms[0].email.value=document.forms[0].first_name.value.substr(0,1).toLowerCase() + document.forms[0].last_name.value.toLowerCase() + '@mtroyal.ca'; document.forms[0].username.value=document.forms[0].first_name.value.substr(0,1).toLowerCase() + document.forms[0].last_name.value.toLowerCase(); " name="last_name" maxlength="255" size="30" value="{LAST_NAME}" >
 
-			     <tr>
-			        <td>Employee Type:</td>
-			        <td>{EMP_TYPE_OPTIONS}
-			    </td></tr>
-			    <tr>
-			        <td>Title:</td>
-			        <td><input type="text" name="title" maxlength="255" size="30" value="{TITLE}"></td>
-			    </tr>
-			     <tr>
-			        <td>Secondary Title:</td>
-			        <td><input type="text" name="secondary_title" maxlength="255" size="30" value="{SECONDARY_TITLE}"></td>
-			    </tr>
-			     <tr>
-			        <td>Office Location:</td>
-			        <td><input type="text" name="office" maxlength="30" size="30" value="{OFFICE}"></td>
-			    </tr>
-			     <tr>
-			        <td>Phone: <i>(403)123-4567</i></td>
-			        <td><input type="text" name="phone" maxlength="30" size="30" value="{PHONE}"></td>
-			    </tr>
-			     <tr>
-			        <td>Fax:</td>
-			        <td><input type="text" name="fax" maxlength="30" size="30" value="{FAX}"></td>
-			    </tr>
-			     <tr>
-			        <td>Homepage:</td>
-			        <td><input type="text" name="homepage" maxlength="100" size="30" value="{HOMEPAGE}"></td>
-			    </tr>
-			     <tr>
-			        <td>User Topics (Filter)</td>
-			        <td>{TOPIC_OPTIONS}</td>
-			    </tr>
-			    <tr>
-			    	<td>One Line:</td>
-					<td><textarea name="oneline" rows="1" cols="70"  >{ONELINE}</textarea>  </td>
-			    </tr>
-			     <tr>
-			        <td>Short Profile:</td>
-			        <td><textarea name="profile_short" rows='3' cols="120">{PROFILE_SHORT}</textarea></td>
-			        </tr>
-			    <tr>
-			        <td>Long Profile:</td>
-			        <td><textarea name="profile_ext" rows='12' cols="120">{PROFILE_EXT}</textarea></td>
-			        </tr>
-			        <tr>
-			        <td>Keywords:</td>
-			        <td><input type="text" name="keywords" maxlength="255" size="80" value="{KEYWORDS}">
-			</td>
-			    </tr>
-			    <tr>
-			        <td>Mail Events?:</td>
-			        <td><input type="checkbox" name="mail_events" value="1" {MAIL_EVENTS}></td>
-			    </tr>
-			     <tr>
-			        <td>Mail Deadlines?:</td>
-			        <td><input type="checkbox" name="mail_deadlines" value="1" {MAIL_DEADLINES}></td>
-			    </tr>
-			     <tr>
-			        <td>Feature User?:</td>
-			        <td><input type="checkbox" name="feature" value="1" {FEATURE}></td>
-			    </tr>
-			    <tr>
-			        <td>Browser?:</td>
-			        <td><input type="checkbox" name="browser" value="1" {BROWSER}></td>
-			    </tr>
-			    <tr>
-			        <td>Hidden?:</td>
-			        <td><input type="checkbox" name="hidden" value="1" {HIDDEN}></td>
-			    </tr>
-			    <tr>
-			        <td>Disabled?:</td>
-			        <td><input type="checkbox" name="disabled" value="1" {DISABLED}></td>
-			    </tr>
-			    <tr>
-			        <td colspan="2"><hr>
-			        </td>
-			    </tr>
-			    <tr>
-			        <td>Status</td>
-			        <td><select name="emp_status">
+                </div>
+                <div class="users"><label class="users">Department:</label>
+                {DEPARTMENT_LIST}
+                </div>
+                <div class="users"><label class="users" >Secondary Department:</label>
+                {DEPARTMENT2_LIST}
+                </div>
+                <div class="users"><label class="users"> Email:</label>
+                    <input type="text" name="email" maxlength="255" size="30" value="{EMAIL}">
+                </div>
+                <div class="users"><label class="users">Username:</label>
+	                <input type="text" name="username" maxlength="255" size="30" value="{USERNAME}">
+                </div>
+			</fieldset>
+			<fieldset class="users">
+				<legend>Job Info</legend>
+                <div class="users"><label class="users">Employee Type:</label>
+                    {EMP_TYPE_OPTIONS}
+                </div>
+                <div class="users"><label class="users">Title:</label>
+                    <input type="text" name="title" maxlength="255" size="30" value="{TITLE}">
+                </div>
+			    
+			  	<div class="users"><label class="users">Secondary Title:</label>
+			        <input type="text" name="secondary_title" maxlength="255" size="30" value="{SECONDARY_TITLE}">
+			  	</div>
+			    <div class="users"><label class="users">Office Location:</label>
+			        <input type="text" name="office" maxlength="30" size="30" value="{OFFICE}">
+			    </div>
+			    <div class="users"><label class="users">Phone: <i>(403)123-4567</i></label>
+			        <input type="text" name="phone" maxlength="30" size="30" value="{PHONE}">
+			    </div>
+			    <div class="users"><label class="users">Fax:</label>
+			        <input type="text" name="fax" maxlength="30" size="30" value="{FAX}">
+			    </div>
+			    <div class="users"><label class="users">Homepage:</label>
+			        <input type="text" name="homepage" maxlength="100" size="30" value="{HOMEPAGE}">
+			    </div>
+			</fieldset>
+			<fieldset class="users">
+				<legend>Descriptions</legend>
+			    <div class="users"><label class="users">User Topics (Filter)</label>
+			        {TOPIC_OPTIONS}
+			    </div>
+			    <div class="users"><label class="users">One Line:</label>
+					<textarea name="oneline" rows="1" cols="70"  >{ONELINE}</textarea>
+			    </div>
+			    <div class="users"><label class="users">Short Profile:</label>
+			        <textarea name="profile_short" rows='3' cols="100">{PROFILE_SHORT}</textarea>
+			    </div>
+			    <div class="users"><label class="users">Long Profile:</label>
+			        <textarea name="profile_ext" rows='12' cols="100">{PROFILE_EXT}</textarea>
+			    </div>
+			    <div class="users"><label class="users">Keywords:</label>
+			        <input type="text" name="keywords" maxlength="255" size="80" value="{KEYWORDS}">
+			    </div>
+			</fieldset>
+			<fieldset class="users">
+				<legend>Prefs and Status</legend>
+			    <div class="users"><label class="users">Mail Events?:</label>
+			        <input type="checkbox" name="mail_events" value="1" {MAIL_EVENTS}>
+			    </div>
+			    <div class="users"><label class="users">Mail Deadlines?:</label>
+			        <input type="checkbox" name="mail_deadlines" value="1" {MAIL_DEADLINES}>
+			    </div>
+			    <div class="users"><label class="users">Feature User?:</label>
+			        <input type="checkbox" name="feature" value="1" {FEATURE}>
+			    </div>
+			    <div class="users"><label class="users">Hidden?:</label>
+			        <input type="checkbox" name="hidden" value="1" {HIDDEN}>
+			    </div>
+			    <div class="users"><label class="users">Disabled?:</label>
+			        <input type="checkbox" name="disabled" value="1" {DISABLED}>
+			    </div>
+			    <div class="users"><label class="users">Status:</label>
+			        <select name="emp_status">
 			        {EMP_STATUS_OPTIONS}
-			        </select></td>
-				</tr>
-			    <tr>
-			        <td>Start Date</td>
-			        <td><input type="text" name="start_date" size="6" value="{START_DATE}"> <i>YYYY</i></td>
-			    </tr>
-			    <tr>
-			        <td>TSS Status</td>
-			        <td><input type="checkbox" name="tss" {TSS}></td>
-			    </tr>
-			    <tr>
-			        <td>TSS Start</td>
-			        <td><input type="text" name="tss_start" size="6" value="{TSS_START}"> <i>YYYY</i></td>
-			    </tr>
-			    <tr><td>Employee #</td>
-			    <td><input type="text" name="emp_num" size="12" value="{EMP_NUM}"></td>
-			    </tr>
-			    <tr><td>Active Status</td>
-			    <td><input type="text" name="active_status" size=1 value="{ACTIVE_STATUS}"> <i>(A=Active, L=Leave)</i></td></tr>
-			<tr><td></td></tr>
-			    <tr>
-					<td>&nbsp;</td>
-					<td><input type="submit" name="update" value="Update">&nbsp;&nbsp;
+			        </select>
+			    </div>
+			    <div class="users"><label class="users">Start Date</label>
+			        <input type="text" name="start_date" size="6" value="{START_DATE}"> <i>YYYY</i>
+			    </div>
+			    <div class="users"><label class="users">Employee #:</label>
+			    	<input type="text" name="emp_num" size="12" value="{EMP_NUM}">
+			    </div>
+			    <div class="users"><label class="users">Active Status</label>
+			    	<input type="text" name="active_status" size=1 value="{ACTIVE_STATUS}"> <i>(A=Active, L=Leave)</i>
+			    </div>
+
+				<div style="text-align: center"><button type="submit" name="update" value="Update">Update</button>&nbsp;&nbsp;
 						<button type="button" onClick="window.location='users.php?section=view&delete=y&id={ID}&section=view{FAC_ONLY}&letter={LETTER}'">Delete</button>&nbsp;&nbsp;
 						<button type="button" onClick="window.location='users.php?section=view{FAC_ONLY}&letter={LETTER}'">Back</button>&nbsp;&nbsp;
-			            {PICTURE_BUTTON}</td>
-				</tr>
+			            {PICTURE_BUTTON}
+				</div>
 
                 
                  <patTemplate:tmpl name="viewcat" visibility="hidden">
-                 <tr>
+                 <table><tr>
                     <td colspan="2"><hr>
                     </td>
                 </tr>
