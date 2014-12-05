@@ -69,21 +69,21 @@ $configInfos["scholviu.v3client.com"]["admin"] = array('tdavis','cnakamoto');
 $configInfos["scholviu.v3client.com"]["picture_path"] = "/var/www/orsadmin-prep_htdocs/admin/documents/shared/pictures/";
 $configInfos["scholviu.v3client.com"]["picture_url"] = "/admin/documents/shared/pictures/";
 
-$configInfos["admin.scholviu.v3client.com"]["server_name"] = "scholviu.v3client.com";
-$configInfos["admin.scholviu.v3client.com"]["host"] = "localhost";
-$configInfos["admin.scholviu.v3client.com"]["user"] = "scholviu_ors";
-$configInfos["admin.scholviu.v3client.com"]["pass"] = "rilinc";
-$configInfos["admin.scholviu.v3client.com"]["dbdriver"] = "mysql";
-$configInfos["admin.scholviu.v3client.com"]["dbname"] = "scholviu_research";
-$configInfos["admin.scholviu.v3client.com"]["peardir"] = '';
-$configInfos["admin.scholviu.v3client.com"]["debug"] = false;
-$configInfos["admin.scholviu.v3client.com"]["url_root"] = 'http://scholviu.v3client.com/';
-$configInfos["admin.scholviu.v3client.com"]["file_root"] = '/home/scholviu/public_html/admin';
-$configInfos["admin.scholviu.v3client.com"]["upload_root"] = '/var/www/research-prep_htdocs/documents/uploads/';
-$configInfos["admin.scholviu.v3client.com"]["tracking_docs"] = "/var/www/orsadmin-prep_htdocs/admin/documents/shared/tracking/";
-$configInfos["admin.scholviu.v3client.com"]["admin"] = array('tdavis','cnakamoto');
-$configInfos["admin.scholviu.v3client.com"]["picture_path"] = "/var/www/orsadmin-prep_htdocs/admin/documents/shared/pictures/";
-$configInfos["admin.scholviu.v3client.com"]["picture_url"] = "/admin/documents/shared/pictures/";
+$configInfos["admin.schol.viu.ca"]["server_name"] = "admin.schol.viu.ca";
+$configInfos["admin.schol.viu.ca"]["host"] = "localhost";
+$configInfos["admin.schol.viu.ca"]["user"] = "scholviu_ors";
+$configInfos["admin.schol.viu.ca"]["pass"] = "rilinc";
+$configInfos["admin.schol.viu.ca"]["dbdriver"] = "mysql";
+$configInfos["admin.schol.viu.ca"]["dbname"] = "scholviu_research";
+$configInfos["admin.schol.viu.ca"]["peardir"] = '';
+$configInfos["admin.schol.viu.ca"]["debug"] = false;
+$configInfos["admin.schol.viu.ca"]["url_root"] = 'http://admin.schol.viu.ca/';
+$configInfos["admin.schol.viu.ca"]["file_root"] = '/home/scholviu/public_html/admin';
+$configInfos["admin.schol.viu.ca"]["upload_root"] = '/var/www/research-prep_htdocs/documents/uploads/';
+$configInfos["admin.schol.viu.ca"]["tracking_docs"] = "/var/www/orsadmin-prep_htdocs/admin/documents/shared/tracking/";
+$configInfos["admin.schol.viu.ca"]["admin"] = array('tdavis','cnakamoto');
+$configInfos["admin.schol.viu.ca"]["picture_path"] = "/home/scholviu/public_html/admin/documents/shared/pictures/";
+$configInfos["admin.schol.viu.ca"]["picture_url"] = "/admin/documents/shared/pictures/";
 
 
 
@@ -94,12 +94,28 @@ $configInfos["localhost"]["pass"] = 'rilinc';
 $configInfos["localhost"]["dbdriver"] = 'mysql';
 $configInfos["localhost"]["dbname"] = 'research';
 $configInfos["localhost"]["peardir"] = '/vagrant/vendor/conservatory/research-pear/';
-$configInfos["localhost"]["debug"] = false;
+$configInfos["localhost"]["debug"] = true;
 $configInfos["localhost"]["authmethod"] = 'usertable';
 $configInfos["localhost"]["url_root"] = 'http://local.orsadmin';
 $configInfos["localhost"]["file_root"] = '/vagrant/research-admin/';
 $configInfos["localhost"]["admin"] = array('tdavis','cnakamoto');
 $configInfos["localhost"]["irgf_docs"] = "/admin/documents/shared/irgf";
+$configInfos["localhost"]["picture_path"] = "/Users/tdavis/Sites/webrepo/tags/release-4.0/admin/documents/pictures/";
+
+$configInfos["admin.localhost"]["server_name"] = 'localhost';
+$configInfos["admin.localhost"]["host"] = 'localhost';
+$configInfos["admin.localhost"]["user"] = 'ors';
+$configInfos["admin.localhost"]["pass"] = 'rilinc';
+$configInfos["admin.localhost"]["dbdriver"] = 'mysql';
+$configInfos["admin.localhost"]["dbname"] = 'research';
+$configInfos["admin.localhost"]["peardir"] = '/vagrant/vendor/conservatory/research-pear/';
+$configInfos["admin.localhost"]["debug"] = true	;
+$configInfos["admin.localhost"]["authmethod"] = 'usertable';
+$configInfos["admin.localhost"]["url_root"] = 'http://local.orsadmin';
+$configInfos["admin.localhost"]["file_root"] = '/vagrant/research-admin/';
+$configInfos["admin.localhost"]["admin"] = array('tdavis','cnakamoto');
+$configInfos["admin.localhost"]["irgf_docs"] = "/admin/documents/shared/irgf";
+$configInfos["admin.localhost"]["picture_path"] = "/Users/tdavis/Sites/webrepo/tags/release-4.0/admin/documents/pictures/";
 
 if (strpos($_SERVER['HTTP_HOST'],':') != 0) {
     list($server,$port)=explode(":",$_SERVER['HTTP_HOST']);

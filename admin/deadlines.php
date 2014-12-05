@@ -276,8 +276,7 @@ if (isset($_REQUEST['section'])) {
 			$topics=$db->Execute($sql);
 			
 			$topic_options=$topics->GetMenu('topics[]','',true,true,8);
-			$tmpl->AddVars('add',array( 'topic_options'=>$topic_options,
-                                        'success'=>$success));
+			$tmpl->AddVar('add','topic_options',$topic_options);
 			$tmpl->setAttribute("add","visibility","visible");
 			$hdr->AddVar("header","title","Deadlines: Add New");
 			
