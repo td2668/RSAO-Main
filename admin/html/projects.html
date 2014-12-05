@@ -182,6 +182,26 @@
 			
     
     </patTemplate:tmpl>
+    
+    <patTemplate:tmpl name="where" visibility="hidden">
+    	<form method="post" name="form1" action="">
+
+
+	<tr>
+		<td>Project:</td><td><select name='project_id' onchange="form1.submit()"><option value='0'></option>
+        ~!project_options~
+        </select></td></tr>
+    <tr><td valign='top'>Current:</td><td> ~!table~ </td></tr>    
+    <tr><td>Country:</td><td><select name='country_code' onchange="form1.submit()"><option value='0'>--Select a Country--</option>
+    ~!country_options~
+    </select></td></tr>
+    <tr><td>State:</td><td><select name='state_code' onchange="form1.submit()"><option value='0'></option><option value='NOSTATE'>--No State--</option>
+    ~!state_options~
+    </select></td></tr>
+</table>
+</form>
+    
+    </patTemplate:tmpl>
 
 	</div>
 	
