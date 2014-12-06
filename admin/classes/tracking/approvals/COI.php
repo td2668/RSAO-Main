@@ -9,7 +9,7 @@ require_once('classes/tracking/Approval.php');
 /**
  * Defines a approval of type COI - Conflict of Interest
  */
-class COI extends Approval
+class COI extends Approval 
 {
     /**
      * Constructor
