@@ -73,11 +73,12 @@ if (isset($_REQUEST['section'])) {
             $users = $db->Execute("SELECT CONCAT(last_name,', ',first_name) as name,user_id FROM users WHERE 1 order by last_name,first_name");
             if (count($users)>0) {
                 $user_options=$users->GetMenu('dean','',true,false,8);
+                $users->Move(0);
                 $ad_options=$users->GetMenu('associate_dean','',true,false,8);
             }
             
             
-            $tmpl->AddVars("add",array('ad_options'=>$_options,'user_options'=>$user_options));
+            $tmpl->AddVars("add",array('ad_options'=>$ad_options,'user_options'=>$user_options));
             $tmpl->setAttribute("add","visibility","visible");
             
             
@@ -95,9 +96,9 @@ if (isset($_REQUEST['section'])) {
 	            $users = $db->Execute("SELECT CONCAT(last_name,', ',first_name) as name,user_id FROM users WHERE 1 order by last_name,first_name");
 	            if (count($users)>0) {
 	                $values['user_options']=$users->GetMenu2('dean',$values['dean'],true,false,8);
-	                //print_r($users);
-	                $values['ad_options']=$users->GetMenu2('associate_dean',$values['dean'],true,true,8);
-	                print_r($values);
+					$users->Move(0);
+	                $values['ad_options']=$users->GetMenu2('associate_dean',$values['associate_dean'],true,false,8);
+	                
             	}
 				$values['id']=$_REQUEST['id'];
                 $tmpl->AddVars("update",$values);

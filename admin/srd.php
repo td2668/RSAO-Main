@@ -2,6 +2,14 @@
     //error_reporting(E_ALL);
     include("includes/config.inc.php");
     include("includes/functions-required.php");
+    
+    $hdr=loadPage("header",'Header');
+
+	$menuitems=array();
+	$menuitems[]=array('title'=>'Add','url'=>'srd.php?section=add');
+	$menuitems[]=array('title'=>'List','url'=>'srd.php?section=view');
+	$hdr->AddRows("list",$menuitems);
+    
     $tmpl=loadPage("srd", 'Student Research Day Registration');
     //print_r($_REQUEST);
     //Manage the SRD table(s)
@@ -564,5 +572,7 @@ ABSTRACT: $descrip
          
      }
      
-     if(isset($success)) $tmpl->addVar('page','success',$success);
+     if(isset($success)) $hdr->addVar('header','success',$success);
+
+	 $hdr->displayParsedTemplate('header');
      $tmpl->displayParsedTemplate('page');

@@ -93,7 +93,7 @@ $configInfos["localhost"]["pass"] = 'rilinc';
 $configInfos["localhost"]["dbdriver"] = 'mysql';
 $configInfos["localhost"]["dbname"] = 'research';
 $configInfos["localhost"]["peardir"] = '/vagrant/vendor/conservatory/research-pear/';
-$configInfos["localhost"]["debug"] = false;
+$configInfos["localhost"]["debug"] = true;
 $configInfos["localhost"]["authmethod"] = 'database,usertable';
 $configInfos["localhost"]["url_root"] = 'http://localhost';
 $configInfos["localhost"]["file_root"] = '//Users/tdavis/Sites/webrepo/research/tags/release-4.0/';
@@ -107,6 +107,28 @@ $configInfos["email_db_options"] =  array(
     'dsn'         => 'mysql://ors:rilinc@localhost/research',
     'mail_table'  => 'mail_queue',
 );
+
+$configInfos["localhostw"]["host"] = 'localhostw';
+$configInfos["localhostw"]["user"] = 'ors';
+$configInfos["localhostw"]["pass"] = 'rilinc';
+$configInfos["localhostw"]["dbdriver"] = 'mysql';
+$configInfos["localhostw"]["dbname"] = 'research';
+$configInfos["localhostw"]["peardir"] = '/vagrant/vendor/conservatory/research-pear/';
+$configInfos["localhostw"]["debug"] = true;
+$configInfos["localhostw"]["authmethod"] = 'database,usertable';
+$configInfos["localhostw"]["url_root"] = 'http://localhost';
+$configInfos["localhostw"]["file_root"] = '//Users/tdavis/Sites/webrepo/research/tags/release-4.0/';
+$configInfos["localhostw"]["upload_root"] = $configInfos["localhost"]["file_root"] . '/documents/uploads/';
+$configInfos["localhostw"]["picture_path"] = $configInfos["localhost"]["file_root"] . '/documents/shared/pictures/';
+$configInfos["localhostw"]["picture_url"] = '/pictures/';
+$configInfos["localhostw"]["admin"] = array('tdavis','cnakamoto');
+$configInfos["localhostw"]["irgf_docs"] = "/documents/shared/irgf";
+$configInfos["email_db_options"] =  array(
+    'type'        => 'db',
+    'dsn'         => 'mysql://ors:rilinc@localhost/research',
+    'mail_table'  => 'mail_queue',
+);
+
 
 // Global variable $configinfo will be filled with correct info depending on the server name
 
