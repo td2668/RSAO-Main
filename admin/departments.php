@@ -1,44 +1,48 @@
 <?php
 include("includes/config.inc.php");
 include("includes/functions-required.php");
-include("includes/class-template.php");
-//include("includes/garbage_collector.php");
-$template = new Template;
-//require("security.php");
 
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
+$hdr=loadPage("header",'Header');
 
-include("html/header.html");
+$menuitems=array();
+$menuitems[]=array('title'=>'Add','url'=>'departments.php?section=add');
+$menuitems[]=array('title'=>'List','url'=>'departments.php?section=view');
+$hdr->AddRows("list",$menuitems);
+
+
+$tmpl=loadPage("departments", 'Departments');
+
+$success="";
+
+
 if (isset($_REQUEST['add'])) {
-    $values = array(
-        'null',
-        $_REQUEST['name'],
-        $_REQUEST['shortname'],
-        $_REQUEST['division_id'],
-        $_REQUEST['chair'],
-        $_REQUEST['director']
-    );
-    if (mysqlInsert("departments", $values)) {
+    if($_REQUEST['division']=='') $division=0; else $division=$_REQUEST['division'];
+    if($_REQUEST['chair']=='') $chair=0; else $chair=$_REQUEST['chair'];
+    if ($db->Execute("INSERT INTO departments SET
+    				name='$_REQUEST[name]',
+    				shortname='$_REQUEST[shortname]',
+    				division_id=$division,
+    				chair=$chair				
+    				")) {
         $success = " <strong>Complete</strong>";
     }
 }
 else {
     if (isset($_REQUEST['update'])) {
-        $values = array(
-            'name'        => $_REQUEST['name'],
-            'shortname'   => $_REQUEST['shortname'],
-            'division_id' => $_REQUEST['division_id'],
-            'chair'       => $_REQUEST['chair'],
-            'director'    => $_REQUEST['director']
-        );
-        if (mysqlUpdate("departments", $values, "department_id=$_REQUEST[id]")) {
-            $success = " <strong>Department Updated</strong>";
-        }
+	    if($_REQUEST['division']=='') $division=0; else $division=$_REQUEST['division'];
+		if($_REQUEST['chair']=='') $chair=0; else $chair=$_REQUEST['chair'];
+        if ($db->Execute("UPDATE departments SET
+    				name='$_REQUEST[name]',
+    				shortname='$_REQUEST[shortname]',
+    				division_id=$division,
+    				chair=$chair		
+    				WHERE department_id=$_REQUEST[id]")) {
+        $success = " <strong>Complete</strong>";
+    	}
     }
     else {
         if (isset($_REQUEST['delete'])) {
-            if (mysqlDelete("departments", "department_id=$_REQUEST[id]")) {
+            if ($db->Execute("DELETE FROM departments WHERE department_id=$_REQUEST[id]")) {
                 $success = " <strong>Department Deleted</strong>";
             }
         }
@@ -51,137 +55,68 @@ if (isset($_REQUEST['section'])) {
     }
     switch ($_REQUEST['section']) {
         case "view":
-            $values = mysqlFetchRows("departments", "1 order by name");
-            $output = "";
+            $values = $db->GetAll("SELECT          						 
+            							divisions.name as divname,
+            							departments.name as deptname,
+            							departments.department_id as department_id,
+            							CONCAT(users.last_name,', ',users.first_name) as chair
+            						FROM departments 
+            						LEFT JOIN divisions using (division_id) 
+            						LEFT JOIN users on (departments.chair=users.user_id)            						
+            						WHERE 1 order by departments.name");
+
             if (is_array($values)) {
-                foreach ($values as $index) {
-                    $division = mysqlFetchRow("divisions", "division_id=$index[division_id]");
-                    if (is_array($division)) {
-                        $div = $division['name'];
-                    }
-                    else {
-                        $div = "--";
-                    }
-                    $chair = mysqlFetchRow("users", "user_id=$index[chair]");
-                    if (is_array($chair)) {
-                        $ch = "$chair[last_name], $chair[first_name]";
-                    }
-                    else {
-                        $ch = " -- ";
-                    }
-                    $director = mysqlFetchRow("users", "user_id=$index[director]");
-                    if (is_array($director)) {
-                        $director = "$director[last_name], $director[first_name]";
-                    }
-                    else {
-                        $director = "--";
-                    }
-                    $output .= "
-						<tr>
-							<td bgcolor='#E09731'><a style='color:white' href='departments.php?section=update&id=$index[department_id]'>Update</a></td>
-							<td bgcolor='#D7D7D9'>$index[name]</td>
-							<td bgcolor='#D7D7D9'>$div</td>
-							<td bgcolor='#D7D7D9'>$ch</td>
-							<td bgcolor='#D7D7D9'>$director</td>
-						</tr>";
-                }
-                $hasharray = array(
-                    'success'=> $success,
-                    'output' => $output
-                );
-                $filename = 'templates/template-departments_view.html';
-            }
-            else {
-                $hasharray = array('title'=> "Departments");
-                $filename = 'includes/error-no_records.html';
-            }
-            $parsed_html_file = $template->loadTemplate($filename, $hasharray, "HTML");
-            echo $parsed_html_file;
+                $tmpl->AddRows("viewlist",$values);
+                $tmpl->setAttribute("view","visibility","visible");
+              } 
             break;
         case "add":
-            $division_options = "";
-            $user_options = "";
-            $divisions = mysqlFetchRows("divisions", "1 order by name");
-            if (is_array($divisions)) {
-                foreach ($divisions as $division) {
-                    $division_options .= "<option value='$division[division_id]'>$division[name]</option>\n";
-                }
+            
+            $divisions = $db->Execute("SELECT name,division_id FROM divisions WHERE 1 order by name");
+            if (count($divisions)>0) {
+                $division_options=$divisions->GetMenu('division','',true,false,8);
             }
-            $users = mysqlFetchRows("users", "1 order by last_name,first_name");
-            if (is_array($users)) {
-                foreach ($users as $user) {
-                    if($user['last_name'] && $user['first_name']) {
-                        $user_options .= "<option value='$user[user_id]'>$user[last_name], $user[first_name]</option>\n";
-                    }
-                }
+            $users = $db->Execute("SELECT CONCAT(last_name,', ',first_name) as name,user_id FROM users WHERE 1 order by last_name,first_name");
+            if (count($users)>0) {
+                $user_options=$users->GetMenu('chair','',true,false,8);
             }
-            $hasharray = array(
-                'success'         => $success,
-                'division_options'=> $division_options,
-                'user_options'    => $user_options
-            );
-            $filename = 'templates/template-departments_add.html';
-            $parsed_html_file = $template->loadTemplate($filename, $hasharray, "HTML");
-            echo $parsed_html_file;
+            
+            $tmpl->AddVars("add",array('division_options'=>$division_options,'user_options'=>$user_options));
+            $tmpl->setAttribute("add","visibility","visible");
+            
+            
             break;
         case "update":
-            $values = mysqlFetchRow("departments", "department_id=$_REQUEST[id]");
-            $division_options = "";
-            $user_options = "";
-            $director_options = "";
-            $divisions = mysqlFetchRows("divisions", "1 order by name");
-            if (is_array($divisions)) {
-                foreach ($divisions as $division) {
+            $values = $db->GetRow("SELECT          						 
+            							divisions.division_id as divid,
+            							shortname,
+            							departments.name as deptname,
+            							departments.department_id as department_id,
+            							users.user_id as chair_id
+            						FROM departments 
+            						LEFT JOIN divisions using (division_id) 
+            						LEFT JOIN users on (departments.chair=users.user_id)            						
+            						WHERE departments.department_id=$_REQUEST[id]");
 
-                    if ($values['division_id'] == $division['division_id']) {
-                        $dsel = "selected";
-                    }
-                    else {
-                        $dsel = "";
-                    }
-                    $division_options .= "<option value='$division[division_id]' $dsel>$division[name]</option>\n";
-                }
-            }
-            $users = mysqlFetchRows("users", "1 order by last_name,first_name");
-            if (is_array($users)) {
-                foreach ($users as $user) {
-                    if ($values['chair'] == $user['user_id']) {
-                        $usel = "selected";
-                    }
-                    else {
-                        $usel = "";
-                    }
-                    if($user['last_name'] && $user['first_name']) {
-                        $user_options .= "<option value='$user[user_id]' $usel>$user[last_name], $user[first_name]</option>\n";
-                    }
-                }
-            }
-            if (is_array($users)) {
-                foreach ($users as $user) {
-                    if ($values['director'] == $user['user_id']) {
-                        $usel = "selected";
-                    }
-                    else {
-                        $usel = "";
-                    }
-                    if($user['last_name'] && $user['first_name']) {
-                        $director_options .= "<option value='$user[user_id]' $usel>$user[last_name], $user[first_name]</option>\n";
-                    }
-                }
-            }
-            $hasharray = array(
-                'id'              => $values['department_id'],
-                'name'            => $values['name'],
-                'shortname'       => $values['shortname'],
-                'division_options'=> $division_options,
-                'user_options'    => $user_options,
-                'director_options'=> $director_options
-            );
-            $filename = 'templates/template-departments_update.html';
-            $parsed_html_file = $template->loadTemplate($filename, $hasharray, "HTML");
-            echo $parsed_html_file;
+            if (is_array($values)) {
+	            $divisions = $db->Execute("SELECT name,division_id FROM divisions WHERE 1 order by name");
+	            if (count($divisions)>0) {
+	                $values['division_options']=$divisions->GetMenu2('division',$blank1stitem=$values['divid'],true,false,8);
+	            }
+	            $users = $db->Execute("SELECT CONCAT(last_name,', ',first_name) as name,user_id FROM users WHERE 1 order by last_name,first_name");
+	            if (count($users)>0) {
+	                $values['user_options']=$users->GetMenu2('chair',$values['chair_id'],true,false,8);
+            	}
+				$values['id']=$_REQUEST['id'];
+                $tmpl->AddVars("update",$values);
+                $tmpl->setAttribute("update","visibility","visible");
+              } 
+            
+            
             break;
     }
 }
-//-- Footer File
-include("templates/template-footer.html");
+
+$hdr->AddVar('header','success',$success);
+$hdr->displayParsedTemplate('header');
+$tmpl->displayParsedTemplate('page');

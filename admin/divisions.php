@@ -1,37 +1,46 @@
 <?php
 include("includes/config.inc.php");
 include("includes/functions-required.php");
-include("includes/class-template.php");
 
-$template = new Template;
+$hdr=loadPage("header",'Header');
 
-include("html/header.html");
+$menuitems=array();
+$menuitems[]=array('title'=>'Add','url'=>'divisions.php?section=add');
+$menuitems[]=array('title'=>'List','url'=>'divisions.php?section=view');
+$hdr->AddRows("list",$menuitems);
+
+
+$tmpl=loadPage("divisions", 'Divisions');
+
+$success="";
+
 
 if (isset($_REQUEST['add'])) {
-    $values = array(
-        'null',
-        $_REQUEST['name'],
-        $_REQUEST['dean'],
-        $_REQUEST['associate_dean']
-    );
-    if (mysqlInsert("divisions", $values)) {
+    if($_REQUEST['dean']=='') $dean=0; else $dean=$_REQUEST['dean'];
+    if($_REQUEST['associate_dean']=='') $associate_dean=0; else $associate_dean=$_REQUEST['associate_dean'];
+    if ($db->Execute("INSERT INTO divisions SET
+    				name='$_REQUEST[name]',
+    				associate_dean=$associate_dean,
+    				dean=$dean				
+    				")) {
         $success = " <strong>Complete</strong>";
     }
 }
 else {
     if (isset($_REQUEST['update'])) {
-        $values = array(
-            'name'          => $_REQUEST['name'],
-            'dean'          => $_REQUEST['dean'],
-            'associate_dean'=> $_REQUEST['associate_dean']
-        );
-        if (mysqlUpdate("divisions", $values, "division_id=$_REQUEST[id]")) {
-            $success = " <strong>Division Updated</strong>";
-        }
+	    if($_REQUEST['dean']=='') $dean=0; else $dean=$_REQUEST['dean'];
+		if($_REQUEST['associate_dean']=='') $associate_dean=0; else $associate_dean=$_REQUEST['associate_dean'];
+        if ($db->Execute("UPDATE divisions SET
+    				name='$_REQUEST[name]',
+    				associate_dean=$associate_dean,
+    				dean=$dean	
+    				WHERE division_id=$_REQUEST[id]")) {
+        $success = " <strong>Complete</strong>";
+    	}
     }
     else {
         if (isset($_REQUEST['delete'])) {
-            if (mysqlDelete("divisions", "division_id=$_REQUEST[id]")) {
+            if ($db->Execute("DELETE FROM divisions WHERE division_id=$_REQUEST[id]")) {
                 $success = " <strong>Division Deleted</strong>";
             }
         }
@@ -44,123 +53,62 @@ if (isset($_REQUEST['section'])) {
     }
     switch ($_REQUEST['section']) {
         case "view":
-            $values = mysqlFetchRows("divisions", "1 order by name");
-            $output = "";
+            $values = $db->GetAll("SELECT          						 
+            							divisions.name as divname,
+            							divisions.division_id as division_id,
+            							CONCAT(d.last_name,', ',d.first_name) as dean,
+            							CONCAT(ad.last_name,', ',ad.first_name) as associate_dean
+            						FROM divisions 
+            						LEFT JOIN users as d on (divisions.dean=d.user_id)
+            						LEFT JOIN users as ad on (divisions.associate_dean=ad.user_id)           						
+            						WHERE 1 order by divisions.name");
+
             if (is_array($values)) {
-                foreach ($values as $index) {
-
-                    $dean = mysqlFetchRow("users", "user_id=$index[dean]");
-                    if (is_array($dean)) {
-                        $ch = "$dean[last_name], $dean[first_name]";
-                    }
-                    else {
-                        $ch = " --- ";
-                    }
-
-                    $associateDean = mysqlFetchRow("users", "user_id=$index[associate_dean]");
-                    if (is_array($associateDean)) {
-                        $assoc = "$associateDean[last_name], $associateDean[first_name]";
-                    }
-                    else {
-                        $assoc = " --- ";
-                    }
-
-                    $output .= "
-						<tr>
-							<td bgcolor='#E09731'><a style='color:white' href='divisions.php?section=update&id=$index[division_id]'>Update</a></td>
-							<td bgcolor='#D7D7D9'>$index[name]</td>
-							<td bgcolor='#D7D7D9'>$ch</td>
-                            <td bgcolor='#D7D7D9'>$assoc</td>
-						</tr>";
-                }
-                $hasharray = array(
-                    'success'=> $success,
-                    'output' => $output
-                );
-                $filename = 'templates/template-divisions_view.html';
-            }
-            else {
-                $hasharray = array('title'=> "Divisions");
-                $filename = 'includes/error-no_records.html';
-            }
-            $parsed_html_file = $template->loadTemplate($filename, $hasharray, "HTML");
-            echo $parsed_html_file;
+                $tmpl->AddRows("viewlist",$values);
+                $tmpl->setAttribute("view","visibility","visible");
+              } 
             break;
         case "add":
-            $user_options = "";
-            $users = mysqlFetchRows("users", "1 order by last_name,first_name");
-            if (is_array($users)) {
-                foreach ($users as $user) {
-                    if($user['last_name'] && $user['first_name']) {
-                        $user_options .= "<option value='$user[user_id]'>$user[last_name], $user[first_name]</option>\n";
-                    }
-                }
+            
+            $users = $db->Execute("SELECT CONCAT(last_name,', ',first_name) as name,user_id FROM users WHERE 1 order by last_name,first_name");
+            if (count($users)>0) {
+                $user_options=$users->GetMenu('dean','',true,false,8);
+                $ad_options=$users->GetMenu('associate_dean','',true,false,8);
             }
-            $hasharray = array(
-                'success'     => $success,
-                'user_options'=> $user_options
-            );
-            $filename = 'templates/template-divisions_add.html';
-            $parsed_html_file = $template->loadTemplate($filename, $hasharray, "HTML");
-            echo $parsed_html_file;
+            
+            
+            $tmpl->AddVars("add",array('ad_options'=>$_options,'user_options'=>$user_options));
+            $tmpl->setAttribute("add","visibility","visible");
+            
+            
             break;
         case "update":
-            $values = mysqlFetchRow("divisions", "division_id=$_REQUEST[id]");
-            $user_options = "";
+            $values = $db->GetRow("SELECT          						 
+            							divisions.name as divname,
+            							divisions.division_id as division_id,
+            							dean,associate_dean
+            						FROM divisions              						
+            						WHERE divisions.division_id=$_REQUEST[id]");
 
-            $users = mysqlFetchRows("users", "1 order by last_name,first_name");
-
-            if (is_array($users)) {
-                foreach ($users as $user) {
-                    if ($values['dean'] == $user['user_id']) {
-                        $usel = "selected";
-                    }
-                    else {
-                        $usel = "";
-                    }
-                    if($user['last_name'] && $user['first_name']) {
-                        $user_options .= "<option value='$user[user_id]' $usel>$user[last_name], $user[first_name]</option>\n";
-                    }
-                }
-            }
-            $deanArray = array(
-                'id'          => $values['division_id'],
-                'name'        => $values['name'],
-                'dean_options'=> $user_options
-            );
-
-            $user_options = "";
-            if (is_array($users)) {
-                foreach ($users as $user) {
-                    if ($values['associate_dean'] == $user['user_id']) {
-                        $usel = "selected";
-                    }
-                    else {
-                        $usel = "";
-                    }
-                    if($user['last_name'] && $user['first_name']) {
-                        $user_options .= "<option value='$user[user_id]' $usel>$user[last_name], $user[first_name]</option>\n";
-                    }
-                }
-            }
-            $associateDeanArray = array(
-                'id'               => $values['division_id'],
-                'name'             => $values['name'],
-                'assocdean_options'=> $user_options
-            );
-
-            $hasharray = array(
-                'id'                => $_REQUEST['id'],
-                'name'              => $values['name'],
-                'dean_options'      => $deanArray,
-                'assocdean_options' => $associateDeanArray
-            );
-
-            $filename = 'templates/template-divisions_update.html';
-            $parsed_html_file = $template->loadTemplate($filename, $hasharray, "HTML");
-            echo $parsed_html_file;
+            if (is_array($values)) {
+	            
+	            $users = $db->Execute("SELECT CONCAT(last_name,', ',first_name) as name,user_id FROM users WHERE 1 order by last_name,first_name");
+	            if (count($users)>0) {
+	                $values['user_options']=$users->GetMenu2('dean',$values['dean'],true,false,8);
+	                //print_r($users);
+	                $values['ad_options']=$users->GetMenu2('associate_dean',$values['dean'],true,true,8);
+	                print_r($values);
+            	}
+				$values['id']=$_REQUEST['id'];
+                $tmpl->AddVars("update",$values);
+                $tmpl->setAttribute("update","visibility","visible");
+              } 
+            
+            
             break;
     }
 }
-//-- Footer File
-include("templates/template-footer.html");
+
+$hdr->AddVar('header','success',$success);
+$hdr->displayParsedTemplate('header');
+$tmpl->displayParsedTemplate('page');
