@@ -24,13 +24,21 @@ fieldset {
 	
 }
 
-.users{
+div.users{
 	margin-top: 6px;
 	font-size: 0.9em;
-}
+	vertical-align: middle;
+    
+     }
 label.users{
 	float:left;
 	width:12em;
+	margin-top: 2px;	
+}
+label.usersnobox{
+	float:left;
+	width:12em;
+	
 }
 
 form {
@@ -42,6 +50,7 @@ label {
 	width:10em;
 	text-align:right;
 	margin-right:0.5em;
+	
 }
 legend {
 	color:#0b77b7;

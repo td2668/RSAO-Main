@@ -1,12 +1,36 @@
+
 <?php
-    //error_reporting(E_ALL);
-    include("includes/config.inc.php");
-    include("includes/functions-required.php");
+	/**
+	 * List and manipulate Student Research Day registrations
+	 *
+	 * Long description for file (if any)...
+	 *
+	 * PHP version 5
+	 *
+	 * LICENSE: This source file is subject to version 3.01 of the PHP license
+	 * that is available through the world-wide-web at the following URI:
+	 * http://www.php.net/license/3_01.txt.  If you did not receive a copy of
+	 * the PHP License and are unable to obtain it through the web, please
+	 * send a note to license@php.net so we can mail you a copy immediately.
+	 *
+	 * @category   CategoryName
+	 * @package    orsadmin
+	 * @author     Trevor Davis
+	 * @author     
+	 * @copyright  2010-2015 TDavis
+	 * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
+	 * @version    SVN: $Id$
+
+	 */
+	
+ 
+    require("includes/config.inc.php");
+    require("includes/functions-required.php");
     
     $hdr=loadPage("header",'Header');
 
 	$menuitems=array();
-	$menuitems[]=array('title'=>'Add','url'=>'srd.php?section=add');
+	$menuitems[]=array('title'=>'Add','url'=>'srd.php?add');
 	$menuitems[]=array('title'=>'List','url'=>'srd.php?section=view');
 	$hdr->AddRows("list",$menuitems);
     
@@ -15,6 +39,7 @@
     //Manage the SRD table(s)
 
     //colors for table
+    
     $yesColor = "lightgreen";
     $noColor = "orange";
     $maybeColor = "#FFF380";
@@ -30,14 +55,16 @@
     if(isset($_REQUEST['add'])){
         $sql="INSERT into srd_reg VALUES();";
         if($db->Execute($sql) === false)
-        $success= "<font color='red'>Error inserting: ".$db->ErrorMsg()."</font>";
-        else $success="Started";
-        $_REQUEST['id']=mysql_insert_id();
-        $sql="UPDATE srd_reg SET submit_date=NOW() WHERE srd_reg_id=$_REQUEST[id]";
-        if($db->Execute($sql) === false)
-        $success.= " <font color='red'>Error updating: ".$db->ErrorMsg()."</font>";
-        
-        $_REQUEST['section']='edit';
+        	$success= "<font color='red'>Error inserting: ".$db->ErrorMsg()."</font>";
+        else {
+	        $success="Started";
+			$_REQUEST['id']=mysql_insert_id();
+			$sql="UPDATE srd_reg SET submit_date=NOW() WHERE srd_reg_id=$_REQUEST[id]";
+			if($db->Execute($sql) === false)
+				$success.= " <font color='red'>Error updating: ".$db->ErrorMsg()."</font>";
+			$_REQUEST['section']='edit';
+			}
+			
         //print_r($_REQUEST);
     }
     
@@ -395,7 +422,14 @@ ABSTRACT: $descrip
              }
 
 
-             $srd_year=GetSchoolYear(time());
+             $year_options='';
+             $srd_year=(isset($_REQUEST['year'])) ? $_REQUEST['year'] : GetSchoolYear(time());
+             //while I'm here set up the menu for the year request
+             for ($year=2012; $year<=GetSchoolYear(time())+1; $year++){
+	         	if($year==$srd_year) $sel="selected"; else $sel='';
+	         	$year_options.="<option value=$year $sel>$year</option>\n";   
+	         }
+	             
 
              $sql="SELECT srd.*, dep.name AS departmentName, CONCAT(users.first_name, ' ', users.last_name) AS supervisor
                   FROM srd_reg AS srd
@@ -417,6 +451,7 @@ ABSTRACT: $descrip
 			$range= "June " . $prev . ' - May ' . $srd_year;
             $tmpl->addVar('view', "COUNT", count($regs));
             $tmpl->addVar('view', "RANGE", $range);
+            $tmpl->addVar('view', "YEAR_OPTIONS", $year_options);
 
              if(count($regs)>0){
                  foreach($regs as $key=>$reg){
@@ -499,6 +534,7 @@ ABSTRACT: $descrip
                 $tmpl->addRows('mainlist',$regs);
                 if(isset($success)) $tmpl->addVar('view','success',$success);
          	}//if count>0
+         	$hdr->AddVar("header","title","SRD: View");
          	
          	
          break;
@@ -565,6 +601,7 @@ ABSTRACT: $descrip
                     if(isset($success)) $tmpl->addVar('edit','success',$success);
                  }
              }
+             $hdr->AddVar("header","title","SRD: Add/Update");
          break;
          
          

@@ -270,6 +270,7 @@ if (isset($_REQUEST['section'])) {
 			}
 			//print_r($viewlist[0]); 
 			$tmpl->AddRows('viewlist',$viewlist);
+			$hdr->AddVar("header","title","Deadlines: View");
             break;
 		case "add":
 			$sql="SELECT name,topic_id FROM topics_research WHERE 1 ORDER BY name";

@@ -69,6 +69,7 @@ if (isset($_REQUEST['section'])) {
                 $tmpl->AddRows("viewlist",$values);
                 $tmpl->setAttribute("view","visibility","visible");
               } 
+              $hdr->AddVar("header","title","Departments: View");
             break;
         case "add":
             
@@ -83,6 +84,7 @@ if (isset($_REQUEST['section'])) {
             
             $tmpl->AddVars("add",array('division_options'=>$division_options,'user_options'=>$user_options));
             $tmpl->setAttribute("add","visibility","visible");
+            $hdr->AddVar("header","title","Departments: Add");
             
             
             break;
@@ -111,6 +113,7 @@ if (isset($_REQUEST['section'])) {
                 $tmpl->AddVars("update",$values);
                 $tmpl->setAttribute("update","visibility","visible");
               } 
+              $hdr->AddVar("header","title","Departments: Update");
             
             
             break;
