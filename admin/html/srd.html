@@ -17,7 +17,7 @@
     <td colspan="4">Range: {RANGE}</td>
     <td colspan="8">Acad. Yr.:<select name="range" onchange="javascript: window.location='srd.php?year='+this.value">
 	    {YEAR_OPTIONS}
-    </select>
+    </select></td>
     <td colspan="3"><button type='button' onClick='window.location="srd.php?moveall";'>Move All</button>
     <button type='button' onClick='window.location="srd.php?extractall";'>Extract All</button></td>
     </tr>
@@ -69,13 +69,13 @@
                 <td><input type="radio" {M} readonly="readonly"></td>
                 <td>{POSTERS}</td>
                 <td>
-                <button type='button' onClick='window.location="srd.php?section=edit&id={SRD_REG_ID}";'>Edit</button>
+                <button type='button' onClick='window.location="srd.php?section=edit&id={SRD_REG_ID}&year={YEAR}";'>Edit</button>
                 </td>
                 <td>
-                <button type='button' {DIS} style="background-color:{MCOLOUR};" onClick='window.location="srd.php?move&id={SRD_REG_ID}";'>{MNAME}</button>
+                <button type='button' {DIS} style="background-color:{MCOLOUR};" onClick='window.location="srd.php?move&id={SRD_REG_ID}&year={YEAR}";'>{MNAME}</button>
                 </td>
                 <td>
-                <button type='button' style="" onClick='window.location="srd.php?extract&id={SRD_REG_ID}";'>Extract</button>
+                <button type='button' style="" onClick='window.location="srd.php?extract&id={SRD_REG_ID}&year={YEAR}";'>Extract</button>
                 </td>
             </tr>
                 </patTemplate:sub>
@@ -98,13 +98,13 @@
                 		<td><input type="radio" {M} readonly="readonly"></td>
                         <td>{POSTERS}</td>
                         <td>
-                        	<button type='button'  onClick='window.location="srd.php?section=edit&id={SRD_REG_ID}";'>Edit</button>
+                        	<button type='button'  onClick='window.location="srd.php?section=edit&id={SRD_REG_ID}&year={YEAR}";'>Edit</button>
                         </td>
                         <td>
-                			<button type='button' {DIS} style="background-color:{MCOLOUR};" onClick='window.location="srd.php?move&id={SRD_REG_ID}";'>{MNAME}</button>
+                			<button type='button' {DIS} style="background-color:{MCOLOUR};" onClick='window.location="srd.php?move&id={SRD_REG_ID}&year={YEAR}";'>{MNAME}</button>
                 		</td>
                 		<td>
-                <button type='button' onClick='window.location="srd.php?extract&id={SRD_REG_ID}";'>Extract</button>
+                <button type='button' onClick='window.location="srd.php?extract&id={SRD_REG_ID}&year={YEAR}";'>Extract</button>
                 </td>
                     </tr>
                 </patTemplate:sub>
@@ -115,6 +115,7 @@
     <patTemplate:tmpl name="edit" visibility="hidden">
         <form name="edit" action="srd.php?update">
             <input type="hidden" name="id" value="{SRD_REG_ID}">
+            <input type="hidden" name="year" value="{YEAR}"/>
             <fieldset >
                 <div class="users"><label class="users">Last Name</label>
                     <input type="text" value="{LASTNAME}" size="60" name="lastName"

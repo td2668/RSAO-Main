@@ -2,6 +2,15 @@
     //error_reporting(E_ALL);
     include("includes/config.inc.php");
     include("includes/functions-required.php");
+    
+    $hdr=loadPage("header",'Header');
+
+	$menuitems=array();
+	$menuitems[]=array('title'=>'Add','url'=>'srd_posters.php?add');
+	$menuitems[]=array('title'=>'List','url'=>'srd_posters.php?section=view');
+	$hdr->AddRows("list",$menuitems);
+    
+    
     $tmpl=loadPage("srd_posters", 'SRD Posters');
     //print_r($_REQUEST);
     //Manage the SRD table(s)
@@ -44,7 +53,7 @@
                 echo"found a file";
                 $ext=explode(".",$_FILES['filename2']['name']);
                 $ext_el=sizeof($ext)-1;  //in case theres another . in the filename
-                $filename_noext="printfile".mktime();
+                $filename_noext="printfile".time();
                 $filename=$filename_noext.".".$ext[$ext_el];
                 
                 if (!copy ($_FILES['filename2']['tmp_name'],$configInfo['upload_root'].'posters/'.$filename))
@@ -54,13 +63,13 @@
             
             if(isset($filename)) $fileload=",filename='$filename'"; else $fileload='';
             $sql="UPDATE poster_reg SET
-            firstName='". mysql_escape_string(isset($_REQUEST['firstName']) ? $_REQUEST['firstName'] : '') . "',
-            lastName='". mysql_escape_string(isset($_REQUEST['lastName']) ? $_REQUEST['lastName'] : '') . "',
-            studentid='". mysql_escape_string(isset($_REQUEST['studentid']) ? $_REQUEST['studentid'] : '') . "',
-            email='". mysql_escape_string(isset($_REQUEST['email']) ? $_REQUEST['email'] : '') . "',
-            title='". mysql_escape_string(isset($_REQUEST['title']) ? $_REQUEST['title'] : '') . "',
-            orientation='". mysql_escape_string(isset($_REQUEST['orientation']) ? $_REQUEST['orientation'] : '') . "',
-            status='". mysql_escape_string(isset($_REQUEST['status']) ? $_REQUEST['status'] : '') . "'
+            firstName='". mysql_real_escape_string(isset($_REQUEST['firstName']) ? $_REQUEST['firstName'] : '') . "',
+            lastName='". mysql_real_escape_string(isset($_REQUEST['lastName']) ? $_REQUEST['lastName'] : '') . "',
+            studentid='". mysql_real_escape_string(isset($_REQUEST['studentid']) ? $_REQUEST['studentid'] : '') . "',
+            email='". mysql_real_escape_string(isset($_REQUEST['email']) ? $_REQUEST['email'] : '') . "',
+            title='". mysql_real_escape_string(isset($_REQUEST['title']) ? $_REQUEST['title'] : '') . "',
+            orientation='". mysql_real_escape_string(isset($_REQUEST['orientation']) ? $_REQUEST['orientation'] : '') . "',
+            status='". mysql_real_escape_string(isset($_REQUEST['status']) ? $_REQUEST['status'] : '') . "'
             $fileload
             WHERE poster_reg_id= $_REQUEST[id];
             ";
@@ -135,7 +144,20 @@ Your poster or multimedia presentation entitled \"$_REQUEST[title]\" has been pr
              }
 
 
-             $srd_year=GetSchoolYear(time());
+             $year_options='';
+             if(isset($_REQUEST['year'])) 
+             	{if($_REQUEST['year']=='') $srd_year = GetSchoolYear(time()); else $srd_year=$_REQUEST['year'];}
+             	else $srd_year=GetSchoolYear(time());
+             //echo ("SET SRD YEAR AS $srd_year ----------------------------");	
+
+             //$srd_year=(isset($_REQUEST['year'])) ? $_REQUEST['year'] : GetSchoolYear(time());
+             //while I'm here set up the menu for the year request
+             for ($year=2012; $year<=GetSchoolYear(time())+1; $year++){
+	         	if($year==$srd_year) $sel="selected"; else $sel='';
+	         	$year_options.="<option value=$year $sel>$year</option>\n";   
+	         }
+	             
+
 
              $sql="SELECT poster.*, dep.name AS departmentName, CONCAT(users.first_name, ' ', users.last_name) AS supervisor
                   FROM poster_reg AS poster
@@ -157,9 +179,12 @@ Your poster or multimedia presentation entitled \"$_REQUEST[title]\" has been pr
 			$range= "June " . $prev . ' - May ' . $srd_year;
             $tmpl->addVar('view', "COUNT", count($regs));
             $tmpl->addVar('view', "RANGE", $range);
+            $tmpl->addVar('view', "YEAR_OPTIONS", $year_options);
 
              if(count($regs)>0){
                  foreach($regs as $key=>$reg){
+	                 $regs[$key]['year']=$srd_year;
+	                 
                      $regs[$key]['submit_date']=date('Y-m-d, H:i',strtotime($reg['submit_date']));
                      switch($reg['status'])
                      {
@@ -218,6 +243,7 @@ Your poster or multimedia presentation entitled \"$_REQUEST[title]\" has been pr
                     if($ori=='portrait') $reg['portrait']="checked='checked'";
                     elseif($ori=='landscape') $reg['landscape']="checked='checked'";
                     else $reg['unknown']="checked='checked'";
+                    $reg['year']= (isset($_REQUEST['year'])) ? $_REQUEST['year'] : GetSchoolYear(time());
 
                     $tmpl->addVars('edit',$reg);
                     if(isset($success)) $tmpl->addVar('edit','success',$success);
@@ -227,5 +253,7 @@ Your poster or multimedia presentation entitled \"$_REQUEST[title]\" has been pr
          
      }
      
-     if(isset($success)) $tmpl->addVar('page','success',$success);
+     if(isset($success)) $hdr->addVar('header','success',$success);
+
+	 $hdr->displayParsedTemplate('header');
      $tmpl->displayParsedTemplate('page');

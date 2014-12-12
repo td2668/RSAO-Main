@@ -3,7 +3,7 @@
 	/**
 	 * List and manipulate Student Research Day registrations
 	 *
-	 * Long description for file (if any)...
+	 * 
 	 *
 	 * PHP version 5
 	 *
@@ -13,7 +13,6 @@
 	 * the PHP License and are unable to obtain it through the web, please
 	 * send a note to license@php.net so we can mail you a copy immediately.
 	 *
-	 * @category   CategoryName
 	 * @package    orsadmin
 	 * @author     Trevor Davis
 	 * @author     
@@ -23,7 +22,6 @@
 
 	 */
 	
- 
     require("includes/config.inc.php");
     require("includes/functions-required.php");
     
@@ -91,10 +89,10 @@ if(isset($_REQUEST['move'])){
         	$sql="SELECT * FROM srd_reg WHERE srd_reg_id=$_REQUEST[id]";
         	$srd=$db->GetRow($sql);
         	if($srd){
-        		$srd['title']=mysql_escape_string($srd['title']);
-        		$srd['descrip']=mysql_escape_string($srd['descrip']);
-        		$srd['program']=mysql_escape_string($srd['program']);
-        		$srd['url']=mysql_escape_string($srd['url']);
+        		$srd['title']=mysql_real_escape_string($srd['title']);
+        		$srd['descrip']=mysql_real_escape_string($srd['descrip']);
+        		$srd['program']=mysql_real_escape_string($srd['program']);
+        		$srd['url']=mysql_real_escape_string($srd['url']);
         		if($srd['hreb']=='yes')$srd['hreb']=1; else $srd['hreb']=0;
         		if($srd['hreb2']=='yes')$srd['hreb2']=1; else $srd['hreb2']=0;
   //       Insert dates of projects
@@ -141,8 +139,8 @@ if(isset($_REQUEST['move'])){
       			
       			
       			$order=1;
-      			$first=mysql_escape_string($srd['firstName']);
-      			$last=mysql_escape_string($srd['lastName']);
+      			$first=mysql_real_escape_string($srd['firstName']);
+      			$last=mysql_real_escape_string($srd['lastName']);
       			$id=mysql_insert_id();
       			$sql="INSERT INTO student_researchers (
       					first,
@@ -182,8 +180,8 @@ if(isset($_REQUEST['move'])){
                 	foreach($cores as $core){
  //TODO               	//Do they exist already?
                 		$order++;
-                		$first=mysql_escape_string($core['first']);
-      					$last=mysql_escape_string($core['last']);
+                		$first=mysql_real_escape_string($core['first']);
+      					$last=mysql_real_escape_string($core['last']);
                 		$sql="INSERT INTO student_researchers (
                 				first,
                 				last,
@@ -306,7 +304,7 @@ ABSTRACT: $descrip
 		      $mail_queue = new Mail_Queue( $configInfo['email_db_options'], $configInfo['email_options'] );
 		      $mime = new Mail_mime();
 		
-		      $from = 'research@mtroyal.ca';
+		      $from = 'research@viu.ca';
 		      $from_name = 'SRD Bot';
 		
 		
@@ -372,22 +370,22 @@ ABSTRACT: $descrip
         if(isset($_REQUEST['id'])){
             
             $sql="UPDATE srd_reg SET
-            firstName='". mysql_escape_string(isset($_REQUEST['firstName']) ? $_REQUEST['firstName'] : '') . "',
-            lastName='". mysql_escape_string(isset($_REQUEST['lastName']) ? $_REQUEST['lastName'] : '') . "',
-            studentid='". mysql_escape_string(isset($_REQUEST['studentid']) ? $_REQUEST['studentid'] : '') . "',
-            email='". mysql_escape_string(isset($_REQUEST['email']) ? $_REQUEST['email'] : '') . "',
-            program='". mysql_escape_string(isset($_REQUEST['program']) ? $_REQUEST['program'] : '') . "',
-            course='". mysql_escape_string(isset($_REQUEST['course']) ? $_REQUEST['course'] : '') . "',
-            pref='". mysql_escape_string(isset($_REQUEST['pref']) ? $_REQUEST['pref'] : '') . "',
-            hreb='". mysql_escape_string(isset($_REQUEST['hreb']) ? $_REQUEST['hreb'] : '') . "',
-            hreb2='". mysql_escape_string(isset($_REQUEST['hreb2']) ? $_REQUEST['hreb2'] : '') . "',
-            title='". mysql_escape_string(isset($_REQUEST['title']) ? $_REQUEST['title'] : '') . "',
-            descrip='". mysql_escape_string(isset($_REQUEST['descrip']) ? $_REQUEST['descrip'] : '') . "',
-            foip='". mysql_escape_string(isset($_REQUEST['foip']) ? $_REQUEST['foip'] : '') . "',
-            status='". mysql_escape_string(isset($_REQUEST['status']) ? $_REQUEST['status'] : '') . "',
-            srd='". mysql_escape_string(isset($_REQUEST['srd']) ? 1 : 0) . "',
-            strd='". mysql_escape_string(isset($_REQUEST['strd']) ? 1 : 0) . "',
-            url='". mysql_escape_string(isset($_REQUEST['url']) ? $_REQUEST['url'] : '') . "'
+            firstName='". mysql_real_escape_string(isset($_REQUEST['firstName']) ? $_REQUEST['firstName'] : '') . "',
+            lastName='". mysql_real_escape_string(isset($_REQUEST['lastName']) ? $_REQUEST['lastName'] : '') . "',
+            studentid='". mysql_real_escape_string(isset($_REQUEST['studentid']) ? $_REQUEST['studentid'] : '') . "',
+            email='". mysql_real_escape_string(isset($_REQUEST['email']) ? $_REQUEST['email'] : '') . "',
+            program='". mysql_real_escape_string(isset($_REQUEST['program']) ? $_REQUEST['program'] : '') . "',
+            course='". mysql_real_escape_string(isset($_REQUEST['course']) ? $_REQUEST['course'] : '') . "',
+            pref='". mysql_real_escape_string(isset($_REQUEST['pref']) ? $_REQUEST['pref'] : '') . "',
+            hreb='". mysql_real_escape_string(isset($_REQUEST['hreb']) ? $_REQUEST['hreb'] : '') . "',
+            hreb2='". mysql_real_escape_string(isset($_REQUEST['hreb2']) ? $_REQUEST['hreb2'] : '') . "',
+            title='". mysql_real_escape_string(isset($_REQUEST['title']) ? $_REQUEST['title'] : '') . "',
+            descrip='". mysql_real_escape_string(isset($_REQUEST['descrip']) ? $_REQUEST['descrip'] : '') . "',
+            foip='". mysql_real_escape_string(isset($_REQUEST['foip']) ? $_REQUEST['foip'] : '') . "',
+            status='". mysql_real_escape_string(isset($_REQUEST['status']) ? $_REQUEST['status'] : '') . "',
+            srd='". mysql_real_escape_string(isset($_REQUEST['srd']) ? 1 : 0) . "',
+            strd='". mysql_real_escape_string(isset($_REQUEST['strd']) ? 1 : 0) . "',
+            url='". mysql_real_escape_string(isset($_REQUEST['url']) ? $_REQUEST['url'] : '') . "'
             WHERE srd_reg_id= $_REQUEST[id];
             ";
       if($db->Execute($sql) === false)
@@ -423,7 +421,12 @@ ABSTRACT: $descrip
 
 
              $year_options='';
-             $srd_year=(isset($_REQUEST['year'])) ? $_REQUEST['year'] : GetSchoolYear(time());
+             if(isset($_REQUEST['year'])) 
+             	{if($_REQUEST['year']=='') $srd_year = GetSchoolYear(time()); else $srd_year=$_REQUEST['year'];}
+             	else $srd_year=GetSchoolYear(time());
+             //echo ("SET SRD YEAR AS $srd_year ----------------------------");	
+
+             //$srd_year=(isset($_REQUEST['year'])) ? $_REQUEST['year'] : GetSchoolYear(time());
              //while I'm here set up the menu for the year request
              for ($year=2012; $year<=GetSchoolYear(time())+1; $year++){
 	         	if($year==$srd_year) $sel="selected"; else $sel='';
@@ -455,6 +458,7 @@ ABSTRACT: $descrip
 
              if(count($regs)>0){
                  foreach($regs as $key=>$reg){
+	                 $regs[$key]['year']=$srd_year;
                      $sql = sprintf("SELECT COUNT(*) AS numCoresearchers FROM srd_researchers WHERE srd_reg_id = %s", $reg['srd_reg_id']);
                      $cores = $db->getRow($sql);
                      $regs[$key]['coresearchers'] = $cores['numCoresearchers'] == 0 ? '' : $cores['numCoresearchers'];
@@ -509,7 +513,7 @@ ABSTRACT: $descrip
                      	$regs[$key]['mname']='Move';
                      }
                      
-                     $srd_year=GetSchoolYear(time());
+                     //$srd_year=GetSchoolYear(time());
     	
 		    		$sql="SELECT * FROM poster_reg WHERE studentid='$reg[studentid]' 
 		    		AND (
@@ -569,6 +573,8 @@ ABSTRACT: $descrip
 
                          $reg['coresearchers'] = $coresearcherList;
                      }
+                     
+                    $reg['year']= (isset($_REQUEST['year'])) ? $_REQUEST['year'] : GetSchoolYear(time());
 
                     $reg['submit_date']=date('M j/y',strtotime($reg['submit_date']));
                     $reg['pref1']=($reg['pref']=='poster') ? "checked='checked'" : '';
