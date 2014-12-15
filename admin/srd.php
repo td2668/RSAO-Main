@@ -65,6 +65,20 @@
 			
         //print_r($_REQUEST);
     }
+    if(isset($_REQUEST['deleteid'])) if($_REQUEST['deleteid']>0){
+	    $sql="DELETE FROM srd_researchers WHERE id=$_REQUEST[deleteid]";
+	    $db->Execute($sql);
+	    $_REQUEST['section']='edit';
+    }
+    if(isset($_REQUEST['addcores'])) {
+	    $sql="INSERT INTO srd_researchers SET 
+	    		first='".mysql_real_escape_string($_REQUEST['newcores_first'])."', 
+	    		last='".mysql_real_escape_string($_REQUEST['newcores_last'])."', 
+	    		srd_reg_id=$_REQUEST[id]";
+	    $db->Execute($sql);
+	    $_REQUEST['section']='edit';
+    }
+    
     
     if(isset($_REQUEST['delete'])){
         
@@ -312,7 +326,7 @@ ABSTRACT: $descrip
 		            $recipient = $configInfo["debug_email"];
 		            $recipient_name = $configInfo["debug_email_name"];
 		      } else {
-		        $recipient = $_SERVER['PHP_AUTH_USER'].'@mtroyal.ca';
+		        $recipient = $_SERVER['PHP_AUTH_USER'].'@viu.ca';
 		        $recipient_name = "$_SERVER[PHP_AUTH_USER]";
 		      }
 		      $from_params = empty( $from_name ) ? '<' . $from . '>' : '"' . $from_name . '" <' . $from . '>';
@@ -320,7 +334,7 @@ ABSTRACT: $descrip
 		      $hdrs = array(
 		        'From' => $from_params,
 		        'To' => $recipient_params,
-		        'Subject' => "Full List of S+TSRD Abstracts",
+		        'Subject' => "Full List of Abstracts",
 		        );
 
       		 $srd_year=GetSchoolYear(time());
@@ -368,6 +382,10 @@ ABSTRACT: $descrip
     
     if(isset($_REQUEST['update'])){
         if(isset($_REQUEST['id'])){
+	        
+	        if(isset($_REQUEST['time'])) {
+		        $timeslots=implode(',', $_REQUEST['time']);
+	        }
             
             $sql="UPDATE srd_reg SET
             firstName='". mysql_real_escape_string(isset($_REQUEST['firstName']) ? $_REQUEST['firstName'] : '') . "',
@@ -376,22 +394,23 @@ ABSTRACT: $descrip
             email='". mysql_real_escape_string(isset($_REQUEST['email']) ? $_REQUEST['email'] : '') . "',
             program='". mysql_real_escape_string(isset($_REQUEST['program']) ? $_REQUEST['program'] : '') . "',
             course='". mysql_real_escape_string(isset($_REQUEST['course']) ? $_REQUEST['course'] : '') . "',
-            pref='". mysql_real_escape_string(isset($_REQUEST['pref']) ? $_REQUEST['pref'] : '') . "',
             hreb='". mysql_real_escape_string(isset($_REQUEST['hreb']) ? $_REQUEST['hreb'] : '') . "',
             hreb2='". mysql_real_escape_string(isset($_REQUEST['hreb2']) ? $_REQUEST['hreb2'] : '') . "',
             title='". mysql_real_escape_string(isset($_REQUEST['title']) ? $_REQUEST['title'] : '') . "',
             descrip='". mysql_real_escape_string(isset($_REQUEST['descrip']) ? $_REQUEST['descrip'] : '') . "',
             foip='". mysql_real_escape_string(isset($_REQUEST['foip']) ? $_REQUEST['foip'] : '') . "',
             status='". mysql_real_escape_string(isset($_REQUEST['status']) ? $_REQUEST['status'] : '') . "',
-            srd='". mysql_real_escape_string(isset($_REQUEST['srd']) ? 1 : 0) . "',
-            strd='". mysql_real_escape_string(isset($_REQUEST['strd']) ? 1 : 0) . "',
-            url='". mysql_real_escape_string(isset($_REQUEST['url']) ? $_REQUEST['url'] : '') . "'
+            url='". mysql_real_escape_string(isset($_REQUEST['url']) ? $_REQUEST['url'] : '') . "',
+            departmentId='". mysql_real_escape_string(isset($_REQUEST['department']) ? $_REQUEST['department'] : '') . "',
+            mode='". mysql_real_escape_string(isset($_REQUEST['mode']) ? $_REQUEST['mode'] : '') . "',
+            slots='$timeslots'
             WHERE srd_reg_id= $_REQUEST[id];
             ";
       if($db->Execute($sql) === false)
         $success= "<font color='red'>Error inserting: ".$db->ErrorMsg()."</font>";
       else $success="Saved";
       }
+      $_REQUEST['section']="edit";
     }
     
     if(!isset($_REQUEST['section'])) $_REQUEST['section']="view";
@@ -501,6 +520,15 @@ ABSTRACT: $descrip
                          case '2' :
                              $regs[$key]['status'] = 'Finalized';
                      }
+                     
+                     if($reg['mode']>0){
+                     	$sql="SELECT name,id FROM srd_categories WHERE id=$reg[mode]";
+					 	$cats=$db->GetRow($sql);
+					 	$reg['mode']=$cats['name'];
+                     }
+                     else $reg['mode']='';
+                     
+                     
                      if(strlen($reg['title'])>30) $regs[$key]['title']=substr($reg['title'],0,30) . '...';
                      if(strlen($reg['descrip'])<5) $regs[$key]['title']="<font color='red'>".$regs[$key]['title']."</font>";
                      if($reg['moved']==TRUE) {
@@ -528,11 +556,16 @@ ABSTRACT: $descrip
 		    		$prev=$db->GetAll($sql);
 		    		if(count($prev)>0) $regs[$key]['posters']=count($prev);
 		    		else $regs[$key]['posters']='';
-		    		if($reg['srd']) $regs[$key]['main']="checked='checked'"; else $regs[$key]['main']='';
-		    		if($reg['strd']) $regs[$key]['st']="checked='checked'"; else $regs[$key]['st']='';
-		    		if($reg['pref']=='poster')
+		    		//if($reg['srd']) $regs[$key]['main']="checked='checked'"; else $regs[$key]['main']='';
+		    		//if($reg['strd']) $regs[$key]['st']="checked='checked'"; else $regs[$key]['st']='';
+		    		/*
+if($reg['pref']=='poster')
 		    			{ $regs[$key]['p']="checked='checked'"; $regs[$key]['m']='';}
 		    		else {$regs[$key]['m']="checked='checked'"; $regs[$key]['p']='';}
+*/
+					switch($reg['st_category']){
+						
+					}
 		    		
                 }//foreach
                 $tmpl->addRows('mainlist',$regs);
@@ -558,21 +591,31 @@ ABSTRACT: $descrip
                  if($reg){
 
                      // build the list of coresearchers
-                     foreach($reg AS $singleRes) {
-                         $sql = sprintf("SELECT CONCAT(cores.first, ' ', cores.last) AS coresearcher
-                                  FROM srd_researchers AS cores WHERE cores.srd_reg_id = %s", $reg['srd_reg_id']);
-                         $coresearchers=$db->getAll($sql);
-
-                         $coresearcherList = "";
-                         foreach($coresearchers AS $key=>$coresearcher) {
-                             $coresearcherList .= $coresearcher['coresearcher'];
-                             if($key < count($coresearchers)-1) {
-                                 $coresearcherList .= ", ";
-                             }
-                         }
-
-                         $reg['coresearchers'] = $coresearcherList;
-                     }
+                     
+                     $sql = sprintf("SELECT CONCAT(cores.first, ' ', cores.last) AS coresearcher, id
+                              FROM srd_researchers AS cores WHERE cores.srd_reg_id = %s", $reg['srd_reg_id']);
+                     $coresearchers=$db->getAll($sql);
+                     
+					 if(count($coresearchers)>0) {
+						 $tmpl->AddRows("coresearchers",$coresearchers);
+						 $tmpl->setAttribute('coresearchers','visibility','visible');
+						}
+						
+                    $depts=$db->Execute("SELECT name,department_id from departments ORDER BY name");
+                    $reg['dept_options']=$depts->getMenu2("department",$reg['departmentId']);
+                    //echo($reg['dept_options']);
+                    
+                    $cats=$db->Execute("SELECT name,id from srd_categories ORDER BY sort_order");
+                    $reg['cat_options']=$cats->getMenu2("mode",$reg['mode']);
+                    echo($reg['cat_options']);
+                    
+                    $regtime=explode( ',', $reg['slots']);
+                    $targyear=GetSchoolYear(time());
+                    //echo($targyear);
+                    $times=$db->Execute("SELECT `desc`, `slot` from srd_reg_slots WHERE year='$targyear' ORDER BY `slot` ");
+                    
+                    $reg['time_options']=$times->getMenu2("time",$regtime,true,true,12);
+                    //echo($reg['cat_options']);
                      
                     $reg['year']= (isset($_REQUEST['year'])) ? $_REQUEST['year'] : GetSchoolYear(time());
 
@@ -592,8 +635,8 @@ ABSTRACT: $descrip
                     $reg['hrebdone2']=($reg['hreb2']=='no') ? "checked='checked'" : '';
                     $reg['hrebdone3']=($reg['hreb2']=='notsure') ? "checked='checked'" : '';
                     
-                    if($reg['srd']) $reg['srd']="checked='checked'"; else $reg['srd']='';
-                    if($reg['strd']) $reg['strd']="checked='checked'"; else $reg['strd']='';
+                    //if($reg['srd']) $reg['srd']="checked='checked'"; else $reg['srd']='';
+                    //if($reg['strd']) $reg['strd']="checked='checked'"; else $reg['strd']='';
                     
                     $options_list=array('submitted','contacted','finalized');
                     $opt=array();
