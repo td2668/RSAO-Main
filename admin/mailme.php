@@ -3,7 +3,7 @@
 include("includes/config.inc.php");
 include_once("includes/functions-required.php");
 include_once("includes/mail-functions.php");
-include_once("includes/class-template.php");
+
 
 define("NEWS", 0);
 define("DEADLINE", 1);
@@ -12,15 +12,21 @@ define("OTHER", 3);
 
 global $db;
 
-$template = new Template;
-//require("security.php");
-//-- Header File
-include("html/header.html");
+$hdr=loadPage("header",'Header');
+
+$menuitems=array();
+$menuitems[]=array('title'=>'Add','url'=>'mailme.php?section=add');
+$menuitems[]=array('title'=>'List','url'=>'mailme.php?section=view');
+$hdr->AddRows("list",$menuitems);
+
+$tmpl=loadPage("mailme", 'Mail');
+
+
 set_time_limit(120);
 $success="";
 //error_reporting(E_ALL);
 //Prep all variables after a submit
-if (isset($_REQUEST['add']) || isset($_REQUEST['update']) || isset($_REQUEST['asend']) || isset($_REQUEST['usend']) || isset($_REQUEST['atestsend']) || isset($_REQUEST['utestsend'])) {
+if ( isset($_REQUEST['update']) || isset($_REQUEST['usend']) || isset($_REQUEST['utestsend'])) {
     $topics_research = (isset($_REQUEST['topics_research']))?$topics_research = implode(",", $_REQUEST['topics_research']): "";
     $divisions = (isset($_REQUEST['divisions']))?$divisions = implode(",", $_REQUEST['divisions']): "";
     $userlist= (isset($_REQUEST['single_user']))?$userlist= implode(",",$_REQUEST['single_user']):"";
@@ -46,16 +52,10 @@ if (isset($_REQUEST['add']) || isset($_REQUEST['update']) || isset($_REQUEST['as
     else $deans=0;
     if(isset($_REQUEST['students'])) $students=1;
     else $students=0;
-    if(isset($_REQUEST['tss'])) $tss=1;
-    else $tss=0;
-    if(isset($_REQUEST['srd'])) $srd=1;
-    else $srd=0;
-    if(isset($_REQUEST['strd'])) $strd=1;
-    else $strd=0;
     if(isset($_REQUEST['abstract'])) $abstract=1;
     else $abstract=0;
-    if($_REQUEST['from_email']=='') $_REQUEST['from_email']='research@mtroyal.ca';
-    if($_REQUEST['from_name']=='') $_REQUEST['from_name']='Research Services';
+    if($_REQUEST['from_email']=='') $_REQUEST['from_email']='research@viu.ca';
+    if($_REQUEST['from_name']=='') $_REQUEST['from_name']='RSAO';
     //process file here
     $filename='';
     if(isset($_FILES['file'])) if($_FILES['file']['name'] != ""){
@@ -88,42 +88,13 @@ if (isset($_REQUEST['add']) || isset($_REQUEST['update']) || isset($_REQUEST['as
 }
 
 // Add new item or Add & Send
-if (isset($_REQUEST['add']) || isset($_REQUEST['asend']) || isset($_REQUEST['atestsend'])) {
-    if (isset($_REQUEST['asend'])) $sent=1; else $sent=0;
-    $values = array(    'null',
-                        $_REQUEST['subject'],
-                        addslashes($_REQUEST['body']),
-                        $s_date,
-                        $topics_research,
-                        $divisions,
-                        $sent,
-                        'null',
-                        'null',
-                        $ft_faculty,
-                        $pt_faculty,
-                        $management,
-                        $support,
-                        $outside,
-                        $chairs,
-                        $deans,
-                        $students,
-                        $tss,
-                        $srd,
-                        $strd,
-                        $abstract,
-                        $userlist,
-                        $filename,
-                        $_REQUEST['prepend'],
-                        $_REQUEST['from_email'],
-                        $_REQUEST['from_name'],
-                        $override,
-                        $type
-    );
-    $result = mysqlInsert("mail", $values);
-    if($result==1) $success.=" <strong>Complete</strong>";
+if (isset($_REQUEST['add']))  {
+    
+    $result = $db->Execute("INSERT INTO mail VALUES()");
+    if(is_array($result)) $success.=" <strong>Complete</strong>";
     else echo ("Error Updating: $result");
 
-    $_REQUEST['id']=mysql_insert_id();
+    $_REQUEST['id']=$db->Insert_ID();
 }
 
 //Update existing or Update and Send
@@ -133,35 +104,32 @@ if (isset($_REQUEST['update']) || isset($_REQUEST['usend']) || isset($_REQUEST['
     if(!isset($filename)) $filename=$_REQUEST['old_filename'];
 
 
-    $values = array(    'subject'=>$_REQUEST['subject'],
-                        'body'=>addslashes($_REQUEST['body']),
-                        's_date'=>$s_date,
-                        'topics_research'=>$topics_research,
-                        'divisions'=>$divisions,
-                        'sent'=>$sent,
-                        'ft_faculty'=>$ft_faculty,
-                        'pt_faculty'=>$pt_faculty,
-                        'management'=>$management,
-                        'support'=>$support,
-                        'outside'=>$outside,
-                        'chairs'=>$chairs,
-                        'deans'=>$deans,
-                        'students'=>$students,
-                        'tss'=>$tss,
-                        'srd'=>$srd,
-                        'strd'=>$strd,
-                        'abstract'=>$abstract,
-                        'single_user'=>$userlist,
-                        'filename'=>$filename,
-                        'prepend'=>$_REQUEST['prepend'],
-                        'from_email'=>$_REQUEST['from_email'],
-                        'from_name'=>$_REQUEST['from_name'],
-                        'mail_type'=>$type,
-                        'override'=>$override
-    );
-    $result = mysqlUpdate("mail", $values, "mail_id=$_REQUEST[id]");
-    if($result == 1) $success.=" <strong>Updated</strong>";
-    else echo ("Error Updating: $result");
+    $result=$db->Execute("UPDATE mail SET
+    			 subject='".mysql_real_escape_string($_REQUEST['subject'])."',
+                 body='".mysql_real_escape_string($_REQUEST['body'])."',
+                 s_date='$s_date',
+                 topics_research='$topics_research',
+                 divisions='$divisions',
+                 sent='$sent',
+                 ft_faculty=$ft_faculty,
+                 pt_faculty=$pt_faculty,
+                 management=$management,
+                 support=$support,
+                 outside=$outside,
+                 chairs=$chairs,
+                 deans=$deans,
+                 students=$students,
+				 abstract='".mysql_real_escape_string($abstract)."',
+                 single_user='$userlist',
+                 filename='".mysql_real_escape_string($filename)."',
+                 prepend='$_REQUEST[prepend]',
+                 from_email='$_REQUEST[from_email]',
+                 from_name='".mysql_real_escape_string($_REQUEST['from_name'])."',
+                 mail_type='$type',
+                 override='$override'
+                 WHERE mail_id=$_REQUEST[id]");
+    if($result) $success.=" <strong>Updated</strong>";
+    else $success.= "Error Updating: ". $db->ErrorMsg() . ' ';
 }
 
 $plug_msg='@firstname@:<br><br>
@@ -169,8 +137,8 @@ $plug_msg='@firstname@:<br><br>
 ';
 $msg_subject='';
 if(isset($_REQUEST['msg_flag'])) if($_REQUEST['msg_flag']=='1'){
-    $msg=mysqlFetchRow("messages","message_id=$special_msg");
-    if(is_array($msg)){
+    $msg=$db->GetRow("SELECT * FROM messages WHERE message_id=$special_msg");
+    if(count($msg)>0){
         $plug_msg=$msg['message'];
         $msg_subject=$msg['name'];
     }
@@ -178,7 +146,7 @@ if(isset($_REQUEST['msg_flag'])) if($_REQUEST['msg_flag']=='1'){
 
 //------------------------Send Mail--------------------------
 
-if (isset($_REQUEST['usend']) || isset($_REQUEST['asend']) || isset($_REQUEST['atestsend']) || isset($_REQUEST['utestsend'])) {
+if (isset($_REQUEST['usend']) || isset($_REQUEST['utestsend'])) {
 
         $mailitems = array('subject'    => $_REQUEST['subject'],
                            'body'       => stripslashes($_REQUEST['body']),
@@ -210,7 +178,7 @@ if (isset($_REQUEST['usend']) || isset($_REQUEST['asend']) || isset($_REQUEST['a
 	//var_dump('total', $total);
 	//var_dump('users', $users);
 
-	if (isset($_REQUEST['utestsend']) || isset($_REQUEST['atestsend'])) {
+	if (isset($_REQUEST['utestsend'])) {
 	    $mailitems['testmail'] = true;
 	    echo("<b>Admin Mailout only</b><br><br>");
 	} else {
@@ -278,14 +246,14 @@ if (isset($_REQUEST['usend']) || isset($_REQUEST['asend']) || isset($_REQUEST['a
 
 	if (isset($_REQUEST['single_user'])) {
 	    foreach ($_REQUEST['single_user'] as $suser) {
-	        $username = mysqlFetchRows('users', "user_id=$suser");
-	        $people .= $username[0]['last_name'] . ', ' . $username[0]['first_name'] . '; ';
+	        $username = $db->GetRow("SELECT * FROM users WHERE user_id=$suser");
+	        $people .= $username['last_name'] . ', ' . $username['first_name'] . '; ';
 	    }
 	}
 	if (isset($_REQUEST['topics_research'])) {
 	    foreach ($_REQUEST['topics_research'] as $topic) {
-	        $tp = mysqlFetchRowsOneCol('topics_research', 'name', "topic_id=$topic");
-	        $topics .= $tp[0] . '; ';
+	        $tp = $db->GetRow("SELECT name FROM topics_research WHERE topic_id=$topic");
+	        $topics .= $tp['name'] . '; ';
 	    }
 	}
 
@@ -333,10 +301,12 @@ if (isset($_REQUEST['section'])) {
     if(!isset($success)) $success="";
     switch($_REQUEST['section']){
         case "view":
+        	$tmpl->setAttribute("view","visibility","visible");
             //Show mail items using fields 'subject' and 'sent_date'
-            $values = mysqlFetchRows("mail","1 order by s_date desc");
+            $values = $db->GetAll("SELECT * FROM mail WHERE 1 order by s_date desc");
             $output = "";
-            if(is_array($values)) {
+            $out=array();
+            if(count($values)>0) {
                 foreach($values as $index) {
                     if($index['s_date'] == 0) $index['s_date']='Manual';
                         else $index['s_date'] = date("d/m/Y", $index['s_date']);
@@ -344,21 +314,28 @@ if (isset($_REQUEST['section'])) {
                     $linkitem="";
                     if(($index['assoc_id'])!=0) {
                         if($index['type'] == "opportunity") {
-                            $item=mysqlFetchRow("opportunities","opportunity_id=$index[assoc_id]");
-                            if(is_array($item)) $linkitem="Opp: ".$item['title'];
+                            $item=$db->GetRow("SELECT * FROM opportunities WHERE opportunity_id=$index[assoc_id]");
+                            if(count($item)>0) $linkitem="Opp: ".$item['title'];
                         }
                         else if ($index['type'] == "deadline-early") {
-                            $item=mysqlFetchRow("deadlines as d left join deadline_dates as dd on d.deadline_id=dd.deadline_id","date_id=$index[assoc_id]");
-                            if(is_array($item)) $linkitem="DL-Early: ".$item['title']." (".date("j/n/y", $item['d_date']).")";
+                            $item=$db->GetRow("SELECT * FROM deadlines as d left join deadline_dates as dd on d.deadline_id=dd.deadline_id WHERE date_id=$index[assoc_id]");
+                            if(count($item)>0) $linkitem="DL-Early: ".$item['title']." (".date("j/n/y", $item['d_date']).")";
                         }
                         else if ($index['type'] == "deadline-close") {
-                            $item=mysqlFetchRow("deadlines as d left join deadline_dates as dd on d.deadline_id=dd.deadline_id","date_id=$index[assoc_id]");
-                            if(is_array($item)) $linkitem="DL-Late: ".$item['title']." (".date("j/n/y", $item['d_date']).")";
+                            $item=$db->GetRow("SELECT * FROM deadlines as d left join deadline_dates as dd on d.deadline_id=dd.deadline_id WHERE date_id=$index[assoc_id]");
+                            if(count($item)>0) $linkitem="DL-Late: ".$item['title']." (".date("j/n/y", $item['d_date']).")";
                         }
                     }
                     //if($index['send_all']) $index['subject'] .= " (SEND ALL)";
                     //if($index['send_admin']) $index['subject'] .= " (ADMIN ONLY)";
-                    $output .= "
+                    
+                    $index['linkitem']=$linkitem;
+                    $index['rowtype']='main';
+                    $out[]=$index;
+                    
+                    
+                    /*
+$output .= "
                         <tr>
                             <td bgcolor='#E09731'><a style='color:white' href='mailme.php?section=update&id=$index[mail_id]'>Update</a></td>
                             <td width='25' bgcolor='#E09731'><a style='color:white' href='mailme.php?delete&id=$index[mail_id]&section=view'>Delete</a></td>
@@ -367,84 +344,39 @@ if (isset($_REQUEST['section'])) {
                             <td bgcolor='$index[sent]'>&nbsp;</td>
                             <td bgcolor='#D7D7D9'>$linkitem</td>
                             </tr>";
+*/
 
 
-                    $mailitems=mysqlFetchRows("mail_history","mail_id=$index[mail_id]");
+                    $mailitems=$db->GetAll("SELECT * FROM mail_history WHERE mail_id=$index[mail_id]");
 
-                    if(is_array($mailitems)) {
+                    if(count($mailitems)>0) {
                         foreach($mailitems as $mailitem){
-                            if($mailitem['date'] == 0) $date1='Manual';
-                            else $date1 = date($iso8601, $mailitem['date']);
-                            $output.="
-                            <tr>
-                                <td bgcolor='#D7D7D9'>&nbsp;</td>
-                                <td bgcolor='#D7D7D9'>&nbsp;</td>
-
-                                <td  bgcolor='#D7D7D9'>";
-                                if($mailitem['groups']<>"") $output.="<b>Groups:</b> $mailitem[groups] ";
-                                if($mailitem['people']<>"") $output.="<b>People:</b> $mailitem[people] ";
-                                if($mailitem['topics']<>"") $output.="<b>Topics:</b> $mailitem[topics] ";
-                              $output.="  </td>
-                                <td bgcolor='#D7D7D9' nowrap>$date1</td>
-                                <td bgcolor='#D7D7D9'>$mailitem[count]</td>
-                                <td bgcolor='#D7D7D9'>&nbsp;</td>
-                                </tr>";
+                            if($mailitem['date'] == 0) $index['date1']='Manual';
+                            else $index['date1'] = date($iso8601, $mailitem['date']);
+                            
+                            if($mailitem['groups']<>"") {$index['type']='Groups:'; $index['item']=$mailitem['groups'];}
+                            elseif($mailitem['people']<>"") {$index['type']='People:'; $index['item']=$mailitem['people'];}
+                            elseif($mailitem['topics']<>"") {$index['type']='Topics:'; $index['item']=$mailitem['topics'];}
+                            else {$index['type']=''; $index['item']='';}
+                            $index['count']=$mailitem['count'];
+                            $index['rowtype']='sub';
+                            $out[]=$index;
                         }
                     }
                 }
-                $hasharray = array('success'=>$success, 'output'=>$output);
-                $filename = 'templates/template-mail_view.html';
+                $tmpl->AddRows("viewlist",$out);
+                //$hasharray = array('success'=>$success, 'output'=>$output);
+                //$filename = 'templates/template-mail_view.html';
             }
             else {
-                $hasharray = array('title'=>"Mail");
-                $filename = 'includes/error-no_records.html';
+                //$hasharray = array('title'=>"Mail");
+                //$filename = 'includes/error-no_records.html';
             }
-            $parsed_html_file = $template->loadTemplate($filename,$hasharray,"HTML");
-            echo $parsed_html_file;
+            //$parsed_html_file = $template->loadTemplate($filename,$hasharray,"HTML");
+            //echo $parsed_html_file;
         break;
 
-        case "add":
-            //Grab subjects list
-
-            $topics = mysqlFetchRows("topics_research", "1 ORDER BY name");
-
-            $topic_options = "<option value='0'></option>";
-            if(is_array($topics)) {
-                foreach($topics as $topic) {
-                    //$sub_topics = mysqlFetchRows("topics_research", "parent_id=$topic[topic_id] order by name");
-                    $topic_options .= "<option value='$topic[topic_id]'>$topic[name]</option>";
-
-                }
-            }
-
-            //Grab departments list
-            $values = mysqlFetchRows("divisions", "1 ORDER BY name");
-            $division_options = "";
-            if(is_array($values)) foreach($values as $index) $division_options .= "<option value='$index[division_id]'>$index[name]</option>";
-
-            //Grab Users List
-            $users=mysqlFetchRows("users","1 order by last_name,first_name");
-            $single_user_list="";
-            if (is_array($users)) {
-                foreach ($users as $user) {
-                    if((strlen($user['first_name']) > 1) && (strlen($user['last_name']) > 1)) {
-                        $single_user_list .= "<option value='$user[user_id]'>$user[last_name], $user[first_name]</option>\n";
-                    }
-                }
-            }
-
-            //Grab Special Messages List
-            $msgs=mysqlFetchRows("messages","1 order by name");
-            $special_msg_options="";
-            if(is_array($msgs)) foreach($msgs as $msg) $special_msg_options.="<option value='$msg[message_id]'>$msg[name]</option>\n";
-
-            $hasharray = array('msg_subject'=>$msg_subject,'plug_msg'=>htmlentities($plug_msg),'success'=>$success, 'topic_options'=>$topic_options, 'division_options'=>$division_options,'single_user_list'=>$single_user_list,'special_msg_options'=>$special_msg_options);
-            $filename = 'templates/template-mail_add.html';
-            $parsed_html_file = $template->loadTemplate($filename,$hasharray,"HTML");
-            echo $parsed_html_file;
-
-
-        break;
+        
 
         case "update":
             $values = mysqlFetchRow("mail", "mail_id=$_REQUEST[id]");
@@ -599,5 +531,7 @@ if (isset($_REQUEST['section'])) {
         break;
     } //switch
 }
-include("templates/template-footer.html");
+$hdr->AddVar('header','success',$success);
+$hdr->displayParsedTemplate('header');
+$tmpl->displayParsedTemplate('page');
 
