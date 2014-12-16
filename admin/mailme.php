@@ -257,22 +257,20 @@ if (isset($_REQUEST['usend']) || isset($_REQUEST['utestsend'])) {
 	    }
 	}
 
-	$result = mysqlInsert('mail_history', array(
-	                                           'null',
-	                                           $_REQUEST['id'],
-	                                           $groups,
-	                                           $people,
-	                                           $topics,
-	                                           $total,
-	                                           mktime()
-	                                      ));
-	if ($result != 1) {
+	$result = $db->Execute("INSERT INTO mail_history SET 
+							mail_id=$_REQUEST[id],
+	                        groups='$groups',
+	                        people='$people',
+	                        topics='$topics',
+	                        count='$total',
+	                        date='".mktime()."'"
+	                                      );
+	if (!$result) {
 	    $success .= " Did not write history file: $result";
 	}
 
-	$filepath = "/var/www/html/";
-	if ($logfile = fopen("{$configInfo['file_root']}admin/mail_log.txt", "a+")) {
-	    $date = date("j/n/y", $todays_date);
+	if ($logfile = fopen("{$configInfo['file_root']}mail_log.txt", "a+")) {
+	    $date = date("Y-n-j", $todays_date);
 	    fwrite($logfile, "-----------------\nDate: $date\n\n");
 	    fwrite($logfile, "Immediate Mail: $mailitems[subject]\n");
 	    if ($total >= 1) {
@@ -283,7 +281,7 @@ if (isset($_REQUEST['usend']) || isset($_REQUEST['utestsend'])) {
 	    }
 	    fclose($logfile);
 	} else {
-	    echo("Mail Log Is Not Writeable at " . $configInfo['file_root'] . "admin/mail_log.txt<br>");
+	    echo("Mail Log Is Not Writeable at " . $configInfo['file_root'] . "mail_log.txt<br>");
 	}
 }
 //if($notsent>=1) $success.=" (not sent to $notsent off-campus)";
@@ -293,8 +291,8 @@ if (isset($_REQUEST['usend']) || isset($_REQUEST['utestsend'])) {
 //-----------------------------------------------------------
 
 if (isset($_REQUEST['delete'])){
-    if(mysqlDelete("mail", "mail_id=$_REQUEST[id]")) $success.=" <strong>Mail Deleted</strong>";
-    mysqlDelete("mail_history","mail_id=$_REQUEST[id]");
+    if($db->Execute("DELETE FROM mail WHERE mail_id=$_REQUEST[id]")) $success.=" <strong>Mail Deleted</strong>";
+    $db->Execute("DELETE FROM mail_history WHERE mail_id=$_REQUEST[id]");
 }
 $section = $_REQUEST['section'];
 if (isset($_REQUEST['section'])) {
@@ -379,25 +377,19 @@ $output .= "
         
 
         case "update":
-            $values = mysqlFetchRow("mail", "mail_id=$_REQUEST[id]");
+            $values = $db->GetRow("SELECT * FROM mail WHERE mail_id=$_REQUEST[id]");
             //-- Selects the Topics
             $objects = explode(",", $values['topics_research']);
-            $topics = mysqlFetchRows("topics_research", "1 ORDER BY name");
-            $topic_options = "<option value='0'></option>";
-            if(is_array($topics)) {
-                foreach($topics as $topic) {
-                    //$sub_topics = mysqlFetchRows("topics_research", "parent_id=$topic[topic_id] order by name");
-                    if(in_array($topic['topic_id'], $objects)) $topic_options .= "<option value='$topic[topic_id]' selected>$topic[name]</option>";
-                    else $topic_options .= "<option value='$topic[topic_id]'>$topic[name]</option>";
-                }//foreach topic
-            }//if isarray topics
+            $topics = $db->Execute("SELECT name,topic_id FROM topics_research WHERE 1 ORDER BY name");
+            $values['topic_options'] = $topics->GetMenu2("topics_research",$objects,true,true,8); 
 
 
             $objects = explode(",", $values['divisions']);
-            $divisions = mysqlFetchRows("divisions", "1 ORDER BY name");
-            $division_options = "";
-
-            if(is_array($objects) && $objects[0] != "") foreach($objects as $object) $ids[] = $object['topic_id'];
+            $divisions = $db->Execute("SELECT name,division_id FROM divisions WHERE 1 ORDER BY name");
+            $division_options = $divisions->GetMenu2("divisions",$objects,true,true,8);
+			
+            /*
+if(is_array($objects) && $objects[0] != "") foreach($objects as $object) $ids[] = $object['topic_id'];
             if(is_array($divisions)) {
                 foreach($divisions as $division) {
                     if(in_array($division['division_id'], $objects)) $division_options .= "<option value='$division[division_id]' selected>$division[name]</option>";
@@ -405,45 +397,24 @@ $output .= "
 
                 }
             }
+*/
 
             $objects = explode(",", $values['single_user']);
-            $users=mysqlFetchRows("users","1 order by last_name,first_name");
-            $single_user_list="<option value=''></option>";
-            if(is_array($users)) {
-                foreach($users as $user) {
-                    if(in_array($user['user_id'], $objects)) $sel='selected'; else $sel='';
-                    if((strlen($user['last_name']) > 1) && (strlen($user['first_name']) > 1)) {
-                     $single_user_list .= "<option value='$user[user_id]' $sel>$user[last_name], $user[first_name]</option>\n";
-                    }
-                }
-            }
-            if($values['s_date'] != "") $s_date = date("m/d/Y", $values['s_date']);
-            if($values['ft_faculty'] ==1) $ft_faculty='checked';
-            else $ft_faculty="";
-            if($values['pt_faculty'] ==1) $pt_faculty='checked';
-            else $pt_faculty="";
-            if($values['management'] ==1) $management='checked';
-            else $management="";
-            if($values['support'] ==1) $support='checked';
-            else $support="";
-            if($values['outside'] ==1) $outside='checked';
-            else $outside="";
-            if($values['chairs'] ==1) $chairs='checked';
-            else $chairs="";
-            if($values['deans'] ==1) $deans='checked';
-            else $deans="";
-            if($values['students'] ==1) $students='checked';
-            else $students="";
-            if($values['tss'] ==1) $tss='checked';
-            else $tss="";
-            if($values['srd'] ==1) $srd='checked';
-            else $srd="";
-            if($values['strd'] ==1) $strd='checked';
-            else $strd="";
-            if($values['abstract'] ==1) $abstract='checked';
-            else $abstract="";
-            if($values['sent'] == 1) $sent="checked"; else $sent="";
-            if($values['override'] == 1) $override="checked"; else $override="";
+            $users=$db->Execute("SELECT CONCAT(last_name,', ',first_name) as name, user_id FROM users WHERE 1 order by last_name,first_name");
+            $single_user_list=$users->GetMenu2("singel_user",$objects,true,true,8);
+            
+            
+            $values['s_date']= ($values['s_date'] != "") ? date("m/d/Y", $values['s_date']) : '';
+            $values['ft_faculty'] = ($values['ft_faculty'] ==1) ? 'checked' : '';     
+            $values['pt_faculty'] = ($values['pt_faculty'] ==1) ? 'checked' : '';
+            $values['management'] = ($values['management'] ==1) ? 'checked' : '';
+            $values['support'] = ($values['support'] ==1) ? 'checked' : '';
+            $values['outside'] = ($values['outside'] ==1) ? 'checked' : '';
+            $values['chairs'] = ($values['chairs'] ==1) ? 'checked' : '';
+            $values['deans'] = ($values['deans'] ==1) ? 'checked';
+            $values['abstract'] = ($values['abstract'] ==1) ? 'checked' : '';
+            $values['sent'] = ($values['sent'] == 1) ? "checked" : '';
+            $values['override'] = ($values['override'] == 1) ? "checked" : "";
 
             $type_news = '';
             $type_deadline = '';

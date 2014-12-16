@@ -115,9 +115,10 @@ $configInfos["admin.localhost"]["authmethod"] = 'usertable';
 $configInfos["admin.localhost"]["url_root"] = 'http://local.orsadmin';
 $configInfos["admin.localhost"]["upload_root"] = '/Users/tdavis/Sites/webrepo/research/tags/release-4.0/admin/documents/';
 $configInfos["admin.localhost"]["upload_webroot"] = '/documents/';
-$configInfos["admin.localhost"]["file_root"] = '/vagrant/research-admin/';
+$configInfos["admin.localhost"]["file_root"] = '/Users/tdavis/Sites/webrepo/research/tags/release-4.0/admin/';
 $configInfos["admin.localhost"]["admin"] = array('tdavis','cnakamoto');
 $configInfos["admin.localhost"]["irgf_docs"] = "/admin/documents/shared/irgf";
+$configInfos["admin.localhost"]["logpath"] = "/Users/tdavis/Sites/webrepo/research/tags/release-4.0/admin/";
 $configInfos["admin.localhost"]["picture_path"] = "/Users/tdavis/Sites/webrepo/tags/release-4.0/admin/documents/pictures/";
 
 if (strpos($_SERVER['HTTP_HOST'],':') != 0) {
