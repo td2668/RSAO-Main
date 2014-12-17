@@ -120,6 +120,7 @@ $configInfos["admin.localhost"]["admin"] = array('tdavis','cnakamoto');
 $configInfos["admin.localhost"]["irgf_docs"] = "/admin/documents/shared/irgf";
 $configInfos["admin.localhost"]["logpath"] = "/Users/tdavis/Sites/webrepo/research/tags/release-4.0/admin/";
 $configInfos["admin.localhost"]["picture_path"] = "/Users/tdavis/Sites/webrepo/tags/release-4.0/admin/documents/pictures/";
+$configInfos["admin.localhost"]["mail_file_path"] = '/Users/tdavis/Sites/webrepo/tags/release-4.0/admin/documents/mailfiles/';
 
 if (strpos($_SERVER['HTTP_HOST'],':') != 0) {
     list($server,$port)=explode(":",$_SERVER['HTTP_HOST']);

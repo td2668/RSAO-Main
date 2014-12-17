@@ -30,50 +30,37 @@ if ( isset($_REQUEST['update']) || isset($_REQUEST['usend']) || isset($_REQUEST[
     $topics_research = (isset($_REQUEST['topics_research']))?$topics_research = implode(",", $_REQUEST['topics_research']): "";
     $divisions = (isset($_REQUEST['divisions']))?$divisions = implode(",", $_REQUEST['divisions']): "";
     $userlist= (isset($_REQUEST['single_user']))?$userlist= implode(",",$_REQUEST['single_user']):"";
-    if(($_REQUEST['s_date'] == "d/m/yy") || $_REQUEST['s_date']=="") $s_date=mktime();
+    if(($_REQUEST['s_date'] == "yy-mm-dd") || $_REQUEST['s_date']=="") $s_date=mktime();
     else {
-        $tmp_date = explode("/", $_REQUEST['s_date']);
-        $s_date = mktime(0,0,0,$tmp_date[0],$tmp_date[1],$tmp_date[2]);
+        $tmp_date = explode("-", $_REQUEST['s_date']);
+        $s_date = mktime(0,0,0,$tmp_date[2],$tmp_date[1],$tmp_date[0]);
     }
 
-    if(isset($_REQUEST['ft_faculty'])) $ft_faculty=1;
-    else $ft_faculty=0;
-    if(isset($_REQUEST['pt_faculty'])) $pt_faculty=1;
-    else $pt_faculty=0;
-    if(isset($_REQUEST['management'])) $management=1;
-    else $management=0;
-    if(isset($_REQUEST['support'])) $support=1;
-    else $support=0;
-    if(isset($_REQUEST['outside'])) $outside=1;
-    else $outside=0;
-    if(isset($_REQUEST['chairs'])) $chairs=1;
-    else $chairs=0;
-    if(isset($_REQUEST['deans'])) $deans=1;
-    else $deans=0;
-    if(isset($_REQUEST['students'])) $students=1;
-    else $students=0;
-    if(isset($_REQUEST['abstract'])) $abstract=1;
-    else $abstract=0;
+    $ft_faculty=(isset($_REQUEST['ft_faculty'])) ? 1 : 0;
+    $pt_faculty=(isset($_REQUEST['pt_faculty'])) ? 1 : 0;
+    $management=(isset($_REQUEST['management'])) ? 1 : 0;
+    $support=(isset($_REQUEST['support'])) ? 1 : 0;
+    $outside=(isset($_REQUEST['outside'])) ? 1 : 0;
+    $chairs=(isset($_REQUEST['chairs'])) ? 1 : 0;
+    $deans=(isset($_REQUEST['deans'])) ? 1 : 0;
+ 
     if($_REQUEST['from_email']=='') $_REQUEST['from_email']='research@viu.ca';
     if($_REQUEST['from_name']=='') $_REQUEST['from_name']='RSAO';
     //process file here
     $filename='';
+    print_r($_FILES);
     if(isset($_FILES['file'])) if($_FILES['file']['name'] != ""){
         if($_FILES["file"]["error"] > 0) {
             $success.="Error uploading file-Return Code: " . $_FILES["file"]["error"] ;
         }
         else {
-            move_uploaded_file($_FILES["file"]["tmp_name"], $mail_file_path . $_FILES["file"]["name"]);
+            move_uploaded_file($_FILES["file"]["tmp_name"], $configInfo['mail_file_path'] . $_FILES["file"]["name"]);
             $filename=$_FILES["file"]["name"];
             $success.="Uploaded file. ";
         }
     }
-    if(isset($_REQUEST['override'])) {
-        $override=true;
-    }
-    else {
-        $override=false;
-    };
+    $override=(isset($_REQUEST['override'])) ? true : false;
+
 
     if(isset($_REQUEST['type'])) {
         $type = $_REQUEST['type'];
@@ -118,8 +105,6 @@ if (isset($_REQUEST['update']) || isset($_REQUEST['usend']) || isset($_REQUEST['
                  outside=$outside,
                  chairs=$chairs,
                  deans=$deans,
-                 students=$students,
-				 abstract='".mysql_real_escape_string($abstract)."',
                  single_user='$userlist',
                  filename='".mysql_real_escape_string($filename)."',
                  prepend='$_REQUEST[prepend]',
@@ -307,7 +292,7 @@ if (isset($_REQUEST['section'])) {
             if(count($values)>0) {
                 foreach($values as $index) {
                     if($index['s_date'] == 0) $index['s_date']='Manual';
-                        else $index['s_date'] = date("d/m/Y", $index['s_date']);
+                        else $index['s_date'] = date("Y-m-d", $index['s_date']);
                     if($index['sent']==1) $index['sent']='#FF3333'; else $index['sent']='#D7D7D9';
                     $linkitem="";
                     if(($index['assoc_id'])!=0) {
@@ -401,7 +386,7 @@ if(is_array($objects) && $objects[0] != "") foreach($objects as $object) $ids[] 
 
             $objects = explode(",", $values['single_user']);
             $users=$db->Execute("SELECT CONCAT(last_name,', ',first_name) as name, user_id FROM users WHERE 1 order by last_name,first_name");
-            $values['single_user_list']=$users->GetMenu2("singel_user",$objects,true,true,8);
+            $values['single_user_list']=$users->GetMenu2("single_user",$objects,true,true,8);
             
             
             $values['s_date']= ($values['s_date'] != "") ? date("Y-m-d", $values['s_date']) : '';
@@ -412,7 +397,6 @@ if(is_array($objects) && $objects[0] != "") foreach($objects as $object) $ids[] 
             $values['outside'] = ($values['outside'] ==1) ? 'checked' : '';
             $values['chairs'] = ($values['chairs'] ==1) ? 'checked' : '';
             $values['deans'] = ($values['deans'] ==1) ? 'checked' : '';
-            $values['abstract'] = ($values['abstract'] ==1) ? 'checked' : '';
             $values['sent'] = ($values['sent'] == 1) ? "checked" : '';
             $values['override'] = ($values['override'] == 1) ? "checked" : "";
 

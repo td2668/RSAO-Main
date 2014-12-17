@@ -1,21 +1,19 @@
-body 
-{ 
-	background-color: White;
-    font-family: sans-serif;
-}
+
 
 blockquote {
 	border-left: 2px dotted #888;
-	padding-left: 5px;
+	/* padding-left: 5px; */
 	background: #d0f0ff;
 }
 
 .wmd-panel
 {
-	margin-left: 25%;
-	margin-right: 25%;
-	width: 50%;
-	min-width: 500px;
+	/* margin-left: 25%; */
+
+	float:left;	
+	
+	
+	min-width: 600px;
 }
 
 .wmd-button-bar 
@@ -27,7 +25,7 @@ blockquote {
 .wmd-input 
 { 
 	height: 300px;
-	width: 100%;
+	min-width: 600px;
 	background-color: Gainsboro;
 	border: 1px solid DarkGray;
 }
@@ -35,6 +33,7 @@ blockquote {
 .wmd-preview 
 { 
 	background-color: #c0e0ff; 
+	width: 600px;
 }
 
 .wmd-button-row 
