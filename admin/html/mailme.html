@@ -37,9 +37,187 @@
     
     
     <patTemplate:tmpl name="update" visibility="hidden">
+    	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.3/themes/ui-lightness/jquery-ui.css" type="text/css" media="all" />
+
+		<script language="JavaScript" type="text/javascript">
+
+		$(function() {
+        	$( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' }).val();
+			});
+
+		</script>
+		
+		
+
+<form method="post" ENCTYPE="multipart/form-data" name="form1" action="mailme.php?section=view&id={ID}">
+<input type="hidden" name="old_filename" value="{FILENAME}"
+<fieldset name="users">
+<legend>Mail Info</legend>
+
+    <div class="users"><label class="users">Email Type :</label>
+        <div>
+            <input name="type" type="radio" onclick="$('#prepend').val('[ResearchNews]');" value="news" {TYPE_NEWS}/> Newsletter
+            <input name="type" type="radio" onclick="$('#prepend').val('[ResearchDeadline]');" value="deadline" {TYPE_DEADLINE}/> Deadline
+            <input name="type" type="radio" onclick="$('#prepend').val('{PREPEND}');" value="other" {TYPE_OTHER}/> Other
+        </div>
+    </div>
+    <div class="users"><label class="users">Prepend:</label>
+        <input type="text" size="30" name="prepend" id='prepend' value="{PREPEND}"/>
+    </div>
+	<div class="users"><label class="users">Subject:</label>
+		<input type="text" name="subject" maxlength="255" size="80" value="{SUBJECT}">
+	</div>
+	<div class="users"><label class="users">Mail Date:</label>
+	  <input type="text" id='datepicker' name="s_date" maxlength="20" size="15" value="{S_DATE}">
+          <input type="checkbox" name="sent" value="sent" {SENT}> Sent Flag
+	</div>
+	
+
+        <div class="wmd-panel">
+            <div id="wmd-button-bar"></div>
+            <textarea class="wmd-input" id="wmd-input">
+This is the *first* editor.
+------------------------------
+
+Just plain **Markdown**, except that the input is sanitized:
+
+<marquee>I'm the ghost from the past!</marquee>
+
+and that it implements "fenced blockquotes" via a plugin:
+
+"""
+Do it like this:
+
+1. Have idea.
+2. ???
+3. Profit!
+"""
+</textarea>
+        </div>
+        <div id="wmd-preview" class="wmd-panel wmd-preview"></div>
+	
+	
+	
+	
+	<div class="users"><label class="users">Body:</label>
+		<textarea name="body" rows="15" cols="80">{BODY}</textarea><br>&nbsp;&nbsp;&nbsp;&nbsp;
+		<button name="" onClick="javascript: document.forms[0].body.value='@firstname@:<br>\n<br>\n';">HTML Template</button><br>
+        
+            <span style='font-style: italic'>Mail should be formatted using html markup. Line breaks must be made with &lt;br&gt; or &lt;p&gt;. Default font is Verdana 12, so other fonts require FONT tags. Any pictures require a fully qualified domain name. The mailing routine substitutes a short redirect link for any links in your document in order to defeat the text-wrap issue in some mailers. It helps to always put links at the start of a line. Your message will be marked-down for plain text mailers, and any HREFs will become visible.</span>
+	</div>
+	
+	<div class="users"><label class="users">Filename:</label>
+        {FILENAME} 
+            <input type="file" name="file" id="file" /> 
+	</div>
     
+    <div class="users"><label class="users">From Email:</label>
+    	<input type="text" size="30" name="from_email" value="{FROM_EMAIL}" />
+    </div>
+    <div class="users"><label class="users">From Name:</label>
+    	<input type="text" size="30" name="from_name" value="{FROM_NAME}" /> (<i>Avoid apostrophes please</i>)
+    </div>
+
+</fieldset>
+<fieldset class="users">
+	<legend>Mail Targets</legend>
+    
+        <span style='font-weight: bold; font-size: 11pt;'>Recipients</span>
+        <hr/>
+
+		<div class="users"><label class="users">Override:</label>
+            <input name="override" type="checkbox" id="override" value="yes" {OVERRIDE} />
+            <span style='font-weight:bold; margin-left: 10px'>* Include recipients below who have indicated they do not wish to receive mail</span>
+		</div>
+        <hr/>
+
+		<div class="users"><label class="users">Faculty:</label>
+			{DIVISION_OPTIONS}
+		</div>
+		<div class="users"><label class="users">Research Topics: </label>
+			{TOPIC_OPTIONS}
+		</div>
+	
+	  <div class="users"><label class="users">Full-time Faculty </label>
+	  	<input name="ft_faculty" type="checkbox" id="ft_faculty" {FT_FACULTY} value="yes">
+	  </div>
+	  <div class="users"><label class="users">Part-time Faculty </label>
+	  	<input name="pt_faculty" type="checkbox" id="pt_faculty" {PT_FACULTY} value="yes">
+	  </div>
+	  <div class="users"><label class="users">Management </label>
+      	<input name="management" type="checkbox" id="management" ~!management~ value="yes">
+	  </div>
+	  <div class="users"><label class="users">Support Staff </label>
+      	<input name="support" type="checkbox" id="support" {SUPPORT} value="yes">
+      </div>
+      <div class="users"><label class="users">Outside VIU </label>
+	  	<input name="outside" type="checkbox" id="outside" {OUTSIDE} value="yes">
+	  </div>
+	  <div class="users"><label class="users">Chairs</label>
+	  	<input name="chairs" type="checkbox" id="chairs" {CHAIRS} value="yes">
+	  </div>
+	  <div class="users"><label class="users">Deans</label>
+	  	<input name="deans" type="checkbox" id="deans" ~!deans~ value="yes">
+	  </div>
+	  <div class="users"><label class="users">Individuals</label>
+	  	{SINGLE_USER_LIST}
+
+	  </div>
+	
+	  <div style="text-align: center"><button type="submit" name="update" value="Update">Update</button>&nbsp;&nbsp;
+			<button type='button' onClick="window.location='mailme.php?section=view&delete=y&id={ID}'">Delete</button>
+			<input type="submit" name="usend" value="Send Now">&nbsp;&nbsp;
+			<input type="submit" name="utestsend" value="Test Send to Admin">&nbsp;&nbsp;
+			<button type='button' onClick="window.location='mailme.php?section=view'">Back</button>
+	  </div>
+</fieldset>
+
+</form>
+
+
     
     </patTemplate:tmpl>
     
 	</div>
 </patTemplate:tmpl>
+
+<script src="../../node_modules/pagedown/Markdown.Converter.js"></script>
+		<script src="../../node_modules/pagedown/Markdown.Sanitizer.js"></script>
+		<script src="../../node_modules/pagedown/Markdown.Editor.js"></script>
+		
+		<script type="text/javascript">
+            (function () {
+                var converter1 = Markdown.getSanitizingConverter();
+                
+                converter1.hooks.chain("preBlockGamut", function (text, rbg) {
+                    return text.replace(/^ {0,3}""" *\n((?:.*?\n)+?) {0,3}""" *$/gm, function (whole, inner) {
+                        return "<blockquote>" + rbg(inner) + "</blockquote>\n";
+                    });
+                });
+                
+                var editor1 = new Markdown.Editor(converter1);
+                
+                editor1.run();
+                
+                var converter2 = new Markdown.Converter();
+
+                converter2.hooks.chain("preConversion", function (text) {
+                    return text.replace(/\b(a\w*)/gi, "*$1*");
+                });
+
+                converter2.hooks.chain("plainLinkText", function (url) {
+                    return "This is a link to " + url.replace(/^https?:\/\//, "");
+                });
+                
+                var help = function () { alert("Do you need help?"); }
+                var options = {
+                    helpButton: { handler: help },
+                    strings: { quoteexample: "whatever you're quoting, put it right here" }
+                };
+                var editor2 = new Markdown.Editor(converter2, "-second", options);
+                
+                editor2.run();
+            })();
+        </script>

@@ -386,7 +386,7 @@ $output .= "
 
             $objects = explode(",", $values['divisions']);
             $divisions = $db->Execute("SELECT name,division_id FROM divisions WHERE 1 ORDER BY name");
-            $division_options = $divisions->GetMenu2("divisions",$objects,true,true,8);
+            $values['division_options'] = $divisions->GetMenu2("divisions",$objects,true,true,8);
 			
             /*
 if(is_array($objects) && $objects[0] != "") foreach($objects as $object) $ids[] = $object['topic_id'];
@@ -401,67 +401,33 @@ if(is_array($objects) && $objects[0] != "") foreach($objects as $object) $ids[] 
 
             $objects = explode(",", $values['single_user']);
             $users=$db->Execute("SELECT CONCAT(last_name,', ',first_name) as name, user_id FROM users WHERE 1 order by last_name,first_name");
-            $single_user_list=$users->GetMenu2("singel_user",$objects,true,true,8);
+            $values['single_user_list']=$users->GetMenu2("singel_user",$objects,true,true,8);
             
             
-            $values['s_date']= ($values['s_date'] != "") ? date("m/d/Y", $values['s_date']) : '';
+            $values['s_date']= ($values['s_date'] != "") ? date("Y-m-d", $values['s_date']) : '';
             $values['ft_faculty'] = ($values['ft_faculty'] ==1) ? 'checked' : '';     
             $values['pt_faculty'] = ($values['pt_faculty'] ==1) ? 'checked' : '';
             $values['management'] = ($values['management'] ==1) ? 'checked' : '';
             $values['support'] = ($values['support'] ==1) ? 'checked' : '';
             $values['outside'] = ($values['outside'] ==1) ? 'checked' : '';
             $values['chairs'] = ($values['chairs'] ==1) ? 'checked' : '';
-            $values['deans'] = ($values['deans'] ==1) ? 'checked';
+            $values['deans'] = ($values['deans'] ==1) ? 'checked' : '';
             $values['abstract'] = ($values['abstract'] ==1) ? 'checked' : '';
             $values['sent'] = ($values['sent'] == 1) ? "checked" : '';
             $values['override'] = ($values['override'] == 1) ? "checked" : "";
 
-            $type_news = '';
-            $type_deadline = '';
-            $type_other = '';
+            
+            $values['type_news'] = ($values['mail_type'] == NEWS) ? 'checked' : '';
 
-            if($values['mail_type'] == NEWS) {
-                $type_news = 'checked';
-            }
-            if($values['mail_type'] == DEADLINE) {
-                $type_deadline='checked';
-            }
-            if($values['mail_type'] == OTHER) {
-                $type_other = 'checked';
-            }
-            $hasharray = array('success'          => $success,
-                               'topic_options'    => $topic_options,
-                               'division_options' => $division_options,
-                               'subject'          => $values['subject'],
-                               's_date'           => $s_date,
-                               'body'             => stripslashes($values['body']),
-                               'id'               => $values['mail_id'],
-                               'sent'             => $sent,
-                               'ft_faculty'       => $ft_faculty,
-                               'pt_faculty'       => $pt_faculty,
-                               'management'       => $management,
-                               'support'          => $support,
-                               'outside'          => $outside,
-                               'chairs'           => $chairs,
-                               'deans'            => $deans,
-                               'single_user_list' => $single_user_list,
-                               'filename'         => $values['filename'],
-                               'students'         => $students,
-                               'tss'              => $tss,
-                               'srd'              => $srd,
-                               'strd'             => $strd,
-                               'abstract'         => $abstract,
-                               'prepend'          => $values['prepend'],
-                               'from_email'       => $values['from_email'],
-                               'from_name'        => $values['from_name'],
-                               'override'         => $override,
-                               'type_news'        => $type_news,
-                               'type_deadline'    => $type_deadline,
-                               'type_other'       => $type_other
-            );
-            $filename = 'templates/template-mail_update.html';
-            $parsed_html_file = $template->loadTemplate($filename,$hasharray,"HTML");
-            echo $parsed_html_file;
+            $values['type_deadline'] = ($values['mail_type'] == DEADLINE) ? 'checked' : '';
+
+            $values['type_other'] = ($values['mail_type'] == OTHER) ? 'checked' : '';
+
+			$values['body'] = stripslashes($values['body']);
+            $values['id']= $values['mail_id'];
+
+            $tmpl->setAttribute("update","visibility","visible");
+            $tmpl->addVars('update',$values);
 
         break;
 
