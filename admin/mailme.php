@@ -147,10 +147,6 @@ if (isset($_REQUEST['usend']) || isset($_REQUEST['utestsend'])) {
                                    'outside'         => $outside,
                                    'chairs'          => $chairs,
                                    'deans'           => $deans,
-                                   'tss'             => $tss,
-                                   'srd'             => $srd,
-                                   'strd'            => $strd,
-                                   'abstract'        => $abstract,
                                    'topics_research' => $topics_research,
                                    'divisions'       => $divisions,
                                    'userlist'        => $userlist
