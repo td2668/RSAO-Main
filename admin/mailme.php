@@ -167,10 +167,6 @@ echo ("<pre>".$my_html."</pre>");
                                    'outside'         => $outside,
                                    'chairs'          => $chairs,
                                    'deans'           => $deans,
-                                   'tss'             => $tss,
-                                   'srd'             => $srd,
-                                   'strd'            => $strd,
-                                   'abstract'        => $abstract,
                                    'topics_research' => $topics_research,
                                    'divisions'       => $divisions,
                                    'userlist'        => $userlist
