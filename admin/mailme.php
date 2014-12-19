@@ -1,9 +1,19 @@
 <?php
 
-include("includes/config.inc.php");
+include_once("includes/config.inc.php");
 include_once("includes/functions-required.php");
 include_once("includes/mail-functions.php");
+require_once("includes/Michelf/MarkdownInterface.php");
+require_once("includes/Michelf/Markdown.php");
 
+//echo("<BR><BR>". get_include_path());
+//$path='/Users/tdavis/Sites/webrepo/research/tags/release-4.0/admin/includes';
+$path='/home/scholviu/public_html/admin/includes';
+set_include_path(get_include_path() . PATH_SEPARATOR . $path);
+
+//echo("<BR><BR>". get_include_path());
+
+use \Michelf\Markdown;
 
 define("NEWS", 0);
 define("DEADLINE", 1);
@@ -133,11 +143,21 @@ if(isset($_REQUEST['msg_flag'])) if($_REQUEST['msg_flag']=='1'){
 
 if (isset($_REQUEST['usend']) || isset($_REQUEST['utestsend'])) {
 
+echo ("<pre>".$_REQUEST['body']."</pre>");
+
+
+
+$my_html = Markdown::defaultTransform($_REQUEST['body']);
+
+echo ("<pre>".$my_html."</pre>");
+
         $mailitems = array('subject'    => $_REQUEST['subject'],
                            'body'       => stripslashes($_REQUEST['body']),
                            'from_email' => $_REQUEST['from_email'],
                            'from_name'  => $_REQUEST['from_name']
         );
+
+
 
     $users = recipientBuilder(array(
                                    'ft_faculty'      => $ft_faculty,

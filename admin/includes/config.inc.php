@@ -75,8 +75,8 @@ $configInfos["admin.schol.viu.ca"]["user"] = "scholviu_ors";
 $configInfos["admin.schol.viu.ca"]["pass"] = "rilinc";
 $configInfos["admin.schol.viu.ca"]["dbdriver"] = "mysql";
 $configInfos["admin.schol.viu.ca"]["dbname"] = "scholviu_research";
-$configInfos["admin.schol.viu.ca"]["peardir"] = '';
-$configInfos["admin.schol.viu.ca"]["debug"] = false;
+$configInfos["admin.schol.viu.ca"]["peardir"] = '/home/scholviu/php';
+$configInfos["admin.schol.viu.ca"]["debug"] = true;
 $configInfos["admin.schol.viu.ca"]["url_root"] = 'http://admin.schol.viu.ca/';
 $configInfos["admin.schol.viu.ca"]["file_root"] = '/home/scholviu/public_html/admin';
 $configInfos["admin.schol.viu.ca"]["upload_root"] = '/var/www/research-prep_htdocs/documents/uploads/';
@@ -240,7 +240,6 @@ $deadline_change_email='tdavis@mtroyal.ca';
 $debug = $configInfo['debug'];
 
 $server_name = $configInfo['server_name'];
-
 
 
 function loadPage($page, $title="") {

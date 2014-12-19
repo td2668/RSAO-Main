@@ -380,7 +380,7 @@ ABSTRACT: $descrip
     }
 
     
-    if(isset($_REQUEST['update'])){
+    if(isset($_REQUEST['update']) || isset($_REQUEST['addcores'])){
         if(isset($_REQUEST['id'])){
 	        
 	        if(isset($_REQUEST['time'])) {
@@ -403,7 +403,9 @@ ABSTRACT: $descrip
             url='". mysql_real_escape_string(isset($_REQUEST['url']) ? $_REQUEST['url'] : '') . "',
             departmentId='". mysql_real_escape_string(isset($_REQUEST['department']) ? $_REQUEST['department'] : '') . "',
             mode='". mysql_real_escape_string(isset($_REQUEST['mode']) ? $_REQUEST['mode'] : '') . "',
-            slots='$timeslots'
+            slots='$timeslots',
+            supervisor='".mysql_real_escape_string(isset($_REQUEST['supervisor']) ? $_REQUEST['supervisor'] : '') . "',
+            supervisorId='".mysql_real_escape_string(isset($_REQUEST['supervisorid']) ? $_REQUEST['supervisorid'] : '') . "'
             WHERE srd_reg_id= $_REQUEST[id];
             ";
       if($db->Execute($sql) === false)
@@ -581,7 +583,7 @@ if($reg['pref']=='poster')
          case 'edit':
              if(isset($_REQUEST['id'])){
                  $tmpl->setAttribute('edit','visibility','visible');
-                 $sql="SELECT srd.*, departments.name AS department, CONCAT(users.first_name, ' ', users.last_name) AS supervisor
+                 $sql="SELECT srd.*, departments.name AS department, user_id
                        FROM srd_reg AS srd
                        LEFT JOIN departments ON srd.departmentId = departments.department_id
                        LEFT JOIN users ON srd.supervisorId = users.user_id
@@ -600,6 +602,9 @@ if($reg['pref']=='poster')
 						 $tmpl->AddRows("coresearchers",$coresearchers);
 						 $tmpl->setAttribute('coresearchers','visibility','visible');
 						}
+					
+					$users=$db->Execute("SELECT CONCAT(users.last_name, ', ', users.first_name),user_id FROM users WHERE 1 ORDER BY last_name,first_name");
+					$reg['supervisor_options']=$users->getMenu2("supervisorid",$reg['user_id']);
 						
                     $depts=$db->Execute("SELECT name,department_id from departments ORDER BY name");
                     $reg['dept_options']=$depts->getMenu2("department",$reg['departmentId']);

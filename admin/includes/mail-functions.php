@@ -3,6 +3,8 @@
 //require_once('htmlMimeMail5/htmlMimeMail5.php');
 require_once('mail-config.php');
 
+
+
 function reset_user (&$user, $key) {
 	//reuse the visits field for a mail/nomail flag
 	$user['visits']=0;
@@ -125,7 +127,7 @@ function mailout ($user, $key, $values) {
     if (($sendMail == true && $values['testmail'] == false) ||
         ($values['testmail'] && $user['sys_admin'] == 1)) {
         //Set up variables for search & replace
-
+		
 
 		//if(!(isset($values['from']))) $values['from']="research@mtroyal.ca";
 			//$mail->setFrom($values['from']);
@@ -136,7 +138,7 @@ function mailout ($user, $key, $values) {
 		$values['body']=str_replace("@firstname@",$user['first_name'],$values['body']);
 		$values['body']=str_replace("@lastname@",$user['last_name'],$values['body']);
 		$values['body']=str_replace("@username@",$user['username'],$values['body']);
-
+		
         $mail_queue =& new Mail_Queue($db_options, $mail_options);
         $mime =& new Mail_mime();
 
@@ -189,7 +191,7 @@ function mailout ($user, $key, $values) {
 <div style='font-size:9px; font-family: Arial, Helvetica, sans-serif; color:#660000'>Click here to unsubscribe or change your topic preferences : <a href='http://research.mtroyal.ca/contactpreferences.php?userid=%s'>Change Contact Preferences</a></div><br>
 ", $user['user_id']);
         }
-
+		
         $mime->setHTMLBody($htmlsection . $html_footer);
 
         //Headers
@@ -214,7 +216,7 @@ function mailout ($user, $key, $values) {
 		$body = $mime->get();
         $hdrs = $mime->headers($hdrs);
 
-
+		
 
   //      echo("From: $from<br>Recipient: $recipient<br>Headers:"); print_r($hdrs); echo "<br><br>Body: $body";
         $result = 'MAILQUEUE_ERROR';
